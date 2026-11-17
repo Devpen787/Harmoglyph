@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "disabled": false,
+      "autoApprove": ["read_file", "list_directory"]
+    },
+    "harmoglyph-audit": {
+      "type": "http",
+      "url": "http://localhost:3000/api/kiroween/audit",
+      "description": "Zero-cost local Kiroween 2026 repository compliance, Git state & /.kiro staging inspector.",
+      "disabled": false
+    },
+    "harmoglyph-specs-graph": {
+      "type": "http",
+      "url": "http://localhost:3000/api/kiroween/specs",
+      "description": "Zero-cost local /.kiro/specs.json pipeline & hook dependency manifest provider.",
+      "disabled": false
+    },
+    "harmoglyph-free-tier-hub": {
+      "type": "http",
+      "url": "http://localhost:3000/api/kiroween/free-tier-workspace",
+      "description": "Zero-cost local Kiro Free-Tier workspace inspector & live hook execution service.",
+      "disabled": false
+    }
+  }
+}

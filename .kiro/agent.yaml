@@ -1,0 +1,78 @@
+name: harmoglyph-synth-crew
+version: "1.2.0"
+project: Harmoglyph
+description: >
+  Spec-driven Kiro Free-Tier workflow orchestrating the Harmoglyph Frankenstein
+  sheet-to-synth-to-vector pipeline: A1:F48 recursive-descent formula VM,
+  4 mathematical foundations (Harmonic Sine, Fibonacci, Golden Ratio φ, Pythagorean),
+  optional multimodal/ABC score transcription, 2-operator Web Audio FM synth
+  with 16-bit PCM .wav export, bidirectional parametric SVG/PNG plotter, and 500-trial seeded PBT verification.
+category: Frankenstein
+hackathon: Kiroween 2026
+
+model:
+  provider: kiro
+  tier: free-subscription-optimized
+  mode: spec-driven
+  enforceSpecOrder: true
+
+steering:
+  always:
+    - .kiro/steering/product.md
+    - .kiro/steering/tech-stack.md
+    - .kiro/steering/structure.md
+  conditional:
+    - path: .kiro/steering/audio-safety-contract.md
+      fileMatch: "src/engine/**/*.ts"
+    - path: .kiro/steering/math-harmony-contract.md
+      fileMatch: "src/engine/{mathArtTheory,vectorPlotter,audioSynth}.ts"
+  manual:
+    - path: .kiro/steering/kiroween-submission-guide.md
+      trigger: "#kiroween-submission-guide"
+
+specs:
+  manifest: .kiro/specs.json
+  requirements: .kiro/specs/harmoglyph/requirements.md
+  design: .kiro/specs/harmoglyph/design.md
+  tasks: .kiro/specs/harmoglyph/tasks.md
+
+powers:
+  - .kiro/powers/spreadsheet-dsp-power.md
+  - .kiro/powers/math-cymatics-power.md
+
+mcpServers: .kiro/settings/mcp.json
+crewConfig: .kiro/agents/synth-crew.json
+
+hooks:
+  postFileSaveEngine: .kiro/hooks/pbt-on-formula-save.json
+  postFileSaveMath: .kiro/hooks/math-symmetry-verify.json
+  stop: .kiro/hooks/kiroween-submission-audit.json
+
+workflow:
+  specDrivenPhases:
+    - phase: 1-requirements
+      artifact: .kiro/specs/harmoglyph/requirements.md
+      gate: All 7 functional & mathematical capabilities defined in EARS syntax before architecture edits.
+    - phase: 2-design
+      artifact: .kiro/specs/harmoglyph/design.md
+      gate: Unidirectional & inverse dataflow, math foundations, acoustic clamps, and API routes specified cleanly.
+    - phase: 3-tasks
+      artifact: .kiro/specs/harmoglyph/tasks.md
+      gate: Implementation waves mapped with explicit requirement traceability and 5-agent crew ownership.
+    - phase: 4-implement-pipeline
+      artifacts:
+        - server.ts
+        - src/engine/spreadsheetVm.ts
+        - src/engine/mathArtTheory.ts
+        - src/engine/audioSynth.ts
+        - src/engine/vectorPlotter.ts
+        - src/components/StudioView.tsx
+      gate: Spreadsheet VM, math foundations, FM audio, WAV/SVG/PNG/CSV exports, and score ingestion compile cleanly.
+    - phase: 5-verify-and-audit
+      artifacts:
+        - src/engine/pbtSuite.ts
+        - src/components/VerifyView.tsx
+        - src/components/SpecDependencyGraph.tsx
+        - src/components/KiroFreeTierHub.tsx
+        - src/components/KiroweenKitView.tsx
+      gate: 500 seeded PBT trials pass, D3 SpecDependencyGraph renders /.kiro/specs.json, and all 3 hooks execute cleanly.

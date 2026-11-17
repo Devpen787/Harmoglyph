@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  --obsidian-bg: #07090e;
+  --obsidian-surface: #111622;
+  --obsidian-elevated: #161d2e;
+  --obsidian-border: #1f2a40;
+  --obsidian-ink: #edf2f9;
+  --obsidian-muted: #8a99b8;
+  --biolum-cyan: #00e5cc;
+  --signal-amber: #f59e0b;
+  --signal-crimson: #f43f5e;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  background-color: var(--obsidian-bg);
+  color: var(--obsidian-ink);
+  font-family: var(--font-sans);
+  letter-spacing: 0.01em;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono-tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lab coordinate subtle dot grid */
+.obsidian-grid {
+  background-image: radial-gradient(rgba(138, 153, 184, 0.14) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Hairline custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #07090e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f2a40;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2f3f60;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

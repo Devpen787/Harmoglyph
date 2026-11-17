@@ -1,0 +1,16 @@
+{
+  "name": "Kiroween 2026 Submission Readiness Audit",
+  "version": "1.0.0",
+  "event": "Stop",
+  "enabled": true,
+  "checks": [
+    "Verify /LICENSE exists at repository root",
+    "Verify /.gitignore does not ignore /.kiro",
+    "Verify /.kiro/specs/harmoglyph/{requirements.md,design.md,tasks.md} exist",
+    "Verify /.kiro/steering/{tech-stack.md,audio-safety-contract.md} exist",
+    "Verify /.kiro/hooks/{pbt-on-formula-save.json,kiroween-submission-audit.json} exist",
+    "Verify /.kiro/agents/synth-crew.json, /.kiro/settings/mcp.json, and /.kiro/powers/spreadsheet-dsp-power.md exist",
+    "Verify /README.md exists and npm run lint && npm run build pass"
+  ],
+  "description": "Final stop hook confirming all required Kiroween 2026 repository artifacts and build checks succeed."
+}

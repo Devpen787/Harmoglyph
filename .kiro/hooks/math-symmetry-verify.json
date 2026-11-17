@@ -1,0 +1,9 @@
+{
+  "name": "Verify Math-Music-Art Symmetry & Inverse Geometry",
+  "version": "1.0.0",
+  "event": "PostFileSave",
+  "filePattern": "src/engine/{mathArtTheory,vectorPlotter,audioSynth}.ts",
+  "enabled": true,
+  "command": "npx tsx -e \"import { MATH_FOUNDATIONS, buildFoundationFormulaPatch } from './src/engine/mathArtTheory'; import { evaluateSheet } from './src/engine/spreadsheetVm'; import { computeVectorCurve } from './src/engine/vectorPlotter'; const curves = new Set(MATH_FOUNDATIONS.map(f => computeVectorCurve(evaluateSheet(buildFoundationFormulaPatch(f.id, 220).grid).steps, 'harmonograph', f.id).primaryPathD)); if (curves.size !== 4) process.exit(1); console.log('4/4 distinct foundation geometries verified');\"",
+  "description": "Verifies that all 4 mathematical foundations (Harmonic Sine, Fibonacci, Golden Ratio φ, Pythagorean) produce distinct, bounded FM synth and SVG vector outputs."
+}

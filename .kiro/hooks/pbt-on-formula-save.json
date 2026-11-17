@@ -1,0 +1,9 @@
+{
+  "name": "Run PBT Suite & Typecheck on Engine Save",
+  "version": "1.0.0",
+  "event": "PostFileSave",
+  "filePattern": "src/engine/**/*.ts",
+  "enabled": true,
+  "command": "npm run lint && npx tsx -e \"import { runPbtInvariants } from './src/engine/pbtSuite'; const res = runPbtInvariants(20261116, 100); console.log(res.map(r => r.id + ':' + r.passedCount + '/' + r.trials).join(', ')); if (!res.every(r => r.passed)) process.exit(1);\"",
+  "description": "Automatically verifies TypeScript types and all 400 seeded PBT invariants whenever spreadsheet, FM synth, vector plotter, or PBT engine code changes."
+}

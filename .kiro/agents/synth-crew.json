@@ -1,0 +1,41 @@
+{
+  "name": "Harmoglyph Synth Crew",
+  "version": "1.2.0",
+  "description": "Custom 5-agent Kiro Crew pipeline for Harmoglyph (Spreadsheet VM × Mathematical Cymatics × Web Audio FM Synth × Vector Plotter × PBT Verifier).",
+  "agents": [
+    {
+      "id": "formula-compiler",
+      "role": "Formula VM Architect",
+      "focus": "Recursive-descent formula grammar, A1:F48 range resolution, lossless CSV round-trip, and deterministic #CYCLE! termination",
+      "owns": ["src/engine/spreadsheetVm.ts", "src/types/chimera.ts"]
+    },
+    {
+      "id": "math-cymatics-theorist",
+      "role": "Mathematical Foundations & Cymatics Lead",
+      "focus": "Harmonic Sine (2πn), Fibonacci, Golden Ratio (φ), and Pythagorean ratio mappings into FM sidebands and geometric curves",
+      "owns": ["src/engine/mathArtTheory.ts"]
+    },
+    {
+      "id": "fm-sound-designer",
+      "role": "Web Audio & PCM Engineer",
+      "focus": "2-operator FM synth routing across 4 voices, acoustic safety clamps (20–4000 Hz, gain <= 0.35), and 16-bit RIFF/WAVE binary encoding",
+      "owns": ["src/engine/audioSynth.ts", "src/data/presets.ts"]
+    },
+    {
+      "id": "vector-architect",
+      "role": "Parametric Vector & D3 Engineer",
+      "focus": "Harmonograph, Mandala, Ribbon & Pitch Spiral SVG/PNG projection, inverse geometryToFormulaGrid compiler, and interactive D3 SpecDependencyGraph",
+      "owns": [
+        "src/engine/vectorPlotter.ts",
+        "src/components/SpecDependencyGraph.tsx",
+        "src/components/KiroD3NodeLinkGraph.tsx"
+      ]
+    },
+    {
+      "id": "pbt-verifier",
+      "role": "Property-Based Verification & Kiroween Compliance Lead",
+      "focus": "500-trial seeded PBT suite (cycles, acoustic clamps, CSV round-trip, WAV RIFF integrity, math foundation symmetry) and live Kiroween hook runner",
+      "owns": ["src/engine/pbtSuite.ts", "src/components/KiroFreeTierHub.tsx", "server.ts"]
+    }
+  ]
+}

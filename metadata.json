@@ -1,0 +1,6 @@
+{
+  "name": "ChimeraForge",
+  "description": "Multi-paradigm technology chimera studio and Kiro Crew spec-driven workbench for Kiroween 2026.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

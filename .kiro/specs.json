@@ -1,0 +1,63 @@
+{
+  "name": "Harmoglyph",
+  "category": "Frankenstein",
+  "version": "1.2.0",
+  "description": "Sheet-to-synth-to-vector pipeline stitching an A1:F48 Excel-style formula spreadsheet VM, 4 mathematical foundations (Harmonic Sine, Fibonacci, Golden Ratio φ, Pythagorean), a 2-operator Web Audio FM synthesizer with offline 16-bit PCM .wav export, and a bidirectional parametric SVG/PNG vector plotter.",
+  "kiroSpecsDir": ".kiro/specs/harmoglyph",
+  "mathArtTheory": {
+    "module": "src/engine/mathArtTheory.ts",
+    "foundations": ["harmonic-sine", "fibonacci", "golden-ratio", "pythagorean"]
+  },
+  "pipeline": {
+    "stage1_spreadsheetVm": {
+      "module": "src/engine/spreadsheetVm.ts",
+      "gridDimensions": {
+        "columns": ["A", "B", "C", "D", "E", "F"],
+        "rows": 48
+      },
+      "columnBindings": {
+        "A": { "parameter": "freqHz", "label": "Pitch", "unit": "Hz", "clamp": [20, 4000] },
+        "B": { "parameter": "gate", "label": "Gate", "unit": "0..1", "clamp": [0, 1] },
+        "C": { "parameter": "fmIndex", "label": "FM Mod", "unit": "idx", "clamp": [0, 12] },
+        "D": { "parameter": "orbitX", "label": "Orbit X", "unit": "px", "clamp": [10, 100] },
+        "E": { "parameter": "decayMs", "label": "Decay", "unit": "ms", "clamp": [40, 900] },
+        "F": { "parameter": "modRatio", "label": "Harmonic", "unit": "ratio", "clamp": [0.25, 8] }
+      },
+      "supportedFunctions": [
+        "SUM", "AVG", "MIN", "MAX", "SIN", "COS", "ABS", "SQRT",
+        "ROUND", "FLOOR", "CEIL", "POW", "MOD", "IF", "ROW", "COL", "PI"
+      ],
+      "safetyGuarantees": [
+        "Cycle detection via active visiting set terminating with #CYCLE!",
+        "Division-by-zero isolation returning #DIV/0!",
+        "Lossless RFC-style CSV round-trip serialization"
+      ]
+    },
+    "stage2_fmSynthesizer": {
+      "module": "src/engine/audioSynth.ts",
+      "topology": "2-operator FM (foundation-scaled modulator -> modGain -> carrier.frequency -> lowpass biquad -> exponential gain -> masterGain 0.28 -> AnalyserNode)",
+      "exports": {
+        "liveAudio": "Web Audio API step sequencer (60-180 BPM eighth-note grid across 4 voices)",
+        "offlineWav": "22.05 kHz 16-bit mono PCM with 44-byte RIFF/WAVE/fmt/data header"
+      }
+    },
+    "stage3_vectorPlotter": {
+      "module": "src/engine/vectorPlotter.ts",
+      "viewBox": "0 0 440 280",
+      "projection": "Just-intonation interval ratio (p:q) & math-foundation coupled Harmonograph, Euler Pitch Spiral, Chladni Mandala, FM Ribbon, and inverse geometryToFormulaGrid compiler",
+      "export": "Standalone .svg XML and 1200x900 .png poster"
+    }
+  },
+  "verification": {
+    "module": "src/engine/pbtSuite.ts",
+    "seedDefault": 20261116,
+    "trialsPerInvariant": 100,
+    "invariants": [
+      "cycle-termination",
+      "acoustic-clamp",
+      "csv-roundtrip",
+      "wav-header",
+      "math-foundation-symmetry"
+    ]
+  }
+}
