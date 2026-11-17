@@ -4,9 +4,17 @@ import { OpeningStageView } from './components/OpeningStageView';
 import { StudioView } from './components/StudioView';
 import { VerifyView } from './components/VerifyView';
 import { KiroweenKitView } from './components/KiroweenKitView';
+import { CompositionJourneyView } from './components/CompositionJourneyView';
 import { SHEET_PRESETS } from './data/presets';
 import { chimeraAudio } from './engine/audioSynth';
 import { evaluateSheet } from './engine/spreadsheetVm';
+import {
+  cloneComposition,
+  COMPOSITION_PRESETS,
+  validateComposition,
+  type MusicalComposition,
+  type projectToSpreadsheet,
+} from './engine/composition';
 import {
   AppView,
   ArtModeId,
@@ -17,10 +25,34 @@ import {
   SynthVoiceId,
 } from './types/chimera';
 
+const COMPOSITION_DRAFT_KEY = 'harmoglyph-composition-v1';
+
+function recoverCompositionDraft(): MusicalComposition {
+  const fallback = () => cloneComposition(COMPOSITION_PRESETS[1]);
+  try {
+    const raw = window.localStorage.getItem(COMPOSITION_DRAFT_KEY);
+    if (!raw) return fallback();
+    const candidate: unknown = JSON.parse(raw);
+    if (candidate === null || typeof candidate !== 'object') return fallback();
+    const score = candidate as MusicalComposition;
+    if (
+      typeof score.id !== 'string' || typeof score.title !== 'string' ||
+      !Array.isArray(score.tracks) || !Array.isArray(score.notes) ||
+      score.tracks.some((track) => !track || typeof track.id !== 'string' || typeof track.voice !== 'string') ||
+      score.notes.some((note) => !note || typeof note.id !== 'string' || typeof note.trackId !== 'string')
+    ) return fallback();
+    return validateComposition(score).length === 0 ? score : fallback();
+  } catch {
+    // Private browsing, corrupt drafts and unavailable storage must not block the instrument.
+    return fallback();
+  }
+}
+
 export default function App() {
   const initialPreset = SHEET_PRESETS[0];
 
-  const [activeView, setActiveView] = useState<AppView>('stage');
+  const [activeView, setActiveView] = useState<AppView>('compose');
+  const [composition, setComposition] = useState<MusicalComposition>(recoverCompositionDraft);
   const [experienceTier, setExperienceTier] = useState<ExperienceTierId>('discovery');
   const [studioDrawerOpen, setStudioDrawerOpen] = useState<boolean>(false);
   const [studioInitialSubView, setStudioInitialSubView] = useState<
@@ -38,6 +70,12 @@ export default function App() {
   const [imperfection, setImperfection] = useState<number>(0);
   const [grid, setGrid] = useState<SheetRawGrid>(() => ({ ...initialPreset.cells }));
   const [bpm, setBpm] = useState<number>(initialPreset.bpm);
+
+  useEffect(() => {
+    if (validateComposition(composition).length > 0) return;
+    try { window.localStorage.setItem(COMPOSITION_DRAFT_KEY, JSON.stringify(composition)); }
+    catch { /* Draft saving is best-effort only. JSON export remains available. */ }
+  }, [composition]);
 
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [activeRow, setActiveRow] = useState<number>(1);
@@ -141,11 +179,30 @@ export default function App() {
   }, []);
 
   const handleSelectView = useCallback((view: AppView) => {
-    if (view === 'stage') {
+    if (view === 'stage' || view === 'compose') {
       setStudioDrawerOpen(false);
     }
+    if (view !== 'stage' && view !== 'studio') setIsPlaying(false);
     setActiveView(view);
   }, []);
+
+  const handleOpenCompositionInInstrument = useCallback(
+    (score: MusicalComposition, projection: ReturnType<typeof projectToSpreadsheet>) => {
+      handleReplaceGrid(projection.grid, {
+        bpm: score.bpm,
+        title: score.title,
+        rowCount: projection.rowCount,
+        voice: score.tracks[0].voice,
+        artMode: 'pitch-spiral',
+        foundation: 'harmonic-sine',
+        imperfection: 0,
+      });
+      setStudioDrawerOpen(false);
+      setIsPlaying(false);
+      setActiveView('stage');
+    },
+    [handleReplaceGrid],
+  );
 
   const handleToggleStudioDrawer = useCallback(
     (subView?: 'codex' | 'catalog' | 'console' | 'graft' | 'both') => {
@@ -228,6 +285,14 @@ export default function App() {
         bpm={bpm}
         onTogglePlay={handleTogglePlay}
       />
+
+      {activeView === 'compose' && (
+        <CompositionJourneyView
+          composition={composition}
+          onChange={setComposition}
+          onOpenInstrument={handleOpenCompositionInInstrument}
+        />
+      )}
 
       {activeView === 'stage' && (
         <OpeningStageView

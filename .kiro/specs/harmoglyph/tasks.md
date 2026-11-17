@@ -19,3 +19,12 @@
 
 - [x] **Wave 5 — Full Kiro Free-Tier Organization (`/.kiro/*`, `/LICENSE`, `/README.md`)** *(Traces to: Req 7)*
   - Configure `always` (`product.md`, `tech-stack.md`, `structure.md`), `fileMatch` (`audio-safety-contract.md`, `math-harmony-contract.md`), and `manual` (`kiroween-submission-guide.md`) steering docs, 3 executable hooks, 2 Kiro Powers, 5-agent crew, and 4 local MCP servers.
+
+- [x] **Wave 6 — Unified song-to-art composition slice** *(code integration and automated tests; browser/Kiro provenance still pending)*
+  - Add a canonical note/track score and deterministic pitch, time, velocity, ratio and harmonics-to-geometry transforms.
+  - Connect one-note discovery, incremental editing, polyphony, full-show playback, art grammars, selected-note math and supported 3D projections in Compose & Art.
+  - Verify 12TET frequency mapping, five contrasting scores, fixed-seed repeatability, positive old-engine projection, and negative overlapping/differently-voiced transfer.
+  - Record known timing, sustain, visual QA and actual Kiro-use limitations in `docs/SONG_ART_COMPOSITION_SLICE.md`.
+
+- [ ] **Wave 7 — Human and environment verification**
+  - Browser/audio mobile and desktop checks, export replay, independent listening, provenance from an actual Kiro runtime, and judge-access review.

@@ -1,4 +1,4 @@
-export type AppView = 'stage' | 'studio' | 'verify' | 'kiroween';
+export type AppView = 'compose' | 'stage' | 'studio' | 'verify' | 'kiroween';
 export type ExperienceTierId = 'discovery' | 'explorer' | 'algebra';
 export type CodexCompatibilityStatus = 'resonant' | 'organic' | 'tension';
 

@@ -24,27 +24,31 @@ export function TopBar({
   const isSubmissionActive = activeView === 'kiroween' || activeView === 'verify';
 
   return (
-    <header className="h-13 px-5 border-b border-[#1E293B] bg-[#07090E] flex items-center justify-between gap-4 shrink-0 z-30">
+    <header className="min-h-13 px-3 sm:px-5 border-b border-[#1E293B] bg-[#07090E] flex items-center justify-between gap-3 shrink-0 z-30">
       {/* Left: Brand Identity */}
       <div className="flex items-center gap-3 shrink-0">
         <button
           type="button"
-          onClick={() => onSelectView('stage')}
+          onClick={() => onSelectView('compose')}
           className="font-display text-base font-bold tracking-tight text-[#EDF2F9] hover:text-[#00E5CC] transition-colors flex items-center gap-2 whitespace-nowrap cursor-pointer focus-visible:outline-2 focus-visible:outline-[#00E5CC]"
         >
           <span className="w-2 h-2 rounded-full bg-[#00E5CC]" aria-hidden="true" />
           <span>Harmoglyph</span>
         </button>
         <span className="hidden sm:inline-block text-[11px] font-mono text-[#8A99B8] border-l border-[#1E293B] pl-3">
-          3D Harmonic Spreadsheet Instrument
+          Music · mathematics · living art
         </span>
       </div>
 
       {/* Center: Laws of UX (Hick's Law) — 2 Primary Modes + Progressive Studio Trigger */}
       <nav
-        className="flex items-center gap-1.5 rounded-lg border border-[#1E293B] bg-[#0B0F17] p-1"
+        className="flex items-center gap-1.5 rounded-lg border border-[#1E293B] bg-[#0B0F17] p-1 overflow-x-auto"
         aria-label="Primary navigation"
       >
+        <button type="button" onClick={() => onSelectView('compose')} aria-current={activeView === 'compose' ? 'page' : undefined}
+          className={`px-3.5 py-1 rounded-md text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${activeView === 'compose' ? 'bg-[#e5cef8] text-[#24162f]' : 'text-[#8A99B8] hover:text-[#EDF2F9]'}`}>
+          Compose &amp; Art
+        </button>
         <button
           type="button"
           onClick={() => onSelectView('stage')}
@@ -89,7 +93,7 @@ export function TopBar({
       </nav>
 
       {/* Right: Von Restorff Isolated Primary Audio Transport CTA */}
-      <div className="shrink-0 flex items-center gap-2">
+      {activeView !== 'compose' && <div className="shrink-0 flex items-center gap-2">
         <button
           type="button"
           onClick={onTogglePlay}
@@ -111,7 +115,7 @@ export function TopBar({
             </>
           )}
         </button>
-      </div>
+      </div>}
     </header>
   );
 }
