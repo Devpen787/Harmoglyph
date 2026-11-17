@@ -50,7 +50,8 @@ The existing Web Audio synth has a constrained amplitude envelope; long duration
 - `npm run test:composition`: deterministic pitch/time/shape mapping, five sample scores, old spreadsheet integration and polyphony/different-voice negative controls.
 - `npm run build`: production bundle.
 - `.kiro/hooks/pbt-on-formula-save.json`: typecheck + composition tests + existing seeded PBT, five groups × 100 trials (500 total).
-- Separate pre-existing server smoke tests cover health/audit/hook APIs; the new composer has no new API dependency.
+- `.kiro/hooks/math-symmetry-verify.json`: confirms four original math foundations yield four different bounded SVG geometries.
+- Production server smoke (same-process localhost): `/api/health`, `/api/kiroween/audit`, and `/api/kiroween/specs` all returned HTTP 200. The new composer has no new server dependency.
 
 ### Open release gates
 
