@@ -34,3 +34,10 @@ Harmoglyph fuses three incompatible computing paradigms into a single determinis
 ### Requirement 7: Kiro Free-Tier Governance, Property-Based Verification & Submission Audit
 **WHEN** the user opens the **Verify (PBT)** or **Kiroween Kit** views,
 **THE SYSTEM SHALL** execute 500 seeded Property-Based Testing trials across 5 formal invariants, render the interactive D3 `SpecDependencyGraph` parsed from `/.kiro/specs.json`, track Git/`.kiro` staging and official hackathon rules in real time, and allow 1-click execution of `/.kiro/hooks/*.json`.
+
+### Requirement 8: Canonical Composition Bridge (new prototype integration)
+**WHEN** a user selects or edits a composition note,
+**THE SYSTEM SHALL** derive its playback frequency, time, and visible artwork mark from the same canonical note object; show the exact mapping and identify aesthetic visual rules as authored choices, not physical acoustic measurements.
+
+**IF** a composed piece has overlapping notes or different active track timbres,
+**THEN THE SYSTEM SHALL** retain the original voices in the composer and disable the monophonic spreadsheet transfer rather than silently discarding musical information.
