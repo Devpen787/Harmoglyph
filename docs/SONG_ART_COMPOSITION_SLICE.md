@@ -22,7 +22,7 @@ The earlier five experience mockups (one motif, build a piece, full show, song �
 - `ratioToRoot = frequencyHz / frequencyHz(referenceMidi)`.
 - `startAngle = −π/2 + 2π × onsetBeats / totalBeats`.
 - `sweepAngle = 2π × durationBeats / totalBeats`.
-- `radius = 118 + 4.7 × (MIDI − 48) + 13 × trackIndex`.
+- `radius = clamp(105 + 3.8 × (MIDI − 48) + 10 × trackIndex, 64, 268)`, keeping notes within the canvas.
 - `strokeWidth = 3.5 + 5.5 × velocity`.
 - The inspector additionally reports the first five integer harmonic partial frequencies, *not* measured overtones.
 

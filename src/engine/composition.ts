@@ -43,6 +43,7 @@ export interface GeometryMark {
 
 export const PHRASE_COLORS = ['#f5a7ba', '#a99bff', '#74e5dc', '#ffc77d', '#9bc6ff', '#e2a4f5'];
 export const MAX_COMPOSITION_BEATS = 24; // Maps to the existing A1:F48 eighth-note grid.
+const SYNTH_VOICES: SynthVoiceId[] = ['music-box', 'celestial-chime', 'haunted-organ', 'analog-pluck'];
 
 const clamp = (n: number, low: number, high: number) => Math.min(high, Math.max(low, n));
 
@@ -72,6 +73,10 @@ export function validateComposition(composition: MusicalComposition): string[] {
   if (composition.tuning !== '12tet') errors.push('Only 12-tone equal temperament is supported in the song composer.');
   if (!Number.isFinite(composition.bpm) || composition.bpm < 40 || composition.bpm > 240) errors.push('Tempo must be 40–240 BPM.');
   if (!Number.isInteger(composition.beatsPerBar) || composition.beatsPerBar < 1 || composition.beatsPerBar > 12) errors.push('Invalid meter.');
+  if (!composition.title.trim()) errors.push('Give the composition a title.');
+  if (!composition.tracks.length || composition.tracks.length > 3) errors.push('A composition needs one to three tracks.');
+  if (new Set(composition.tracks.map((track) => track.id)).size !== composition.tracks.length) errors.push('Track IDs must be unique.');
+  if (composition.tracks.some((track) => !SYNTH_VOICES.includes(track.voice))) errors.push('Unknown synthesizer voice.');
   if (composition.notes.length === 0) errors.push('Add at least one note.');
   if (totalBeats(composition) > MAX_COMPOSITION_BEATS) errors.push(`The present composer supports up to ${MAX_COMPOSITION_BEATS} beats.`);
   const ids = new Set<string>();
@@ -103,7 +108,7 @@ export function deriveGeometry(composition: MusicalComposition): GeometryMark[] 
       startAngle: -Math.PI / 2 + (Math.PI * 2 * note.startBeat) / span,
       sweepAngle: (Math.PI * 2 * note.durationBeats) / span,
       // The vertical scale and track separation are explicitly *designed* mappings.
-      radius: 118 + (note.midi - 48) * 4.7 + trackIndex * 13,
+      radius: clamp(105 + (note.midi - 48) * 3.8 + trackIndex * 10, 64, 268),
       strokeWidth: 3.5 + note.velocity * 5.5,
       harmonicHz: [1, 2, 3, 4, 5].map((k) => k * hz),
     };

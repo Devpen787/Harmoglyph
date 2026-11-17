@@ -31,7 +31,7 @@ const bloomPath = (mark: GeometryMark, sweep: number) => {
   const b = point(mark.radius, mark.startAngle + sweep);
   const center = mark.startAngle + sweep / 2;
   const bloom = 11 + Math.min(28, Math.abs(Math.log2(mark.ratioToRoot)) * 11);
-  const outer = point(mark.radius + bloom, center);
+  const outer = point(Math.min(285, mark.radius + bloom), center);
   const inner = point(Math.max(30, mark.radius - bloom * .68), center);
   return `M ${format(a.x)} ${format(a.y)} Q ${format(outer.x)} ${format(outer.y)} ${format(b.x)} ${format(b.y)} Q ${format(inner.x)} ${format(inner.y)} ${format(a.x)} ${format(a.y)} Z`;
 };

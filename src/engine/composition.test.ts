@@ -88,3 +88,12 @@ test('invalid MIDI, duration, overlap, velocity and timing are not silently acce
   assert.ok(validateComposition(score).length >= 4);
   assert.equal(canProjectToSpreadsheet(score), false);
 });
+
+test('rendered note radii remain inside the SVG field even at extreme supported pitches', () => {
+  const score = cloneComposition(COMPOSITION_PRESETS.find((p) => p.id === 'leap-dialogue')!);
+  score.notes[0].midi = 36;
+  score.notes[1].midi = 96;
+  for (const mark of deriveGeometry(score)) {
+    assert.ok(mark.radius >= 64 && mark.radius <= 268);
+  }
+});
