@@ -240,3 +240,8 @@ Official submission/rules:
 - **P4:** Permission to execute S0/S1 in Kiro using a pinned branch, then stage any code fixes as reviewable PRs?
 
 No source code, deployed app, or Devpost submission status is changed by this map.
+
+
+## Research intake — 18 November 2026 (review-only)
+
+Two user-provided deep-research reports have been archived verbatim and compared with main and unmerged draft PR #3. The [combined findings, baseline comparison and 69-item review checklist](research/RESEARCH_12_13_SYNTHESIS_AND_REVIEW_CHECKLIST.md) is the owning review queue. Original reports are linked from that file. None of its proposed engineering choices are automatically approved and no app code was changed by the research intake.
