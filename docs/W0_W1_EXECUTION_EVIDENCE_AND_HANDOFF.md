@@ -372,6 +372,116 @@ confirms this format is natively supported by Kiro CLI.
 ### KIRO TASK 4: ✗ open — requires real browser measurement
 ### KIRO TASK 5: ✗ open — evidence links pending
 
+## W1 source commit and independent CI — approved code-review handoff (18 Nov 2026)
+
+**Authorization:** PR #4 comment "Approved W1 code-review and CI handoff — Kiro execution request".  
+**Starting head before this action:** `fddbf1a445614e7394e9031f386009ce0490cff2`
+
+### Step 1 — Git state verified
+
+```
+git status --short (before staging):
+ M .kiro/specs/harmoglyph-clock/tasks.md
+ M src/engine/compositionTimeline.test.ts
+ M src/engine/compositionTimeline.ts
+?? package-lock.json
+
+git diff --check: no whitespace errors
+```
+
+All prior Kiro session changes confirmed present and intact. `tasks.md` and
+`package-lock.json` confirmed unstaged and left unchanged.
+
+### Step 2 — Diff inspection: exactly what was reported
+
+`src/engine/compositionTimeline.ts` additions only:
+- `classifyScheduledEvents()` pure export (38 lines incl. JSDoc)
+- `CompositionLookaheadCursor.reset()` method (8 lines)
+- `private _events` field + `get events()` accessor replacing `readonly events`
+- Updated class JSDoc (seek lifecycle contract)
+- `pull()` / `remaining` internals updated from `this.events` → `this._events`
+
+`src/engine/compositionTimeline.test.ts` additions only:
+- Import of `classifyScheduledEvents`
+- 5 new test cases (lines 68–192 of the diff)
+
+No other files modified in the staged set. Diff confirmed matches session reports.
+
+### Step 3 — Local verification results (all pass)
+
+| Check | Command | Result |
+|---|---|---|
+| Typecheck | `npm run lint` | PASS — `tsc --noEmit`, 0 errors |
+| Composition tests | `npm run test:composition` | PASS — 8/8 |
+| Timeline tests | `node --import tsx --test src/engine/compositionTimeline.test.ts` | PASS — 12/12 |
+| PBT | seed=20261116, 100 trials × 5 invariants | PASS — 500/500 |
+| Build | `npm run build` | PASS — vite, pre-existing chunk-size warning unrelated to W1 |
+
+### Step 4 — Source commit pushed
+
+**Commit SHA:** `086f9ea8d4c27a3e70e7c7c1e3c85dea6e4f8302` (short: `086f9ea`)  
+**Branch:** `work/w0-w1-harmoglyph-clock-review-2026-11-18`  
+**PR:** https://github.com/Devpen787/Harmoglyph/pull/4  
+**Changed paths:**
+- `src/engine/compositionTimeline.ts` (+63 / -6 lines)
+- `src/engine/compositionTimeline.test.ts` (+125 / -1 lines)
+
+**Commit message summary:** API hardening — not a production-path audio fix.
+`cursor.reset()` closes the previously untested seek lifecycle contract.
+`classifyScheduledEvents()` adds observability for delayed-callback coalescing
+without changing the intentional play-late policy.
+
+### Step 5 — Independent GitHub Actions CI
+
+| SHA | Run ID | URL | Conclusion |
+|---|---|---|---|
+| `086f9ea` | `44330372065` | https://github.com/Devpen787/Harmoglyph/actions/runs/44330372065 | **success** |
+
+**CI job steps (all ✔):**
+- Environment and baseline identity
+- Install dependencies
+- Typecheck
+- Composition invariants
+- W1 deterministic timeline tests
+- Check Kiro hook v1 JSON structure
+- Original 500 seeded PBT checks
+- Build
+
+Triggered via `pull_request` on the PR #4 branch. Completed in 30 s on
+ubuntu-latest / Node.js 24. Two informational annotations (Node.js 20
+deprecation, Ubuntu 26 migration notice) are runner infrastructure warnings
+pre-dating this commit; they are not failures.
+
+### PostFileSave hook evidence qualification
+
+The automatic `PostFileSave` dispatch recorded in Kiro session 2 above is
+**Kiro's own self-report**: the hook instruction appeared in a `HOOK_INSTRUCTION`
+block in the Kiro CLI context immediately after `fs_write` of
+`compositionTimeline.ts`. This is Kiro's internal event mechanism — it cannot
+be exported as an independent log file or linked as a separate artifact.
+The hook command itself (`npm run lint && npm run test:composition && ...`) was
+run to completion and all stages passed, as shown above. The _automatic dispatch_
+event is therefore attested by Kiro CLI's session context only; an independent
+observer cannot replay or verify the dispatch event itself, only the command
+result. This is recorded honestly per R6.
+
+### Remaining open gates after W1 source commit + CI
+
+- [ ] E01–E03: Measure scheduling errors with real Chrome/Firefox audio and
+  display timing (fast notes, chords, background tabs, resumed sessions).
+  The virtual-clock model confirms the coalescing mechanism exists; it does
+  not substitute for measured audible onset timing.
+- [ ] B04: Long-score note duration vs capped FM decay.
+- [ ] A02/I01: AI Studio provenance and pre-Oct 30 eligibility audit.
+- [ ] I05: Deployed public app replay path for judges.
+- [ ] PR #3 and #4 remain draft/unmerged. ChatGPT independent review of
+  source commit `086f9ea` and CI run `44330372065` required before promotion.
+
+### KIRO TASK 2: ✔ source committed and CI-verified (`086f9ea`, run 44330372065)
+### KIRO TASK 3: ✔ PostFileSave auto-dispatch self-reported by Kiro CLI (see qualification above)
+### KIRO TASK 4: ✗ open — browser measurement required
+### KIRO TASK 5: ✗ open — evidence links pending
+
 ## Next owner update
 
 When Kiro and browser checks are completed, append evidence links next to the
