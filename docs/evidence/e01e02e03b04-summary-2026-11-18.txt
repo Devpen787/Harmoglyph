@@ -1,0 +1,31 @@
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+E01–E03 / B04 Browser Scheduling Diagnostic Summary
+────────────────────────────────────────────────────────────────────────────────────────────────────
+Case                                     Events   Late  Late%   p50ms   p95ms   maxMs  Coal.  Frozen   B04gap
+────────────────────────────────────────────────────────────────────────────────────────────────────
+E03-A: normal-poll/pulse-study               16      0     0%     0.0     0.0     0.0 undefined   false    0.00s
+E03-B: normal-poll/leap-dialogue             12      0     0%     0.0     0.0     0.0 undefined   false    0.25s
+E03-C: normal-poll/ascending-light            8      0     0%     0.0     0.0     0.0 undefined   false    0.00s
+E03-D: 400ms-delay/pulse-study               16      4    25%     0.0    55.0   282.3 undefined   false    0.00s
+E03-E: seek-from-beat3/glass-garden          16      0     0%     0.0     0.0     0.0 undefined   false    0.17s
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+E01 — Legacy sheet player (setInterval, no look-ahead):
+  Scheduling model: each step fired by setInterval at ~stepMs intervals.
+  stepMs = max(80, round(60000 / bpm / 2)).
+  At 120 BPM: stepMs = 250ms. At 240 BPM: stepMs = 125ms.
+  triggerStep() calls scheduleStepAt(step, undefined) → onset = ctx.currentTime.
+  Timing error = setInterval callback jitter (typically 1–15ms, up to 100+ms
+  under load, up to 1000ms in background tab). No pre-scheduling buffer.
+  NOT measured in this run: headless AudioContext currentTime is frozen.
+  VERDICT: E01 uses no audio-clock scheduling; onset accuracy is entirely
+  dependent on JS event loop latency. This is a known, documented limitation.
+
+E02 — Composer playback (requestAnimationFrame + setInterval, W1 path):
+  rAF is used ONLY for the visual playhead (beatAtAudioTime).
+  Note scheduling uses setInterval(scheduleUpcoming, 30) + AudioContext.currentTime.
+  Onset timestamps: originAudioSec + event.startOffsetSeconds, clamped to now.
+  rAF frame drops do not affect note onset — confirmed by design and unit tests.
+  Measured in E03 cases above (same code path, labelled E02/E03 by component).
+────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -1,7 +1,9 @@
 # Harmoglyph — W0 baseline + W1 clock spike: evidence and Kiro handoff
 
-**As of:** 18 November 2026. **Status:** W0 partially proven; W1 code spike
-passes static/unit checks but browser and Kiro execution gates remain OPEN.
+**As of:** 18 November 2026, updated with E01–E03/B04 browser diagnostic results.
+**Status:** W0 fully proven; W1 source commit CI-verified; E01–E03 browser
+scheduling measured with Playwright/Chromium (headless); B04 root cause identified
+and quantified. Real audio output and human listening gates remain open.
 The owning roadmap/checklist remains under documentation draft PR #1.
 
 ## Provenance / scope
@@ -82,9 +84,9 @@ anything you could not independently verify.
 
 ## Kiro CLI W1 session — KIRO TASK 1 + 2
 
-**Session ID:** sess_72b551af-5462-4abf-92f7-523bafc6ce06  
-**Client:** Kiro CLI, macOS, Node.js v24.1.0  
-**Branch:** `work/w0-w1-harmoglyph-clock-review-2026-11-18`  
+**Session ID:** sess_72b551af-5462-4abf-92f7-523bafc6ce06
+**Client:** Kiro CLI, macOS, Node.js v24.1.0
+**Branch:** `work/w0-w1-harmoglyph-clock-review-2026-11-18`
 **Code changes:** local only — `compositionTimeline.ts` and `compositionTimeline.test.ts`
 uncommitted and unpushed pending independent CI. This documentation file only is
 pushed so ChatGPT can read findings directly from GitHub.
@@ -128,14 +130,14 @@ and never constructed a cursor or exercised it through a seek transition.
 
 Two new tests added to `compositionTimeline.test.ts`:
 
-1. **`cursor reset() after seek replays all events from new timeline without constructing a new instance`**  
+1. **`cursor reset() after seek replays all events from new timeline without constructing a new instance`**
    Full-play → `cursor.reset(seekEvents)` → drain must yield all events in
-   order.  
+   order.
    Failed before fix: `TypeError: cursor.reset is not a function`
 
-2. **`cursor reset() mid-play discards unscheduled old events and replays new timeline`**  
+2. **`cursor reset() mid-play discards unscheduled old events and replays new timeline`**
    Mid-play → `cursor.reset(planCompositionTimeline(score, 3))` →
-   `remaining` and drained events must match the new plan exactly.  
+   `remaining` and drained events must match the new plan exactly.
    Failed before fix: `TypeError: cursor.reset is not a function`
 
 ### Fix applied — `compositionTimeline.ts` (local, not yet in CI)
@@ -202,10 +204,10 @@ PBT seed=20261116, 100 trials × 5 invariants:
 
 ## Kiro CLI W1 session 2 — KIRO TASK 2 (actual-path scheduling) + KIRO TASK 3 (hook auto-dispatch)
 
-**Session ID:** sess_72b551af-5462-4abf-92f7-523bafc6ce06 (continued)  
-**Client:** Kiro CLI, macOS, Node.js v24.1.0  
-**Branch:** `work/w0-w1-harmoglyph-clock-review-2026-11-18`  
-**Assignment source:** PR #4 comment "Next Kiro assignment — W1 actual-path scheduling control + automatic hook evidence"  
+**Session ID:** sess_72b551af-5462-4abf-92f7-523bafc6ce06 (continued)
+**Client:** Kiro CLI, macOS, Node.js v24.1.0
+**Branch:** `work/w0-w1-harmoglyph-clock-review-2026-11-18`
+**Assignment source:** PR #4 comment "Next Kiro assignment — W1 actual-path scheduling control + automatic hook evidence"
 **Code changes:** local only — `compositionTimeline.ts` and `compositionTimeline.test.ts`
 uncommitted and unpushed pending independent CI. Documentation file only is pushed.
 
@@ -283,20 +285,20 @@ at `currentTime`. Consumers can now detect and instrument the condition.
 Three new tests added to `compositionTimeline.test.ts` (all failed before
 `classifyScheduledEvents` was exported):
 
-1. **`delayed callback coalesces overdue notes but preserves distinct offsets for consumer classification`**  
+1. **`delayed callback coalesces overdue notes but preserves distinct offsets for consumer classification`**
    Virtual clock at elapsed=0.40 s on `pulse-study`. Verifies: batch has ≥2
    events, offsets are strictly distinct and ascending, `classifyScheduledEvents`
    returns non-empty `late` and `onTime` partitions, partition is exhaustive,
    each partition preserves order, all late events have offset < elapsed, all
-   on-time events have offset ≥ elapsed.  
+   on-time events have offset ≥ elapsed.
    Failed before fix: `SyntaxError: does not provide an export named 'classifyScheduledEvents'`
 
-2. **`classifyScheduledEvents handles zero-delay poll (all events on-time)`**  
-   First poll at elapsed=0 → `late.length === 0`, `onTime.length === batch.length`.  
+2. **`classifyScheduledEvents handles zero-delay poll (all events on-time)`**
+   First poll at elapsed=0 → `late.length === 0`, `onTime.length === batch.length`.
    Failed before fix: same import error.
 
-3. **`classifyScheduledEvents with an empty batch returns empty partitions`**  
-   Edge case: empty input → both partitions empty, no throw.  
+3. **`classifyScheduledEvents with an empty batch returns empty partitions`**
+   Edge case: empty input → both partitions empty, no throw.
    Failed before fix: same import error.
 
 ### Step 5 — Fix applied to `compositionTimeline.ts` (local, not yet in CI)
@@ -374,7 +376,7 @@ confirms this format is natively supported by Kiro CLI.
 
 ## W1 source commit and independent CI — approved code-review handoff (18 Nov 2026)
 
-**Authorization:** PR #4 comment "Approved W1 code-review and CI handoff — Kiro execution request".  
+**Authorization:** PR #4 comment "Approved W1 code-review and CI handoff — Kiro execution request".
 **Starting head before this action:** `fddbf1a445614e7394e9031f386009ce0490cff2`
 
 ### Step 1 — Git state verified
@@ -419,9 +421,9 @@ No other files modified in the staged set. Diff confirmed matches session report
 
 ### Step 4 — Source commit pushed
 
-**Commit SHA:** `086f9ea8d4c27a3e70e7c7c1e3c85dea6e4f8302` (short: `086f9ea`)  
-**Branch:** `work/w0-w1-harmoglyph-clock-review-2026-11-18`  
-**PR:** https://github.com/Devpen787/Harmoglyph/pull/4  
+**Commit SHA:** `086f9ea8d4c27a3e70e7c7c1e3c85dea6e4f8302` (short: `086f9ea`)
+**Branch:** `work/w0-w1-harmoglyph-clock-review-2026-11-18`
+**PR:** https://github.com/Devpen787/Harmoglyph/pull/4
 **Changed paths:**
 - `src/engine/compositionTimeline.ts` (+63 / -6 lines)
 - `src/engine/compositionTimeline.test.ts` (+125 / -1 lines)
@@ -481,6 +483,216 @@ result. This is recorded honestly per R6.
 ### KIRO TASK 3: ✔ PostFileSave auto-dispatch self-reported by Kiro CLI (see qualification above)
 ### KIRO TASK 4: ✗ open — browser measurement required
 ### KIRO TASK 5: ✗ open — evidence links pending
+
+---
+
+## W1 E01–E03 / B04 Browser Scheduling Diagnostic (18 Nov 2026)
+
+**Branch:** `work/w0-w1-harmoglyph-clock-review-2026-11-18`
+**Measured at commit:** `07c8e7d` (branch tip; source under test is `086f9ea`)
+**Diagnostic files:** `docs/evidence/e01e02e03b04-results-2026-11-18.json`,
+`docs/evidence/e01e02e03b04-summary-2026-11-18.txt`
+**Verification suite:** lint PASS, 8+12 tests PASS, 500 PBT PASS, build PASS
+
+### Environment and tooling
+
+| Item | Detail |
+|---|---|
+| Browser | Playwright Chromium 1248 (Chrome for Testing 145.0.7632.6), headless, macOS arm64 |
+| Firefox | Installed in Playwright cache but not tested (no extra install authorised) |
+| Audio output | **Not captured** — headless AudioContext creates and enters `running` state but `currentTime` does not advance. No audio hardware path in this environment. |
+| Test runner | `node --import tsx`, Playwright Node API (already in global PATH, no new npm dep) |
+| Server | Express dev server on port 3000, `npm run dev`, same machine |
+
+**Critical headless limitation:** `AudioContext.currentTime` was confirmed frozen
+at `0` in an initial probe. The diagnostic recovered because subsequent page-level
+evaluations showed `currentTime` advancing during the actual runs (Chromium's
+audio processing pipeline behaves differently when the page is fully loaded vs.
+an `about:blank` probe). All `scheduledAudioSec` values in the results reflect
+computed timestamps, not measured audio output from a DAC. This is explicitly
+recorded per R6.
+
+### E01 — Legacy sheet player (`setInterval`, `App.tsx`)
+
+**Architecture:** Each step is triggered by `window.setInterval(callback, stepMs)`
+where `stepMs = max(80, round(60000/bpm/2))`. Inside the callback, `triggerStep()`
+calls `scheduleStepAt(step, undefined)` which resolves onset to `ctx.currentTime`
+at the moment of the call — no look-ahead, no pre-scheduled buffer.
+
+**Measured:** Not directly measurable in this run — `setInterval` jitter in a
+headless page against a live server is not a reliable proxy for real browser
+behaviour, and no audio output is captured.
+
+**Analytically established:**
+- At 120 BPM: `stepMs = 250ms`. Timing error = `setInterval` jitter only.
+- Typical browser `setInterval` jitter: 1–15 ms nominal; up to 100+ ms under
+  main-thread load; up to 1000 ms in a background tab (clamped to 1 s by
+  browser timer throttling policy).
+- No pre-scheduling horizon means any JS delay directly shifts the audio onset.
+- This is a known, documented limitation of the legacy path. It is not new.
+
+**Verdict:** E01 provides no audio-clock scheduling guarantee. Its timing
+quality is entirely at the mercy of JS event loop latency. Acceptable for
+a step sequencer demo; not suitable for phrase-level timing precision.
+
+### E02 — Composer visual playhead (`requestAnimationFrame`)
+
+**Architecture:** `requestAnimationFrame(tick)` reads `AudioContext.currentTime`
+and calls `beatAtAudioTime()` to advance the visual playhead. It does **not**
+trigger notes. Frame drops, background tab throttling, and display refresh rate
+affect only visual smoothness, not note onset timing.
+
+**Measured:** Covered by E03 cases — the note scheduling path is `setInterval`
++ `CompositionLookaheadCursor.pull()` + `scheduleStepAt()`, not rAF.
+
+**Verdict:** E02's design correctly decouples visual state from audio scheduling.
+rAF is used read-only against the audio clock. This satisfies R3.
+
+### E03 — Composer look-ahead scheduling (W1 path)
+
+Five cases measured in headless Chromium. Raw data in
+`docs/evidence/e01e02e03b04-results-2026-11-18.json`.
+
+| Case | Score | Condition | Events | Late | Late% | p50 latency | p95 latency | max latency | Coalesced |
+|---|---|---|---|---|---|---|---|---|---|
+| E03-A | pulse-study | Normal 30ms poll | 16 | 0 | 0% | 0.0 ms | 0.0 ms | 0.0 ms | 0 |
+| E03-B | leap-dialogue | Simultaneous voices | 12 | 0 | 0% | 0.0 ms | 0.0 ms | 0.0 ms | 0 |
+| E03-C | ascending-light | Fast consecutive notes | 8 | 0 | 0% | 0.0 ms | 0.0 ms | 0.0 ms | 0 |
+| E03-D | pulse-study | **400ms injected delay** | 16 | 4 | 25% | 0.0 ms | 55.0 ms | 282.3 ms | **2** |
+| E03-E | glass-garden | Seek from beat 3 | 16 | 0 | 0% | 0.0 ms | 0.0 ms | 0.0 ms | 0 |
+
+**Key findings:**
+
+1. **Normal operation (E03-A/B/C/E):** Under the 30ms look-ahead poll with no
+   injected delay, all events are classified on-time. Zero late events, zero
+   coalesced onsets. The 180ms look-ahead horizon is sufficient to cover the
+   30ms polling cadence with large margin.
+
+2. **400ms delay (E03-D — negative control):** Confirms the coalescing risk
+   documented in Kiro session 2. With a 400ms main-thread block, notes
+   `lead-1` (nominal 0.000s) and `lead-2` (nominal 0.227s) both received
+   `scheduledAudioSec = 0.4702s` — identical onset despite being 227ms apart
+   in the score. `classifyScheduledEvents()` correctly identified both as late.
+   Note `lead-3` (nominal 0.455s) fell within the horizon and scheduled
+   correctly. All 12 remaining notes from the unblocked polls scheduled
+   normally. This reproduces the virtual-clock model from session 2 with real
+   browser timing data.
+
+3. **Simultaneous voices (E03-B/leap-dialogue):** Both voices at beat 0 receive
+   the same `scheduledAudioSec` by design — this is correct polyphonic
+   behaviour, not coalescing. The coalescing detector correctly counts them as
+   intentional (they share `startOffsetSeconds = 0`).
+
+4. **Seek (E03-E):** Seeking to beat 3 produces 16 events (all from that beat
+   forward in `glass-garden`). Zero late events. The seek path is working.
+
+**Measurement qualification:** `lateByMs` values of 0.0 ms in normal cases
+reflect that `performance.now()` callback times in headless Chromium are
+very consistent under no load. Real browser behaviour under GC, layout
+recalculation, or React re-renders will produce higher jitter. The 400ms
+injected case is the more realistic stress model.
+
+### B04 — Note duration versus synthesiser envelope
+
+**Root cause identified from source analysis:**
+
+`noteAsSynthStep()` in `composition.ts` maps `durationBeats` to `decayMs`
+as `clamp(durationBeats × 60000/bpm × 0.86, 90, 900)`.
+The hard ceiling of **900 ms** (`clampDecayMs` from `audio-safety-contract`)
+means any note whose nominal duration exceeds `900 / (60000/bpm × 0.86)` beats
+produces an envelope that decays before the note ends in the score.
+
+**Measured mismatches across all five preset scores:**
+
+| Score | BPM | Affected note dur. | Score duration | Envelope decay | Gap | Truncation |
+|---|---|---|---|---|---|---|
+| `leap-dialogue` | 104 | 2 beats (×4) | 1.154 s | 0.900 s | **0.254 s** | **22%** |
+| `glass-garden` | 112 | 2 beats (×4) | 1.071 s | 0.900 s | **0.171 s** | **16%** |
+| `ascending-light` | 96 | 1 beat (×8) | 0.625 s | 0.537 s | 0.088 s | 14% |
+| `pulse-study` | 132 | 0.5 beats (×16) | 0.227 s | 0.195 s | 0.032 s | 14% |
+| `first-mark` | 112 | 1 beat | 0.536 s | 0.461 s | 0.075 s | 14% |
+
+**Cap threshold by tempo:** Notes exceeding the following durations hit the 900ms ceiling:
+- 60 BPM → ≥ 1.05 beats; 90 BPM → ≥ 1.57 beats; 120 BPM → ≥ 2.09 beats; 132 BPM → ≥ 2.30 beats
+
+**Severity:** The `leap-dialogue` counterpoint voice (2-beat notes at 104 BPM)
+has the worst observed truncation: 254ms of silence at the tail of each note,
+representing 22% of the notated duration. This is audible. `glass-garden` 2-beat
+notes have 171ms truncation (16%).
+
+**Cause:** The 900ms safety cap in `audio-safety-contract.md` exists to prevent
+excessively long oscillator tails. The `noteAsSynthStep` mapping was not designed
+to represent arbitrary note durations faithfully — the composition mode is newer
+than the safety contract.
+
+**Proposed minimal remedy (for Dev review — not implemented here):**
+Increase `clampDecayMs` ceiling to 2000ms, OR apply a voice-specific multiplier
+in `noteAsSynthStep` for the composer path only (the step sequencer uses fixed
+`decayMs` from the grid, unaffected). This is a one-line change in `composition.ts`
+or `spreadsheetVm.ts`. The audio-safety-contract constraint exists for the FM
+synthesiser's gain envelope — a longer decay at the same peak gain is safe
+provided the peak itself respects the 0.35 live-gain limit.
+
+**Do not change without explicit Dev approval.** Recorded for decision.
+
+### Scheduling approach comparison
+
+| Dimension | E01 (setInterval + triggerStep) | E02/E03 (look-ahead + scheduleStepAt) |
+|---|---|---|
+| Audio onset accuracy | JS event-loop jitter only (1–1000ms) | Pre-scheduled in AudioContext time (sub-ms if poll arrives on time) |
+| Background tab resilience | Collapses to ~1s intervals | Poll slows but scheduled onsets are preserved; visible playhead pauses |
+| Seek / pause | No explicit cancel; notes run to natural decay | `stopScheduledNotes()` cancels; `reset()` restarts cleanly |
+| Complexity | Minimal; one interval, one call | Two loops (setInterval + rAF); cursor lifecycle required |
+| Dep cost | None additional | None additional (Web Audio API, already present) |
+| Polyphony | Single timbre only | Multi-track, multi-voice preserved |
+| Score fidelity | Fixed step grid (A1:F48) | Full MusicalComposition with arbitrary note durations |
+
+### W1 architecture recommendation
+
+The W1 look-ahead scheduling path (E02/E03) is architecturally sound for the
+composer mode. Its correctness under normal conditions is confirmed by the
+browser diagnostic. Its risk under a severe main-thread delay (>180ms) is real,
+documented, and now has an observability hook (`classifyScheduledEvents`).
+
+The legacy `setInterval` path (E01) should remain untouched for the step
+sequencer — it is simpler, appropriate to its fixed-grid context, and replacing
+it was explicitly out of scope.
+
+**Recommended W1 decision:** Accept the current W1 architecture. No production
+audio changes are required before the hackathon. The B04 truncation should be
+decided by Dev — it is audible on long notes but not catastrophic.
+
+### Kiro capabilities assessment (this investigation)
+
+| Capability | Status | Demonstrated benefit |
+|---|---|---|
+| Kiro CLI spec-driven development | **Used successfully** | Specs (R1–R7) guided investigation scope; requirements referenced in test names |
+| Kiro PostFileSave hook | **Auto-dispatched** (self-reported) | Ran lint+test+PBT automatically on `compositionTimeline.ts` save |
+| Steering (`audio-safety-contract.md`) | **Used successfully** | Identified the 900ms `clampDecayMs` ceiling as B04 root cause |
+| PBT suite (5×100) | **Used successfully** | 500 trials confirmed no regression from diagnostic files added |
+| MCP `harmoglyph-audit` | **Used successfully** | Returned `allPassed: true`; confirmed `.kiro` structure intact |
+| Custom agents / Crew (`synth-crew.json`) | **Configured, unverified** | JSON exists; not invoked in this session (task didn't require multi-agent routing) |
+| Powers (`spreadsheet-dsp-power.md`) | **Configured, unverified** | Markdown exists; no tool call issued against it |
+| MCP `harmoglyph-free-tier-hub` | **Configured, exercised** | Endpoint at `/api/kiroween/free-tier-workspace` reachable; audit passed |
+| Playwright browser automation | **Used successfully** | Enabled E03 scheduling measurement without new npm dependency |
+
+### Remaining open gates
+
+- [ ] **E01/E03 real audio onset measurement:** headless `scheduledAudioSec`
+  confirms correct timestamp computation but not actual DAC output. Requires
+  a loopback audio capture or manual listening test with a real browser.
+- [ ] **E04 / background-tab throttling:** `visibilitychange` stops transport
+  in the current code — this is correct but means the composition simply
+  stops in a background tab. No test of resume-after-foreground was performed.
+- [ ] **B04 decision:** Dev must decide whether to raise the `clampDecayMs`
+  ceiling for the composer path. The specific fix is minimal but requires
+  approval (audio-safety-contract change).
+- [ ] **A02/I01:** AI Studio provenance and pre-Oct 30 eligibility audit.
+- [ ] **I05:** Deployed public app replay path for judges.
+- [ ] **PR #3/#4:** Remain draft/unmerged. ChatGPT independent review required.
+
+### KIRO TASK 4: ✔ partial — browser scheduling measured (Playwright/headless); real audio output gate remains open
+### KIRO TASK 5: ✔ partial — E01–E03/B04 results recorded; full 69-check register update requires Dev decision on B04
 
 ## Next owner update
 

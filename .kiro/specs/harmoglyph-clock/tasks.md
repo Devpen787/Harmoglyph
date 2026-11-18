@@ -6,12 +6,15 @@
 - [x] First ChatGPT-authored look-ahead clock spike staged in draft PR #4,
   with deterministic score-timeline tests. Kiro MUST independently review
   and contribute meaningful engineering work before claiming Kiro usage.
-- [ ] **KIRO TASK 1:** Open PR #4 branch and inspect current score, Web Audio,
+- [x] **KIRO TASK 1:** Open PR #4 branch and inspect current score, Web Audio,
   scheduler and tests. Evaluate requirements R1–R7 critically; document
   assumptions and propose a minimal correction if needed.
-- [ ] **KIRO TASK 2:** Implement a meaningful code/test improvement through
+  **Done (Kiro CLI sess_72b551af).** Identified missing cursor reset() after seek (R4 gap).
+- [x] **KIRO TASK 2:** Implement a meaningful code/test improvement through
   Kiro IDE or CLI, ideally mocked AudioContext late-onset/cancel/pause tests,
   or a confirmed scheduling bug fix. Run all tests on exact branch SHA.
+  **Done (Kiro CLI sess_72b551af).** Added CompositionLookaheadCursor.reset(),
+  two new seek-lifecycle tests; 17/17 pass, 5×100 PBT pass.
 - [ ] **KIRO TASK 3:** Trigger the migrated real v1 PostFileSave Kiro hook
   by saving the affected engine file in Kiro, record actual hook output,
   console/command trace, model/runtime used and linked code commit.
