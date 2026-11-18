@@ -200,3 +200,8 @@ Suggested honest README: **One-line promise → GIF/screenshot → Try live → 
 
 ---
 **Source references:** [R12](research/sources/deep-research-report-12-original.md) · [R13](research/sources/deep-research-report-13-original.md) · [69-item review queue](research/RESEARCH_12_13_SYNTHESIS_AND_REVIEW_CHECKLIST.md) · [Foundation Map](FOUNDATION_MAP_KIROWEEN.md) · [Compose & Art PR #3](https://github.com/Devpen787/Harmoglyph/pull/3) · [Kiroween 2026](https://kiroween.devpost.com/) · [2026 rules](https://kiroween.devpost.com/rules) · [Kiro hooks](https://kiro.dev/docs/hooks/).
+
+
+## Optional process experiment — Relate graph pilot (18 November 2026)
+
+[Relate graph preflight, 69-review-item import fixture and recorded answers](process/relate-pilot/README.md) provides a **documentation-only**, removable exploration of dependency/evidence queries. The graph records 120 items and 355 linked facts, with trust/confidence metadata. The assistant's local JavaScript graph preflight ran; **the Relate CLI itself could not be installed or tested in that environment**. This is **not an extra W0–W5 gate** or a proposed app/agent dependency. Adopt only after independent local CLI execution and a measured advantage over this roadmap's existing review checklist.
