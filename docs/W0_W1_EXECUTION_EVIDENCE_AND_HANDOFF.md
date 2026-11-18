@@ -14,8 +14,7 @@ The owning roadmap/checklist remains under documentation draft PR #1.
   [draft PR #4](https://github.com/Devpen787/Harmoglyph/pull/4),
   targeting PR #3, **not main**.
 - Google AI Studio connected browser tab:
-  `https://aistudio.google.com/apps/cfb83a0a-befe-4774-83a1-49bc5f8a5f68`,
-  currently titled `ChimeraForge`. Read-only tab text showed **"Changes
+  currently titled `ChimeraForge` (private app URL deliberately not recorded here). Read-only tab text showed **"Changes
   from Google AI Studio are available to push to GitHub"**.
   AI Studio source, full history and unpushed diff were not exposed by this
   read-only browser tool. **Parity and project-origin dates remain unresolved.**
