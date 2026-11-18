@@ -200,6 +200,178 @@ PBT seed=20261116, 100 trials × 5 invariants:
 ### KIRO TASK 4: ✗ open — requires browser measurement
 ### KIRO TASK 5: ✗ open — evidence links pending
 
+## Kiro CLI W1 session 2 — KIRO TASK 2 (actual-path scheduling) + KIRO TASK 3 (hook auto-dispatch)
+
+**Session ID:** sess_72b551af-5462-4abf-92f7-523bafc6ce06 (continued)  
+**Client:** Kiro CLI, macOS, Node.js v24.1.0  
+**Branch:** `work/w0-w1-harmoglyph-clock-review-2026-11-18`  
+**Assignment source:** PR #4 comment "Next Kiro assignment — W1 actual-path scheduling control + automatic hook evidence"  
+**Code changes:** local only — `compositionTimeline.ts` and `compositionTimeline.test.ts`
+uncommitted and unpushed pending independent CI. Documentation file only is pushed.
+
+### Step 1 — Git state verified before any change
+
+```
+git branch --show-current  →  work/w0-w1-harmoglyph-clock-review-2026-11-18
+git status --short:
+ M .kiro/specs/harmoglyph-clock/tasks.md
+ M src/engine/compositionTimeline.test.ts
+ M src/engine/compositionTimeline.ts
+?? package-lock.json
+```
+
+All prior Kiro uncommitted changes (cursor `reset()`) preserved intact.
+
+### Step 2 — Tracing the actual `scheduleUpcoming()` path
+
+`CompositionJourneyView.scheduleUpcoming()` runs every 30 ms via `setInterval`.
+On each call:
+
+```
+elapsed = getAudioClockTime() - originAudioSeconds
+batch   = cursor.pull(elapsed, 0.18)
+for event of batch:
+    scheduleStepAt(note, originAudioSeconds + event.startOffsetSeconds, ...)
+```
+
+`scheduleStepAt()` resolves onset as:
+
+```
+onset = Math.max(ctx.currentTime, startAudioSeconds)
+```
+
+**Delayed-callback scenario:** if the JS main thread is blocked (React
+re-render, GC, layout) for ~400 ms, `scheduleUpcoming()` fires late.
+At that point `elapsed = 0.40`. `pull(0.40, 0.18)` returns all events with
+`startOffsetSeconds <= 0.58` — a batch that includes both past-due and
+future notes. For the `pulse-study` score at 132 BPM, notes at offsets
+`0.000`, `0.227`, and `0.455 s` are all returned together:
+
+```
+note lead-1  nominal 0.150 s  →  actual onset 0.550 s  LATE (clamped to now)
+note lead-2  nominal 0.377 s  →  actual onset 0.550 s  LATE (clamped to now)
+note lead-3  nominal 0.605 s  →  actual onset 0.605 s  on-time
+```
+
+Notes 1 and 2 sound simultaneously despite being 0.227 s apart in the score.
+This is **the documented intentional policy** in `design.md` ("Late notes are
+made audible now; their nominal target is preserved in the deterministic
+timeline for independent late-scheduler measurements"). It is not a hidden bug.
+
+**The genuine gap:** the caller receives all these events from `pull()` with
+no way to tell which are overdue. `scheduleStepAt()` clamps silently. A
+consumer that wants to log, warn, skip, or instrument scheduling quality has
+no supported API path. The score's distinct `startOffsetSeconds` values are
+preserved in the returned events, but nothing names the boundary between
+late and on-time.
+
+### Step 3 — Policy decision
+
+Three options were considered:
+
+- **Skip overdue notes** — risks silence on slow devices; changes score semantics
+- **Return a richer type from `pull()`** — breaks the existing call sites
+- **Export a pure classifier** — adds observability without touching policy or existing API
+
+Chosen: export `classifyScheduledEvents(batch, elapsedSeconds)` as a pure
+function returning `{ late, onTime }`. Preserves ascending offset order in
+each partition. Policy unchanged: `scheduleStepAt()` still plays late notes
+at `currentTime`. Consumers can now detect and instrument the condition.
+
+### Step 4 — Failing tests written before the fix
+
+Three new tests added to `compositionTimeline.test.ts` (all failed before
+`classifyScheduledEvents` was exported):
+
+1. **`delayed callback coalesces overdue notes but preserves distinct offsets for consumer classification`**  
+   Virtual clock at elapsed=0.40 s on `pulse-study`. Verifies: batch has ≥2
+   events, offsets are strictly distinct and ascending, `classifyScheduledEvents`
+   returns non-empty `late` and `onTime` partitions, partition is exhaustive,
+   each partition preserves order, all late events have offset < elapsed, all
+   on-time events have offset ≥ elapsed.  
+   Failed before fix: `SyntaxError: does not provide an export named 'classifyScheduledEvents'`
+
+2. **`classifyScheduledEvents handles zero-delay poll (all events on-time)`**  
+   First poll at elapsed=0 → `late.length === 0`, `onTime.length === batch.length`.  
+   Failed before fix: same import error.
+
+3. **`classifyScheduledEvents with an empty batch returns empty partitions`**  
+   Edge case: empty input → both partitions empty, no throw.  
+   Failed before fix: same import error.
+
+### Step 5 — Fix applied to `compositionTimeline.ts` (local, not yet in CI)
+
+Added one exported pure function after `planCompositionTimeline`:
+
+```typescript
+export function classifyScheduledEvents(
+  batch: readonly TimedCompositionNote[],
+  elapsedSeconds: number,
+): { late: TimedCompositionNote[]; onTime: TimedCompositionNote[] }
+```
+
+No existing function, type, or class was modified. `pull()`, `reset()`,
+`remaining`, and `events` are unchanged. `tsc --noEmit` passes clean.
+
+### Step 6 — Test results after fix (local run, not yet in GitHub Actions)
+
+```
+node --import tsx --test src/engine/composition.test.ts \
+                         src/engine/compositionTimeline.test.ts
+
+✔  8 composition tests   (all pre-existing)
+✔ 12 timeline tests      (7 pre-existing + 2 from session 1 + 3 new)
+   tests 20 | pass 20 | fail 0
+```
+
+### Step 7 — PostFileSave hook: AUTOMATICALLY DISPATCHED ✔
+
+The `pbt-on-formula-save.json` hook (`version: v1`, trigger: `PostFileSave`,
+matcher: `src/engine/.*\.ts`) **fired automatically** when Kiro saved
+`src/engine/compositionTimeline.ts` via `fs_write`. The hook instruction
+arrived in a `HOOK_INSTRUCTION` block immediately after the file-save tool
+call, before any manual command was run. This is genuine automatic dispatch,
+not a manual invocation.
+
+**Hook command executed (driven by hook output):**
+
+```
+npm run lint                                              PASS  (tsc --noEmit, 0 errors)
+npm run test:composition                                  PASS  (8/8)
+node --import tsx --test src/engine/compositionTimeline.test.ts  PASS  (12/12)
+PBT seed=20261116, 100 trials × 5 invariants:
+  cycle-termination          100/100  ✔
+  acoustic-clamp             100/100  ✔
+  csv-roundtrip              100/100  ✔
+  wav-header                 100/100  ✔
+  math-foundation-symmetry   100/100  ✔
+```
+
+**I02/I03 status update:** automatic `PostFileSave` dispatch confirmed in
+this Kiro CLI session. The hook matched `src/engine/compositionTimeline.ts`,
+injected its command as a `HOOK_INSTRUCTION`, and all stages passed.
+Metadata captured: session sess_72b551af, Kiro CLI, macOS, Node.js v24.1.0.
+The hook JSON format used is `version: v1`; the `createHook` tool schema
+confirms this format is natively supported by Kiro CLI.
+
+### Open gates — updated after this session
+
+- [x] I02/I03: PostFileSave hook automatic dispatch confirmed (this session).
+- [ ] CI gate: `compositionTimeline.ts` + `.test.ts` changes are local only.
+  Must pass independent GitHub Actions before the PR is complete.
+- [ ] E01–E03: Browser audio timing measurement under real Chrome/Firefox.
+  The virtual-clock model confirms coalescing risk; audible severity under
+  real browser GC/layout delay has NOT been measured. Do not equate the
+  virtual model with a measured audio observation.
+- [ ] B04: Long-score note duration vs capped FM decay.
+- [ ] A02/I01: AI Studio provenance and pre-Oct 30 eligibility audit.
+- [ ] I05: Deployed public app replay path for judges.
+
+### KIRO TASK 2: ✔ complete — delayed-callback coalescing traced, `classifyScheduledEvents` added, 20/20 tests (local)
+### KIRO TASK 3: ✔ confirmed — `PostFileSave` hook auto-dispatched on `fs_write` of `compositionTimeline.ts`
+### KIRO TASK 4: ✗ open — requires real browser measurement
+### KIRO TASK 5: ✗ open — evidence links pending
+
 ## Next owner update
 
 When Kiro and browser checks are completed, append evidence links next to the
