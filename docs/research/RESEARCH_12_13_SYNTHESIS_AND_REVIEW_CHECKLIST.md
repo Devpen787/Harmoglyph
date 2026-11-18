@@ -231,3 +231,8 @@
 - [Official Kiroween rules](https://kiroween.devpost.com/rules)
 
 _This artifact is an organized review queue against the existing project, not a new management system or an instruction to replace the approved product direction._
+
+
+## Competition-focused prioritization — 18 November 2026
+
+The [ETHGlobal finalist-pattern → Kiroween winning roadmap](../KIROWEEN_2026_WINNER_GRADE_ROADMAP.md) uses this register's existing checklist IDs and groups them into six sequenced review/release gates (W0–W5). **Do not mark any checklist box complete merely because it is scheduled by that roadmap.** The roadmap identifies the critical 2026 new-project eligibility condition and real Kiro execution as preconditions, rather than treating them as routine final chores.
