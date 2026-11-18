@@ -74,9 +74,9 @@
 ### Eligibility and rules are W0, not a final administrative chore
 
 The **2026** official page/rules state:
-- **New projects only**, created during **30 October–4 December 2026**; generic libraries/templates allowed and **pre-existing incorporated work must be disclosed**. The first GitHub commit for \`Devpen787/Harmoglyph\` is \`c6b55866342147a4de0eff01551b6a26ad6cf317\` dated **17 November 2026**, but that alone does **not prove all AI Studio/source work started in the eligible period**. Audit source provenance and ask the Devpost organizer if ambiguous. ETHGlobal continuity eligibility **does not apply**.
+- **New projects only**, created during **30 October–4 December 2026**; generic libraries/templates allowed and **pre-existing incorporated work must be disclosed**. The first GitHub commit for `Devpen787/Harmoglyph` is `c6b55866342147a4de0eff01551b6a26ad6cf317` dated **17 November 2026**, but that alone does **not prove all AI Studio/source work started in the eligible period**. Audit source provenance and ask the Devpost organizer if ambiguous. ETHGlobal continuity eligibility **does not apply**.
 - **Meaningful Kiro IDE/CLI/Web/Crew usage** mandatory; insufficient usage is disqualifying. Kiro hooks/spec files alone are insufficient.
-- **Public GitHub** source and detectable OSI license with root tracked \`/.kiro\`; **functional app URL** and judge instructions; **public YouTube** demo under 3 min; Kiro development write-up; truthful third-party ownership/rights.
+- **Public GitHub** source and detectable OSI license with root tracked `/.kiro`; **functional app URL** and judge instructions; **public YouTube** demo under 3 min; Kiro development write-up; truthful third-party ownership/rights.
 - **Category:** Frankenstein is the natural initial fit. Do not switch to Costume Contest solely for aesthetics; it requires a functionally coherent spooky UI. Overall and category prize eligibility follow official rules; do not promise prize money.
 - **Final deadline:** 4 Dec 2026 14:00 PST = 23:00 Zürich. No extensions. Ensure working demo remains accessible during judging.
 
@@ -139,7 +139,7 @@ The **2026** official page/rules state:
 
 ### W5 — JUDGE-READY RELEASE + SUBMISSION · Dec 2–4 · **P0**
 
-**Deliverables:** working unauthenticated or judge-accessible public app; clean public GitHub with license, tracked \`/.kiro\`, Kiro run/evidence, install commands, audit trail, demo instructions, 2:50-or-shorter **public YouTube** video, correct Frankenstein and bonus fields, Devpost preview, final smoke on the actual submitted URL.
+**Deliverables:** working unauthenticated or judge-accessible public app; clean public GitHub with license, tracked `/.kiro`, Kiro run/evidence, install commands, audit trail, demo instructions, 2:50-or-shorter **public YouTube** video, correct Frankenstein and bonus fields, Devpost preview, final smoke on the actual submitted URL.
 
 **Review checklist:** I01–I09, A04, G01–G02.  
 **Pass when:** first-time judge on a clean browser can understand the pitch, hit Play, hear music, observe an explainable artwork, change something, reach a saved outcome, and read actual source/tests in minutes.  
@@ -148,15 +148,15 @@ The **2026** official page/rules state:
 ## 6. Evidence packet — each claim has an owner and proof
 
 Maintain **one evidence index in the existing project docs**, not separate marketing claims or systems. Suggested entries:
-- \`EVIDENCE-01\` baseline/eligible development timestamp, source inventory and disclosed pre-existing code.
-- \`EVIDENCE-02\` exact branch/SHA, clean install, typecheck/build, 5×100 seeded PBT and PR3 composition tests **as actually executed** (not merely present).
-- \`EVIDENCE-03\` one measurable scheduling comparison, display frame timing and output-limit disclosure.
-- \`EVIDENCE-04\` replay fixtures for five scores + silence + invalid mapping, canonical checkpoint hashes/metrics, note-to-element provenance.
-- \`EVIDENCE-05\` a valid refusal: illegal mapping or polyphonic sheet conversion, including intact original composition.
-- \`EVIDENCE-06\` SVG/PNG/score JSON or WAV checked by opening/decoding and comparing claims.
-- \`EVIDENCE-07\` usability/art-direction feedback with raw observations and what changed.
-- \`EVIDENCE-08\` Kiro CLI/IDE sessions and hook trigger output connected to source commits, specs and changed behavior.
-- \`EVIDENCE-09\` published app, public GitHub source/license, fully tested judge path, video, Devpost submission details and backup screenshots.
+- `EVIDENCE-01` baseline/eligible development timestamp, source inventory and disclosed pre-existing code.
+- `EVIDENCE-02` exact branch/SHA, clean install, typecheck/build, 5×100 seeded PBT and PR3 composition tests **as actually executed** (not merely present).
+- `EVIDENCE-03` one measurable scheduling comparison, display frame timing and output-limit disclosure.
+- `EVIDENCE-04` replay fixtures for five scores + silence + invalid mapping, canonical checkpoint hashes/metrics, note-to-element provenance.
+- `EVIDENCE-05` a valid refusal: illegal mapping or polyphonic sheet conversion, including intact original composition.
+- `EVIDENCE-06` SVG/PNG/score JSON or WAV checked by opening/decoding and comparing claims.
+- `EVIDENCE-07` usability/art-direction feedback with raw observations and what changed.
+- `EVIDENCE-08` Kiro CLI/IDE sessions and hook trigger output connected to source commits, specs and changed behavior.
+- `EVIDENCE-09` published app, public GitHub source/license, fully tested judge path, video, Devpost submission details and backup screenshots.
 
 Suggested honest README: **One-line promise → GIF/screenshot → Try live → 2-minute judge path → how it works → source diagram → one success & one intentional refusal → actual evidence/test commands → what it proves/doesn't prove → Kiro development record → install/license/provenance.**
 
