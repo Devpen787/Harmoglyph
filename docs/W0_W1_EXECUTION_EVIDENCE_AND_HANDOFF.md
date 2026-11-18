@@ -694,6 +694,18 @@ decided by Dev — it is audible on long notes but not catastrophic.
 ### KIRO TASK 4: ✔ partial — browser scheduling measured (Playwright/headless); real audio output gate remains open
 ### KIRO TASK 5: ✔ partial — E01–E03/B04 results recorded; full 69-check register update requires Dev decision on B04
 
+### CI note — diagnostic commit `24abf71`
+Initial CI run `44343555415` failed: `tsc` could not resolve `playwright` types
+(not in `package.json`; available only on the local PATH). Fixed in commit
+`73ab604` by adding both diagnostic files to `tsconfig.json` `exclude` array.
+Follow-up CI run `44344796608` passed in 29s. No production code changed.
+
+**Final CI:**
+
+| SHA | Run | Conclusion |
+|---|---|---|
+| `73ab604` | [44344796608](https://github.com/Devpen787/Harmoglyph/actions/runs/44344796608) | ✅ success |
+
 ## Next owner update
 
 When Kiro and browser checks are completed, append evidence links next to the
