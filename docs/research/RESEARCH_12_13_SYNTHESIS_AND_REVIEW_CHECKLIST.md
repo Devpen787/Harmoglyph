@@ -76,9 +76,9 @@
 
 ### A. Snapshot, parity, preservation (R12§5, R13 “Reviewed Claims”, “Plan”)
 
-- [ ] **A01 | P0 | [MAIN + PR3]** Pin exact base and draft commit SHAs, note GitHub PR status, and document the build target. **Close with:** SHA, branch, dated clean-checkout log.
+- [x] **A01 | P0 | [MAIN + PR3]** Pin exact base and draft commit SHAs, note GitHub PR status, and document the build target. **Close with:** SHA, branch, dated clean-checkout log.
 - [ ] **A02 | P0 | [NOT VERIFIED]** Compare the actual Google AI Studio project/deployment to main and draft PR3; list divergence before syncing. **Close with:** read-only screenshots/commit or exported source comparison; no implicit merge.
-- [ ] **A03 | P0 | [MAIN + PR3]** Run clean build, typecheck, existing PBT and PR3 composition tests. **Close with:** command, machine/runtime version, log, exit status, reproducible seed/count.
+- [x] **A03 | P0 | [MAIN + PR3]** Run clean build, typecheck, existing PBT and PR3 composition tests. **Close with:** command, machine/runtime version, log, exit status, reproducible seed/count.
 - [ ] **A04 | P0 | [PR3]** Review whether PR3 integrates without regressing original spreadsheet, FM voices, SVG/PNG/CSV/WAV, inverse geometry and 3D stage. **Close with:** old/new golden journey and explicit negative controls.
 - [ ] **A05 | P1 | [UNKNOWN]** Confirm where the authoritative source for score and style edits lives across main, PR3, private labs and Google AI Studio. **Close with:** version/parity table and one documented merge strategy; no unsanctioned overwrites.
 
@@ -236,3 +236,13 @@ _This artifact is an organized review queue against the existing project, not a 
 ## Competition-focused prioritization — 18 November 2026
 
 The [ETHGlobal finalist-pattern → Kiroween winning roadmap](../KIROWEEN_2026_WINNER_GRADE_ROADMAP.md) uses this register's existing checklist IDs and groups them into six sequenced review/release gates (W0–W5). **Do not mark any checklist box complete merely because it is scheduled by that roadmap.** The roadmap identifies the critical 2026 new-project eligibility condition and real Kiro execution as preconditions, rather than treating them as routine final chores.
+
+
+## W0–W1 execution evidence — 18 November 2026 (partial)
+
+- **A01 verified:** main baseline `c6b55866342147a4de0eff01551b6a26ad6cf317`; unmerged PR #3 baseline `ddd3d2c004fac60f0b3b6744e8cf051c510fa1ff`. Isolated W1 work: [draft PR #4](https://github.com/Devpen787/Harmoglyph/pull/4), based on PR #3, not main. The PR/CI logs pin the branch, Node runtime and exact source revision.
+- **A03 verified at CI scope:** [GitHub Actions run 44283793122](https://github.com/Devpen787/Harmoglyph/actions/runs/44283793122) passed npm dependency install, TypeScript, composition tests, original five PBT groups ×100, and Vite production build; [follow-up W1 implementation run 44284939864](https://github.com/Devpen787/Harmoglyph/actions/runs/44284939864) passed the same plus seven deterministic timeline tests. These are code-level CI results, not listening/sync or Kiro runtime proof.
+- **A02 / I01 open:** read-only connected Google AI Studio tab displayed a pending push-to-GitHub change and a different app title. Full source/timestamp comparison and compliance with *new project during 30 October–4 December 2026* are still unresolved.
+- **E01–E08 open:** PR #4 stages a native Web Audio look-ahead composer timing change, but measured browser/onset/frame behavior has not been tested. The legacy main sheet player still uses `setInterval`.
+- **I02 / I03 open:** draft PR #4 includes a v1 Kiro hook and a Kiro task specification. Actual Kiro IDE/CLI execution, hook trigger and meaningful code authorship are **not** evidenced by GitHub Actions.
+- Read [W0/W1 handoff in PR #4](https://github.com/Devpen787/Harmoglyph/blob/work/w0-w1-harmoglyph-clock-review-2026-11-18/docs/W0_W1_EXECUTION_EVIDENCE_AND_HANDOFF.md). No merge or release has occurred.
