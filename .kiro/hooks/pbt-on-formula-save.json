@@ -1,9 +1,16 @@
 {
-  "name": "Run PBT Suite & Typecheck on Engine Save",
-  "version": "1.0.0",
-  "event": "PostFileSave",
-  "filePattern": "src/engine/**/*.ts",
-  "enabled": true,
-  "command": "npm run lint && npm run test:composition && node --import tsx --input-type=module -e \"import { runPbtInvariants } from './src/engine/pbtSuite.ts'; const res = runPbtInvariants(20261116, 100); console.log(res.map(r => r.id + ':' + r.passedCount + '/' + r.trials).join(', ')); if (!res.every(r => r.passed)) process.exit(1);\"",
-  "description": "Typechecks and tests song-to-art invariants plus all 500 existing seeded PBT trials (5 groups × 100), when engine files change."
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "harmoglyph-engine-verification",
+      "description": "Run typecheck, composition and timeline tests plus 5×100 seeded PBT checks after engine file saves. Kiro runtime execution still needs independent verification.",
+      "trigger": "PostFileSave",
+      "matcher": "(^|/)src/engine/.*\\.ts$",
+      "timeout": 180,
+      "action": {
+        "type": "command",
+        "command": "npm run lint && npm run test:composition && node --import tsx --test src/engine/compositionTimeline.test.ts && node --import tsx --input-type=module -e \"import { runPbtInvariants } from './src/engine/pbtSuite.ts'; const checks = runPbtInvariants(20261116, 100); console.log(JSON.stringify(checks.map(({ id, passed, passedCount, trials }) => ({ id, passed, passedCount, trials })), null, 2)); if (checks.length !== 5 || checks.some(c => !c.passed || c.trials !== 100)) process.exit(1);\""
+      }
+    }
+  ]
 }
