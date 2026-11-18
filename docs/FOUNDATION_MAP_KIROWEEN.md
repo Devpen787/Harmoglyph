@@ -245,3 +245,6 @@ No source code, deployed app, or Devpost submission status is changed by this ma
 ## Research intake — 18 November 2026 (review-only)
 
 Two user-provided deep-research reports have been archived verbatim and compared with main and unmerged draft PR #3. The [combined findings, baseline comparison and 69-item review checklist](research/RESEARCH_12_13_SYNTHESIS_AND_REVIEW_CHECKLIST.md) is the owning review queue. Original reports are linked from that file. None of its proposed engineering choices are automatically approved and no app code was changed by the research intake.
+
+
+The [winner-grade Kiroween roadmap and ETHGlobal finalist framework crosswalk](KIROWEEN_2026_WINNER_GRADE_ROADMAP.md) now assigns competition-impact gates W0–W5 to the existing 69 review checks, including the stricter **2026 new-project eligibility**, Kiro proof, and the five equally weighted Kiroween judging criteria. It is a proposal, not an approved build plan or final judging prediction.
