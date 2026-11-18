@@ -1,0 +1,41 @@
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+W1 Production-Path Scheduling Diagnostic (corrected)
+Engine: planCompositionTimeline → CompositionLookaheadCursor → classifyScheduledEvents
+Clock: virtual (performance.now proxy) — NOT a real AudioContext; onset timestamps are computed, not measured
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Case                                                Ev  Late  Late%  p50ms  p95ms  maxMs  Coal.
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+E03-A: production-path/pulse-study/normal           16     1     6%    0.0    0.0   30.0      0
+E03-B: production-path/leap-dialogue/normal         12     2    17%    0.0   30.0   30.0      8
+E03-C: production-path/ascending-light/normal        8     1    13%    0.0    0.0   30.0      0
+E03-D: production-path/pulse-study/400ms-delay      16     2    13%    0.0  172.7  400.0      2
+E03-E: production-path/glass-garden/seek-beat3      12     0     0%    0.0    0.0    0.0      0
+  SEEK from beat 3: expected 12 events, got 12. First event beat=4.0 offset=0.536s. ✔
+E03-F: production-path/glass-garden/no-seek         16     1     6%    0.0    0.0   30.0      0
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+E03-D delayed events:
+  lead-1: nominal=0.000s computed_onset=0.5200s lateBy=400.0ms
+  lead-2: nominal=0.227s computed_onset=0.5200s lateBy=172.7ms
+  → 2 notes share onset=0.5200s (coalesced)
+
+B04 — Real chain: noteAsSynthStep → mapMathToSynthParams → voice multiplier
+Source: noteAsSynthStep decayMs = clamp(beats × 60000/bpm × 0.86, 90, 900)
+Voice multipliers: celestial-chime ×1.45 (cap 1100ms), haunted-organ ×1.25 (cap 1000ms)
+Note: gaps are CALCULATED from source code, NOT measured audio envelopes
+
+Score                 BPM Note          Beats  scoreSec  baseMs worst-voice       worstMs  gapSec  trunc% best-voice         bestMs  bestGap
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+pulse-study           132 lead-1          0.5     0.227     195 music-box             195   0.032     14% haunted-organ         244    0.000
+leap-dialogue         104 counter-1         2     1.154     900 music-box             900   0.254     22% celestial-chime      1100    0.054
+ascending-light        96 lead-1            1     0.625     538 music-box             538   0.088     14% haunted-organ         672    0.000
+glass-garden          112 lead-8            2     1.071     900 music-box             900   0.171     16% celestial-chime      1100    0.000
+
+MEASUREMENT LIMITS (explicitly stated per R6):
+  - computedAudioOnsetSec: computed timestamp algebra only; NOT measured DAC output
+  - B04 gaps: source-code calculation; NOT measured audio waveform or listener perception
+  - Scheduler jitter: virtual clock (synchronous); NOT real setInterval under page load
+  - AudioContext.currentTime in headless Chromium: does not advance reliably
+  - Real browser audio output requires a headed browser + audio capture hardware
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
