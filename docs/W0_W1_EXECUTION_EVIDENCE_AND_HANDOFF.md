@@ -1,10 +1,7 @@
 # Harmoglyph — W0 baseline + W1 clock spike: evidence and Kiro handoff
 
-**As of:** 18 November 2026, updated with corrected E01–E03/B04 diagnostic (ChatGPT review response).
-**Status:** W0 fully proven; W1 source commit CI-verified; E01–E03 scheduling measured
-via production-path virtual clock (corrected); B04 root cause confirmed through real
-chain; real audio output gate remains open and explicitly stated.
-The owning roadmap/checklist remains under documentation draft PR #1.
+**As of:** 18 November 2026, updated with W0 eligibility analysis, B04 PCM waveform measurements, and Phase 3 manual test procedure.
+**Status:** W0 risk/unresolved (AI Studio pre-history not independently verifiable); W1 source CI-verified; B04 PCM-measured (offline export path); real browser audio gate requires manual test by Dev.
 
 ## Provenance / scope
 - GitHub main baseline: `c6b55866342147a4de0eff01551b6a26ad6cf317`
@@ -327,6 +324,10 @@ node --import tsx --test src/engine/composition.test.ts \
 ```
 
 ### Step 7 — PostFileSave hook: AUTOMATICALLY DISPATCHED ✔
+
+> **Correction (Final Evidence Gate, 18 Nov 2026):** this claim is withdrawn. The cited
+> `HOOK_INSTRUCTION` appeared in Kiro's own reply, not runtime tool output, and later matching
+> saves produced no hook output. See "Correction to earlier hook evidence" below. I02/I03 is open.
 
 The `pbt-on-formula-save.json` hook (`version: v1`, trigger: `PostFileSave`,
 matcher: `src/engine/.*\.ts`) **fired automatically** when Kiro saved
@@ -849,6 +850,208 @@ npm run build          PASS  (vite, 1735 modules)
 
 ### KIRO TASK 4: ✔ corrected — seek bug fixed, production path exercised, B04 real chain, all limits stated
 ### W1 promotion gate: PAUSED pending Dev decision on B04 and real audio listening test
+
+---
+
+## W0/W1 Final Evidence Gate (18 Nov 2026)
+
+**Starting head:** `02e4dae787179b20e9ce401b324a1ab7a3b20a48`. No production file changed in this
+gate (`git diff` on `audioSynth.ts`, `composition.ts`, `compositionTimeline.ts`,
+`CompositionJourneyView.tsx` is empty). New files are diagnostics and evidence only.
+
+Evidence labels used below: **[measured]** observed directly from running code;
+**[source]** read from repository files/history; **[inference]** reasoning from a spec or
+from measured data, not observed; **[unresolved]** not determinable here.
+
+### Correction to earlier hook evidence (I02/I03 reopened)
+
+The session-2 section above records the `PostFileSave` hook as "AUTOMATICALLY DISPATCHED".
+On review, the `HOOK_INSTRUCTION` block cited as proof appeared inside Kiro's own reply
+text, not in tool output returned by the Kiro runtime. It is not reliable dispatch evidence.
+In this gate, Kiro saved two files matching the hook's matcher `(^|/)src/engine/.*\.ts$`
+(`b04WaveformMeasurement.ts`, `headedBrowserProbe.ts`) and **no hook output was returned**
+[measured]. I02/I03 is therefore **open**. The hook *command* passes when run manually; that
+was never in doubt. Whether this Kiro CLI build dispatches v1 `PostFileSave` hooks on agent
+file writes is unverified. Suggested check for Dev: run `/hooks` in an interactive Kiro CLI
+session, save an engine file, and capture what appears.
+
+### Phase 1 — W0 eligibility and provenance
+
+Rule [source: `public/assets/aistudio/Paste_November_16__2026_-_3_46PM_a3d8a149`, official
+rules text]: *"Projects must be newly created by the Entrant after the start of the Hackathon
+Submission Period [Oct 30 2026, 9:00 PT] … must disclose any other pre-existing code or work
+incorporated into the Project."*
+
+**Verified facts [source: git history]**
+
+| Fact | Evidence |
+|---|---|
+| First commit | `18ca27fb` 2026-11-17 11:55:11 UTC, `README.md` only |
+| Scaffold commit | `c6b55866` 2026-11-17 11:55:41 UTC, 64 files, 19,097 lines, pushed 30 s after the first commit |
+| Scaffold already contains the full original instrument | `spreadsheetVm.ts` 514 lines, `audioSynth.ts` 356, `mathArtTheory.ts` 1,115, `vectorPlotter.ts` 736, `pbtSuite.ts` 252, 15 UI components, `.kiro/` specs/steering/hooks/agents/powers/MCP, 4 artwork JPEGs |
+| Added later in GitHub history | `composition.ts`, `CompositionJourneyView.tsx`, `composition.test.ts` (`0f5375a`, Nov 17 16:48 UTC); `compositionTimeline.ts` + tests and W1 scheduling (Nov 18); all docs, CI workflow, diagnostics |
+| Change since scaffold | 29 files, +7,853 / −31 lines (`git diff --stat c6b55866 HEAD`), of which ~4,800 are evidence JSON |
+| Project name in `metadata.json` | `ChimeraForge` (AI Studio app metadata), not Harmoglyph |
+| AI Studio artifacts in repo | rules paste dated by filename Nov 16 2026 15:46; screenshot dated by filename Nov 17 2026 12:41 local. Neither file carries an embedded creation timestamp (PNG XMP/EXIF has none) |
+
+**Unresolved evidence**
+
+1. When the AI Studio `ChimeraForge` project was created. The 19,097-line scaffold arrived in
+   one commit, so the code was written elsewhere first (almost certainly AI Studio). GitHub
+   history cannot date that work.
+2. Whether any of the scaffold predates Oct 30 2026. The filename dates (Nov 16–17) are
+   consistent with in-period work but do not prove it; filenames are not timestamps.
+3. Whether AI Studio holds a different version. Earlier evidence recorded the AI Studio banner
+   "Changes … available to push to GitHub", so AI Studio and GitHub had diverged at that time.
+   AI Studio history is not accessible from this session and was not compared.
+
+**Risks**
+
+- If the AI Studio project or any of its code predates Oct 30, it must be disclosed as
+  pre-existing work, and the "new projects only" rule may apply to the original instrument.
+- If it was created in-period, the single-commit scaffold still needs supporting proof (AI
+  Studio project creation date or version history screenshot) because GitHub alone cannot
+  show it.
+- Kiro usage: the scaffold's `.kiro/` assets were generated with the code, and the hook claim
+  is now reopened (above). Evidence that the project was "built using Kiro" currently rests on
+  this branch's Kiro CLI sessions (W1 tests and `reset()`/`classifyScheduledEvents()`).
+
+**W0 verdict: RISK.** Not blocked on any fact found here, but not verifiable without Dev
+checking the AI Studio project history. No organizer approval is implied.
+
+### Phase 2 — B04 waveform measurement
+
+**Feasibility:** `OfflineAudioContext` is a browser API and is not available in Node. The
+live Web Audio graph in `scheduleStepAt()` could only be rendered offline by refactoring it to
+accept an injected context; that is a synthesis refactor and was not done (stop-for-approval
+boundary). Instead, this gate rendered the **production `.wav` export synthesizer**
+`renderSheetToWavBytes()` (`audioSynth.ts`), unmodified, from Node, via the production
+`noteAsSynthStep()` → `mapMathToSynthParams()` chain. No test seam was added.
+
+**Scope limit:** the export synthesizer and the live player share parameters
+(`noteAsSynthStep`, `mapMathToSynthParams`, the 900 ms clamp) but generate sound differently.
+Export uses a sample loop with `exp(-4.2·i/decaySamples)` envelope, voice multipliers ×1.4 /
+×1.2 without caps, and a 230 ms / 0.25 feedback echo. Live uses OscillatorNode ramps to
+0.0001, multipliers ×1.45 / ×1.25 capped at 1.1 s / 1.0 s, and a delay network with 0.26
+feedback and 0.22 wet. **These results are measured for WAV export and are only an indication
+for live playback.**
+
+Command: `node --import tsx src/engine/b04WaveformMeasurement.ts > results.json`
+Evidence: `docs/evidence/b04-waveform-results-2026-11-18.json` (per-note 50 ms RMS envelopes),
+`docs/evidence/b04-waveform-summary-2026-11-18.txt`.
+Determinism: two runs produce identical output (SHA-256 of output minus timestamp:
+`8dd9bb1a…aa5cb` both runs) [measured].
+
+Each note was rendered alone (one-step sheet), so overlap with neighbouring notes is excluded.
+"Last audible sample" = last sample with |amplitude| > 0.001 [measured].
+
+| Score / note | Score duration | music-box | celestial-chime | haunted-organ |
+|---|---|---|---|---|
+| pulse-study lead-1 (0.5 beat) | 0.227 s | 0.737 s | 0.759 s | 0.752 s |
+| ascending-light lead-1 (1 beat) | 0.625 s | 0.936 s | 1.033 s | 0.997 s |
+| glass-garden lead-2 (0.5 beat) | 0.268 s | 0.762 s | 0.793 s | 0.780 s |
+| glass-garden lead-1 (1 beat) | 0.536 s | 0.836 s | 0.987 s | 0.959 s |
+| glass-garden lead-4 (2 beats) | 1.071 s | 1.017 s | 1.018 s | 1.018 s |
+| leap-dialogue lead-1 (1 beat) | 0.577 s | 0.851 s | 1.002 s | 0.981 s |
+| leap-dialogue counter-1 (2 beats) | 1.154 s | 1.038 s | 1.038 s | 1.038 s |
+
+Findings:
+
+1. **Short and medium notes ring well past their written length** in the export (+0.27 to
+   +0.53 s) [measured]. Most of the tail is the echo. Written duration is not represented as a
+   sound boundary for these notes; they are struck-and-decay sounds.
+2. **2-beat notes end before their written length:** glass-garden −54 ms, leap-dialogue
+   counter −115 ms [measured]. All three voices end at the same sample (1.017–1.038 s). The
+   reason is the export echo buffer: the last echo repeat of a 900 ms envelope lands at
+   ≈ 900 + 230·k ms and falls below 0.001 at the same point for every voice [inference].
+3. **Sound level near the written end is low.** For leap-dialogue counter-1 (music-box) the
+   50 ms RMS falls from 0.093 at onset to 0.012 at 0.6 s and 0.002 at 0.9 s, about −33 dB
+   relative to onset well before the 1.154 s mark [measured].
+4. The earlier source-only calculation (254 ms / 22% gap) overstated truncation for the export
+   path. It ignored the echo and treated decay end as sound end.
+
+**Is the difference material?** For the export: long notes do not sustain as notated. Their
+level drops steadily from the first 100 ms, so a listener hears a decaying chime rather than a
+held 2-beat note. That is a timbre property of the chosen voices, not a scheduling defect. For
+live playback this is **unmeasured**.
+
+**Recommended B04 decision:** accept as a documented limitation for the hackathon. Describe the
+voices as struck/decaying in the Devpost text, and do not claim notated sustain. Do not raise the
+900 ms ceiling. If held notes become a product requirement, the minimal option to evaluate
+later is a composer-only sustain envelope (hold until note end, then release), which needs Dev
+approval because it changes the sound.
+
+### Phase 3 — Headed browser run of the real application
+
+Method [measured]: Playwright (global install, no new dependency) launched **headed** Chrome
+for Testing 156.0.8078.4 on this Mac against the real dev server (`npm run dev`, port 3000).
+It drove the production Compose & Art UI with real clicks and wrapped `AudioContext`,
+`OscillatorNode.start` and `stop` before page load to log what the production code sends to
+Web Audio. Script: `src/engine/headedBrowserProbe.ts`. Three runs:
+`docs/evidence/headed-probe-run{1,2,3}-2026-11-18.json`.
+
+**This proves scheduling calls, not sound.** No audio output was captured or heard. This
+browser is Chrome for Testing launched by Playwright, not Dev's everyday Chrome 157, and its
+autoplay policy may be more permissive.
+
+| # | Check | Result (all three runs agree unless noted) |
+|---|---|---|
+| 1 | First play / unlock | No `AudioContext` exists before the click; it is created inside the Play click and is `running`; `currentTime` advanced to 6.36 s over 6.5 s. 8/8 ascending-light onsets scheduled, 32 oscillator starts (4 per note) [measured]. A user-gesture policy failure would not show up in this browser [limit]. |
+| 2 | Rapid notes | pulse-study: 16/16 onsets, 64 starts. Spacing of the scheduled `when` values matches score spacing exactly (max deviation 0 s), so no note was clamped late [measured]. |
+| 3 | Polyphony | leap-dialogue: 12 notes, 8 distinct onsets, 4 onsets with 8 oscillators (two simultaneous notes), matching the score [measured]. |
+| 4 | Pause / resume | Pause stops active oscillators and the button changes to "Resume" [measured]. Run 2 shows a race: a scheduler tick 5 ms after the click scheduled one note at `when=80.446`, then the pause handler called `stop(80.315)` on it. Because the stop time precedes the start time, that note should never sound (Web Audio spec) [inference]. Run 3: 0 starts after the click. Resume scheduled 16 starts from the paused position. |
+| 5 | Seek and replay | Scrub to beat 8 of glass-garden, then play: 8/8 onsets expected from beat 8 were scheduled, spacing matching the score [measured]. |
+| 6 | Background tab | **Not achieved.** Opening a second tab and minimizing the window via CDP (with Playwright's anti-backgrounding flags removed) never set `document.hidden`, so the app's `visibilitychange` handler was never exercised [measured]. **Manual gate.** |
+
+Console: two 404 resource errors on every load (resource not identified; likely the favicon,
+since page-level response listeners did not see them), no page errors, no Web Audio
+exceptions [measured].
+
+**Manual test for Dev (about 5 minutes, your normal Chrome, sound on):**
+
+1. `cd ~/Harmoglyph && npm run dev`, open `http://localhost:3000`, open DevTools Console.
+2. **Compose & Art** tab is the default. In the preset menu pick *Pulse Study*, click
+   **Play from start**. Listen: is the first note audible, and is the pulse even? Note any
+   stumble in the first second.
+3. Pick *Leap Dialogue*, play. Listen: two lines at once? Do the 2-beat low notes sound held
+   or fade quickly?
+4. Pick *Ascending Light*, play, click **Pause** mid-phrase. Listen: does any note sound
+   *after* pause? Click **Resume**: does it continue from the same place without repeats?
+5. Drag **Song position** to the middle, click **Resume**. Do notes from before the scrub point
+   play? (They should not.)
+6. Pick *Glass Garden*, play, switch to another tab for 5 s, come back. Expected by design:
+   playback stopped. Record whether it stopped, whether any note was stuck, and the button
+   label.
+7. Post one line per step to PR #4: pass / fail / unsure, plus any Console errors.
+
+### Phase 4 — Verification
+
+| Check | Result | Covered by CI? |
+|---|---|---|
+| `npm run lint` (tsc) | PASS | yes |
+| `npm run test:composition` | 8/8 PASS | yes |
+| timeline tests | 12/12 PASS | yes |
+| PBT seed 20261116, 5×100 | 500/500 PASS | yes |
+| `npm run build` | PASS | yes |
+| `b04WaveformMeasurement.ts` | runs; deterministic (identical hash, 2 runs) | **no** |
+| `productionPathDiagnostic.ts` | runs; deterministic (identical hash, 2 runs) | **no** |
+| `headedBrowserProbe.ts` | 3 headed runs completed | **no** |
+
+The diagnostic scripts are listed in `tsconfig.json` `exclude`, so **they are not
+type-checked** locally or in CI. The CI result says nothing about them. They depend on a
+global Playwright install and the Playwright Chromium cache (`HG_CHROMIUM` overrides the
+path). Making them CI-checked would require adding Playwright as a devDependency, which needs
+approval.
+
+### Gate outcome
+
+- **W0:** RISK. AI Studio project history must be checked by Dev and disclosed if needed.
+- **B04:** measured for export. Long notes decay before their written end (−54 / −115 ms) and
+  short notes ring long. Recommendation: accept and document, no change now.
+- **Browser:** scheduling path verified in headed Chrome for checks 1–5. Listening and
+  background-tab behaviour remain manual.
+- **Kiro hook (I02/I03):** reopened; dispatch not evidenced.
+- **W2:** should wait for Dev's AI Studio provenance check and the 5-minute listening test.
 
 ## Next owner update
 

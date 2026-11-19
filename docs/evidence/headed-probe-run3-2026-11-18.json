@@ -1,0 +1,148 @@
+{
+  "generatedAt": "2026-11-19T09:49:14.285Z",
+  "browserVersion": "156.0.8078.4",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+  "scenarios": {
+    "1_first_play_unlock": {
+      "ctxBeforeClick": {
+        "s": null,
+        "ct": null,
+        "hidden": false
+      },
+      "ctxAfter": {
+        "s": "running",
+        "ct": 6.538666666666667,
+        "hidden": false
+      },
+      "ctxStateEvents": [
+        {
+          "t": 781.1999999880791,
+          "k": "ctx-new",
+          "state": "running",
+          "ct": 0
+        },
+        {
+          "t": 816.4000000059605,
+          "k": "ctx-state",
+          "state": "running",
+          "ct": 0.021333333333333333
+        }
+      ],
+      "oscStartCount": 32,
+      "timing": {
+        "expectedDistinctOnsets": 8,
+        "scheduledDistinctOnsets": 8,
+        "comparedSamples": 8,
+        "medianAbsDevSec": 0,
+        "p95AbsDevSec": 0,
+        "maxAbsDevSec": 0,
+        "note": "deviation of scheduled `when` spacing from score spacing; first onset used as reference"
+      },
+      "audioClockAdvanced": null
+    },
+    "2_rapid_notes_pulse_study": {
+      "oscStartCount": 64,
+      "timing": {
+        "expectedDistinctOnsets": 16,
+        "scheduledDistinctOnsets": 16,
+        "comparedSamples": 16,
+        "medianAbsDevSec": 0,
+        "p95AbsDevSec": 0,
+        "maxAbsDevSec": 0,
+        "note": "deviation of scheduled `when` spacing from score spacing; first onset used as reference"
+      }
+    },
+    "3_polyphony_leap_dialogue": {
+      "oscStartCount": 48,
+      "distinctOnsets": 8,
+      "onsetsWithMoreThan4Oscillators": 4,
+      "note": "each note creates 4 oscillators; a count of 8 at one onset = two simultaneous notes",
+      "timing": {
+        "expectedDistinctOnsets": 8,
+        "scheduledDistinctOnsets": 8,
+        "comparedSamples": 8,
+        "medianAbsDevSec": 0,
+        "p95AbsDevSec": 0,
+        "maxAbsDevSec": 0,
+        "note": "deviation of scheduled `when` spacing from score spacing; first onset used as reference"
+      }
+    },
+    "4_pause_resume": {
+      "oscStartsWhilePaused": 0,
+      "oscStopCallsAtPause": 4,
+      "buttonLabelAfterPause": "Resume",
+      "oscStartsAfterResume": 16,
+      "firstResumeWhens": [
+        82.16966666666667,
+        82.79466666666667,
+        83.41966666666667,
+        84.04466666666667
+      ],
+      "rawEventsAroundPause": [
+        {
+          "t": 81065.79999998212,
+          "k": "PAUSE-CLICK-ISSUED",
+          "ct": 80.26666666666667
+        },
+        {
+          "t": 81092,
+          "k": "osc-stop",
+          "when": 80.29333333333334,
+          "ct": 80.29333333333334
+        },
+        {
+          "t": 81092,
+          "k": "osc-stop",
+          "when": 80.29333333333334,
+          "ct": 80.29333333333334
+        },
+        {
+          "t": 81092,
+          "k": "osc-stop",
+          "when": 80.29333333333334,
+          "ct": 80.29333333333334
+        },
+        {
+          "t": 81092,
+          "k": "osc-stop",
+          "when": 80.29333333333334,
+          "ct": 80.29333333333334
+        }
+      ]
+    },
+    "5_seek_to_beat_8_glass_garden": {
+      "expectedEventsFromBeat8": 8,
+      "scheduledDistinctOnsets": 8,
+      "timing": {
+        "expectedDistinctOnsets": 8,
+        "scheduledDistinctOnsets": 8,
+        "comparedSamples": 8,
+        "medianAbsDevSec": 0,
+        "p95AbsDevSec": 0,
+        "maxAbsDevSec": 0,
+        "note": "deviation of scheduled `when` spacing from score spacing; first onset used as reference"
+      },
+      "note": "run for ~4.5s only; later notes not yet scheduled by design (look-ahead)"
+    },
+    "6_background_tab": {
+      "stateWhileBackgrounded": {
+        "s": "running",
+        "ct": 123.68533333333333,
+        "hidden": false
+      },
+      "visibilityEvents": [],
+      "oscStartsAfterReturnWithoutUserAction": 12,
+      "playButtonLabelAfterReturn": "Pause",
+      "method": "real window minimise via CDP Browser.setWindowBounds",
+      "designExpectation": "visibilitychange handler stops transport when hidden (CompositionJourneyView)"
+    }
+  },
+  "consoleMessages": [
+    "[debug] [vite] connecting...",
+    "[debug] [vite] connected.",
+    "[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+    "[error] Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "[error] Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "limits": "No audio output observed. when/currentTime are values passed to / read from Web Audio, not heard sound."
+}
