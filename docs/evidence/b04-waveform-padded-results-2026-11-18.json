@@ -1,0 +1,960 @@
+{
+  "generatedAt": "2026-11-19T15:19:17.661Z",
+  "synthesisPath": "renderSheetToWavBytes — WAV export only, not live Web Audio playback",
+  "sampleRate": 22050,
+  "threshold": 0.001,
+  "paddingStepsSwept": [
+    0,
+    8,
+    16,
+    32,
+    64
+  ],
+  "results": [
+    {
+      "scoreId": "pulse-study",
+      "noteId": "lead-1",
+      "voice": "music-box",
+      "bpm": 132,
+      "durationBeats": 0.5,
+      "scoreDurationSec": 0.2273,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 0.9772,
+          "lastAboveSec": 0.7366,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 2.7954,
+          "lastAboveSec": 0.7366,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 4.6136,
+          "lastAboveSec": 0.7366,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 8.25,
+          "lastAboveSec": 0.7366,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 15.5227,
+          "lastAboveSec": 0.7366,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.7366,
+      "converged": true,
+      "soundMinusScoreSec": 0.5093,
+      "rmsAtOnset50ms": 0.06162,
+      "rmsAroundScoreEnd50ms": 0.01179
+    },
+    {
+      "scoreId": "pulse-study",
+      "noteId": "lead-1",
+      "voice": "celestial-chime",
+      "bpm": 132,
+      "durationBeats": 0.5,
+      "scoreDurationSec": 0.2273,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 0.9772,
+          "lastAboveSec": 0.7595,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 2.7954,
+          "lastAboveSec": 0.7595,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 4.6136,
+          "lastAboveSec": 0.7595,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 8.25,
+          "lastAboveSec": 0.7595,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 15.5227,
+          "lastAboveSec": 0.7595,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.7595,
+      "converged": true,
+      "soundMinusScoreSec": 0.5322,
+      "rmsAtOnset50ms": 0.08708,
+      "rmsAroundScoreEnd50ms": 0.0168
+    },
+    {
+      "scoreId": "pulse-study",
+      "noteId": "lead-1",
+      "voice": "haunted-organ",
+      "bpm": 132,
+      "durationBeats": 0.5,
+      "scoreDurationSec": 0.2273,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 0.9772,
+          "lastAboveSec": 0.7518,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 2.7954,
+          "lastAboveSec": 0.7518,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 4.6136,
+          "lastAboveSec": 0.7518,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 8.25,
+          "lastAboveSec": 0.7518,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 15.5227,
+          "lastAboveSec": 0.7518,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.7518,
+      "converged": true,
+      "soundMinusScoreSec": 0.5245,
+      "rmsAtOnset50ms": 0.04955,
+      "rmsAroundScoreEnd50ms": 0.00618
+    },
+    {
+      "scoreId": "ascending-light",
+      "noteId": "lead-1",
+      "voice": "music-box",
+      "bpm": 96,
+      "durationBeats": 1,
+      "scoreDurationSec": 0.625,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0625,
+          "lastAboveSec": 0.9357,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.5625,
+          "lastAboveSec": 0.9357,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 6.0625,
+          "lastAboveSec": 0.9357,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 11.0625,
+          "lastAboveSec": 0.9357,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 21.0625,
+          "lastAboveSec": 0.9357,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.9357,
+      "converged": true,
+      "soundMinusScoreSec": 0.3107,
+      "rmsAtOnset50ms": 0.08465,
+      "rmsAroundScoreEnd50ms": 0.00273
+    },
+    {
+      "scoreId": "ascending-light",
+      "noteId": "lead-1",
+      "voice": "celestial-chime",
+      "bpm": 96,
+      "durationBeats": 1,
+      "scoreDurationSec": 0.625,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0625,
+          "lastAboveSec": 1.0328,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.5625,
+          "lastAboveSec": 1.0328,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 6.0625,
+          "lastAboveSec": 1.0328,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 11.0625,
+          "lastAboveSec": 1.0328,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 21.0625,
+          "lastAboveSec": 1.0328,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 1.0328,
+      "converged": true,
+      "soundMinusScoreSec": 0.4078,
+      "rmsAtOnset50ms": 0.11059,
+      "rmsAroundScoreEnd50ms": 0.00643
+    },
+    {
+      "scoreId": "ascending-light",
+      "noteId": "lead-1",
+      "voice": "haunted-organ",
+      "bpm": 96,
+      "durationBeats": 1,
+      "scoreDurationSec": 0.625,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0625,
+          "lastAboveSec": 0.9969,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.5625,
+          "lastAboveSec": 0.9969,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 6.0625,
+          "lastAboveSec": 0.9969,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 11.0625,
+          "lastAboveSec": 0.9969,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 21.0625,
+          "lastAboveSec": 0.9969,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.9969,
+      "converged": true,
+      "soundMinusScoreSec": 0.3719,
+      "rmsAtOnset50ms": 0.07112,
+      "rmsAroundScoreEnd50ms": 0.00433
+    },
+    {
+      "scoreId": "glass-garden",
+      "noteId": "lead-1",
+      "voice": "music-box",
+      "bpm": 112,
+      "durationBeats": 1,
+      "scoreDurationSec": 0.5357,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0178,
+          "lastAboveSec": 0.8358,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.1607,
+          "lastAboveSec": 0.8358,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.3035,
+          "lastAboveSec": 0.8358,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 9.5893,
+          "lastAboveSec": 0.8358,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 18.1607,
+          "lastAboveSec": 0.8358,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.8358,
+      "converged": true,
+      "soundMinusScoreSec": 0.3001,
+      "rmsAtOnset50ms": 0.08192,
+      "rmsAroundScoreEnd50ms": 0.00465
+    },
+    {
+      "scoreId": "glass-garden",
+      "noteId": "lead-1",
+      "voice": "celestial-chime",
+      "bpm": 112,
+      "durationBeats": 1,
+      "scoreDurationSec": 0.5357,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0178,
+          "lastAboveSec": 0.987,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.1607,
+          "lastAboveSec": 0.987,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.3035,
+          "lastAboveSec": 0.987,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 9.5893,
+          "lastAboveSec": 0.987,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 18.1607,
+          "lastAboveSec": 0.987,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.987,
+      "converged": true,
+      "soundMinusScoreSec": 0.4513,
+      "rmsAtOnset50ms": 0.10796,
+      "rmsAroundScoreEnd50ms": 0.00832
+    },
+    {
+      "scoreId": "glass-garden",
+      "noteId": "lead-1",
+      "voice": "haunted-organ",
+      "bpm": 112,
+      "durationBeats": 1,
+      "scoreDurationSec": 0.5357,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0178,
+          "lastAboveSec": 0.9587,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.1607,
+          "lastAboveSec": 0.9587,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.3035,
+          "lastAboveSec": 0.9587,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 9.5893,
+          "lastAboveSec": 0.9587,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 18.1607,
+          "lastAboveSec": 0.9587,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.9587,
+      "converged": true,
+      "soundMinusScoreSec": 0.423,
+      "rmsAtOnset50ms": 0.06863,
+      "rmsAroundScoreEnd50ms": 0.00628
+    },
+    {
+      "scoreId": "glass-garden",
+      "noteId": "lead-2",
+      "voice": "music-box",
+      "bpm": 112,
+      "durationBeats": 0.5,
+      "scoreDurationSec": 0.2679,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0178,
+          "lastAboveSec": 0.7623,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.1607,
+          "lastAboveSec": 0.7623,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.3035,
+          "lastAboveSec": 0.7623,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 9.5893,
+          "lastAboveSec": 0.7623,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 18.1607,
+          "lastAboveSec": 0.7623,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.7623,
+      "converged": true,
+      "soundMinusScoreSec": 0.4944,
+      "rmsAtOnset50ms": 0.08687,
+      "rmsAroundScoreEnd50ms": 0.01934
+    },
+    {
+      "scoreId": "glass-garden",
+      "noteId": "lead-2",
+      "voice": "celestial-chime",
+      "bpm": 112,
+      "durationBeats": 0.5,
+      "scoreDurationSec": 0.2679,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0178,
+          "lastAboveSec": 0.7926,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.1607,
+          "lastAboveSec": 0.7926,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.3035,
+          "lastAboveSec": 0.7926,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 9.5893,
+          "lastAboveSec": 0.7926,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 18.1607,
+          "lastAboveSec": 0.7926,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.7926,
+      "converged": true,
+      "soundMinusScoreSec": 0.5247,
+      "rmsAtOnset50ms": 0.12086,
+      "rmsAroundScoreEnd50ms": 0.0304
+    },
+    {
+      "scoreId": "glass-garden",
+      "noteId": "lead-2",
+      "voice": "haunted-organ",
+      "bpm": 112,
+      "durationBeats": 0.5,
+      "scoreDurationSec": 0.2679,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0178,
+          "lastAboveSec": 0.7805,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.1607,
+          "lastAboveSec": 0.7805,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.3035,
+          "lastAboveSec": 0.7805,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 9.5893,
+          "lastAboveSec": 0.7805,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 18.1607,
+          "lastAboveSec": 0.7805,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.7805,
+      "converged": true,
+      "soundMinusScoreSec": 0.5126,
+      "rmsAtOnset50ms": 0.07161,
+      "rmsAroundScoreEnd50ms": 0.01974
+    },
+    {
+      "scoreId": "glass-garden",
+      "noteId": "lead-4",
+      "voice": "music-box",
+      "bpm": 112,
+      "durationBeats": 2,
+      "scoreDurationSec": 1.0714,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0178,
+          "lastAboveSec": 1.0172,
+          "hitsFileEnd": true
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.1607,
+          "lastAboveSec": 1.1202,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.3035,
+          "lastAboveSec": 1.1202,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 9.5893,
+          "lastAboveSec": 1.1202,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 18.1607,
+          "lastAboveSec": 1.1202,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 1.1202,
+      "converged": true,
+      "soundMinusScoreSec": 0.0488,
+      "rmsAtOnset50ms": 0.1305,
+      "rmsAroundScoreEnd50ms": 0.00063
+    },
+    {
+      "scoreId": "glass-garden",
+      "noteId": "lead-4",
+      "voice": "celestial-chime",
+      "bpm": 112,
+      "durationBeats": 2,
+      "scoreDurationSec": 1.0714,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0178,
+          "lastAboveSec": 1.0177,
+          "hitsFileEnd": true
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.1607,
+          "lastAboveSec": 1.3533,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.3035,
+          "lastAboveSec": 1.3533,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 9.5893,
+          "lastAboveSec": 1.3533,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 18.1607,
+          "lastAboveSec": 1.3533,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 1.3533,
+      "converged": true,
+      "soundMinusScoreSec": 0.2819,
+      "rmsAtOnset50ms": 0.16558,
+      "rmsAroundScoreEnd50ms": 0.00267
+    },
+    {
+      "scoreId": "glass-garden",
+      "noteId": "lead-4",
+      "voice": "haunted-organ",
+      "bpm": 112,
+      "durationBeats": 2,
+      "scoreDurationSec": 1.0714,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0178,
+          "lastAboveSec": 1.0176,
+          "hitsFileEnd": true
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.1607,
+          "lastAboveSec": 1.2655,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.3035,
+          "lastAboveSec": 1.2655,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 9.5893,
+          "lastAboveSec": 1.2655,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 18.1607,
+          "lastAboveSec": 1.2655,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 1.2655,
+      "converged": true,
+      "soundMinusScoreSec": 0.1941,
+      "rmsAtOnset50ms": 0.11034,
+      "rmsAroundScoreEnd50ms": 0.00168
+    },
+    {
+      "scoreId": "leap-dialogue",
+      "noteId": "lead-1",
+      "voice": "music-box",
+      "bpm": 104,
+      "durationBeats": 1,
+      "scoreDurationSec": 0.5769,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0385,
+          "lastAboveSec": 0.8511,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.3461,
+          "lastAboveSec": 0.8511,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.6538,
+          "lastAboveSec": 0.8511,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 10.2692,
+          "lastAboveSec": 0.8511,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 19.5,
+          "lastAboveSec": 0.8511,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.8511,
+      "converged": true,
+      "soundMinusScoreSec": 0.2742,
+      "rmsAtOnset50ms": 0.08327,
+      "rmsAroundScoreEnd50ms": 0.00354
+    },
+    {
+      "scoreId": "leap-dialogue",
+      "noteId": "lead-1",
+      "voice": "celestial-chime",
+      "bpm": 104,
+      "durationBeats": 1,
+      "scoreDurationSec": 0.5769,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0385,
+          "lastAboveSec": 1.0024,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.3461,
+          "lastAboveSec": 1.0024,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.6538,
+          "lastAboveSec": 1.0024,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 10.2692,
+          "lastAboveSec": 1.0024,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 19.5,
+          "lastAboveSec": 1.0024,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 1.0024,
+      "converged": true,
+      "soundMinusScoreSec": 0.4255,
+      "rmsAtOnset50ms": 0.10927,
+      "rmsAroundScoreEnd50ms": 0.0071
+    },
+    {
+      "scoreId": "leap-dialogue",
+      "noteId": "lead-1",
+      "voice": "haunted-organ",
+      "bpm": 104,
+      "durationBeats": 1,
+      "scoreDurationSec": 0.5769,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0385,
+          "lastAboveSec": 0.9815,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.3461,
+          "lastAboveSec": 0.9815,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.6538,
+          "lastAboveSec": 0.9815,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 10.2692,
+          "lastAboveSec": 0.9815,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 19.5,
+          "lastAboveSec": 0.9815,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 0.9815,
+      "converged": true,
+      "soundMinusScoreSec": 0.4046,
+      "rmsAtOnset50ms": 0.06986,
+      "rmsAroundScoreEnd50ms": 0.00515
+    },
+    {
+      "scoreId": "leap-dialogue",
+      "noteId": "counter-1",
+      "voice": "music-box",
+      "bpm": 104,
+      "durationBeats": 2,
+      "scoreDurationSec": 1.1538,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0385,
+          "lastAboveSec": 1.0384,
+          "hitsFileEnd": true
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.3461,
+          "lastAboveSec": 1.1348,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.6538,
+          "lastAboveSec": 1.1348,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 10.2692,
+          "lastAboveSec": 1.1348,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 19.5,
+          "lastAboveSec": 1.1348,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 1.1348,
+      "converged": true,
+      "soundMinusScoreSec": -0.019,
+      "rmsAtOnset50ms": 0.09255,
+      "rmsAroundScoreEnd50ms": 0.00059
+    },
+    {
+      "scoreId": "leap-dialogue",
+      "noteId": "counter-1",
+      "voice": "celestial-chime",
+      "bpm": 104,
+      "durationBeats": 2,
+      "scoreDurationSec": 1.1538,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0385,
+          "lastAboveSec": 1.0384,
+          "hitsFileEnd": true
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.3461,
+          "lastAboveSec": 1.4866,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.6538,
+          "lastAboveSec": 1.4866,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 10.2692,
+          "lastAboveSec": 1.4866,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 19.5,
+          "lastAboveSec": 1.4866,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 1.4866,
+      "converged": true,
+      "soundMinusScoreSec": 0.3328,
+      "rmsAtOnset50ms": 0.11902,
+      "rmsAroundScoreEnd50ms": 0.00361
+    },
+    {
+      "scoreId": "leap-dialogue",
+      "noteId": "counter-1",
+      "voice": "haunted-organ",
+      "bpm": 104,
+      "durationBeats": 2,
+      "scoreDurationSec": 1.1538,
+      "paddingSweep": [
+        {
+          "pad": 0,
+          "fileSec": 1.0385,
+          "lastAboveSec": 1.0384,
+          "hitsFileEnd": true
+        },
+        {
+          "pad": 8,
+          "fileSec": 3.3461,
+          "lastAboveSec": 1.3067,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 16,
+          "fileSec": 5.6538,
+          "lastAboveSec": 1.3067,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 32,
+          "fileSec": 10.2692,
+          "lastAboveSec": 1.3067,
+          "hitsFileEnd": false
+        },
+        {
+          "pad": 64,
+          "fileSec": 19.5,
+          "lastAboveSec": 1.3067,
+          "hitsFileEnd": false
+        }
+      ],
+      "convergedLastAboveSec": 1.3067,
+      "converged": true,
+      "soundMinusScoreSec": 0.1529,
+      "rmsAtOnset50ms": 0.08097,
+      "rmsAroundScoreEnd50ms": 0.0015
+    }
+  ]
+}

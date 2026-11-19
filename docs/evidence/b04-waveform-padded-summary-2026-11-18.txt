@@ -1,0 +1,23 @@
+score/note                voice            dur(s)  pad0-last  file0   converged-last  sound-score  rms@end/rms@onset
+pulse-study/lead-1        music-box        0.227  0.737     0.977  0.737          +0.509       -14.4 dB
+pulse-study/lead-1        celestial-chime  0.227  0.759     0.977  0.759          +0.532       -14.3 dB
+pulse-study/lead-1        haunted-organ    0.227  0.752     0.977  0.752          +0.524       -18.1 dB
+ascending-light/lead-1    music-box        0.625  0.936     1.063  0.936          +0.311       -29.8 dB
+ascending-light/lead-1    celestial-chime  0.625  1.033     1.063  1.033          +0.408       -24.7 dB
+ascending-light/lead-1    haunted-organ    0.625  0.997     1.063  0.997          +0.372       -24.3 dB
+glass-garden/lead-1       music-box        0.536  0.836     1.018  0.836          +0.300       -24.9 dB
+glass-garden/lead-1       celestial-chime  0.536  0.987     1.018  0.987          +0.451       -22.3 dB
+glass-garden/lead-1       haunted-organ    0.536  0.959     1.018  0.959          +0.423       -20.8 dB
+glass-garden/lead-2       music-box        0.268  0.762     1.018  0.762          +0.494       -13.0 dB
+glass-garden/lead-2       celestial-chime  0.268  0.793     1.018  0.793          +0.525       -12.0 dB
+glass-garden/lead-2       haunted-organ    0.268  0.780     1.018  0.780          +0.513       -11.2 dB
+glass-garden/lead-4       music-box        1.071  1.017*    1.018  1.120          +0.049       -46.3 dB
+glass-garden/lead-4       celestial-chime  1.071  1.018*    1.018  1.353          +0.282       -35.8 dB
+glass-garden/lead-4       haunted-organ    1.071  1.018*    1.018  1.266          +0.194       -36.3 dB
+leap-dialogue/lead-1      music-box        0.577  0.851     1.038  0.851          +0.274       -27.4 dB
+leap-dialogue/lead-1      celestial-chime  0.577  1.002     1.038  1.002          +0.425       -23.7 dB
+leap-dialogue/lead-1      haunted-organ    0.577  0.982     1.038  0.982          +0.405       -22.6 dB
+leap-dialogue/counter-1   music-box        1.154  1.038*    1.038  1.135          -0.019       -43.9 dB
+leap-dialogue/counter-1   celestial-chime  1.154  1.038*    1.038  1.487          +0.333       -30.4 dB
+leap-dialogue/counter-1   haunted-organ    1.154  1.038*    1.038  1.307          +0.153       -34.6 dB
+* = last above-threshold sample is at the file end (truncated by buffer)

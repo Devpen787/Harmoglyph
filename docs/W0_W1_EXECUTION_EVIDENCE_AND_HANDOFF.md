@@ -921,6 +921,10 @@ checking the AI Studio project history. No organizer approval is implied.
 
 ### Phase 2 — B04 waveform measurement
 
+> **Superseded in part (B04 padding correction below).** The 2-beat results in this section
+> (−54 ms / −115 ms) were limited by the one-step WAV file length, not by the sound. Kept as the
+> original experiment.
+
 **Feasibility:** `OfflineAudioContext` is a browser API and is not available in Node. The
 live Web Audio graph in `scheduleStepAt()` could only be rendered offline by refactoring it to
 accept an injected context; that is a synthesis refactor and was not done (stop-for-approval
@@ -1052,6 +1056,67 @@ approval.
   background-tab behaviour remain manual.
 - **Kiro hook (I02/I03):** reopened; dispatch not evidenced.
 - **W2:** should wait for Dev's AI Studio provenance check and the 5-minute listening test.
+
+## B04 padding correction (18 Nov 2026)
+
+**Review finding:** `renderSheetToWavBytes()` allocates `steps.length × stepSec + 0.75 s`. The
+original B04 experiment rendered one step, so the file was 1.018 s (glass-garden, 112 BPM) and
+1.038 s (leap-dialogue, 104 BPM) long. The measured "ends" of the 2-beat notes were 1.017–1.018 s
+and 1.038 s, within 1 ms of the last sample in the file [measured]. Those were buffer
+cut-offs, not decay ends.
+
+**Corrected method:** same production function, unmodified (`renderSheetToWavBytes`, WAV export
+path), same note, voice and settings. The note is followed by N silent steps (copies of the step
+with `gate: 0`, which the renderer skips), with N ∈ {0, 8, 16, 32, 64}. Threshold unchanged
+(|amplitude| > 0.001). Script: `src/engine/b04WaveformPadded.ts`. Raw:
+`docs/evidence/b04-waveform-padded-results-2026-11-18.json`; summary:
+`docs/evidence/b04-waveform-padded-summary-2026-11-18.txt`. Two runs hash identically
+(`62585c09ff80af43…`).
+
+**Negative control [measured]:** for all 21 note/voice cases, the last above-threshold sample is
+identical at N = 8, 16, 32 and 64, while file length grows from about 3.2 s to 19.5 s. With N = 0,
+it sits on the file end for exactly the six 2-beat cases and nowhere else. The original
+measurements for notes of 1 beat or less were therefore not affected by the buffer.
+
+**Corrected 2-beat results (WAV export) [measured]:**
+
+| Note | Written length | Original (1 step) | Padded, converged | Sound − written | Level at written end vs onset (50 ms RMS) |
+|---|---|---|---|---|---|
+| glass-garden lead-4, music-box | 1.071 s | 1.017 s (file end) | 1.120 s | +0.049 s | −46.3 dB |
+| glass-garden lead-4, celestial-chime | 1.071 s | 1.018 s (file end) | 1.353 s | +0.282 s | −35.8 dB |
+| glass-garden lead-4, haunted-organ | 1.071 s | 1.018 s (file end) | 1.266 s | +0.194 s | −36.3 dB |
+| leap-dialogue counter-1, music-box | 1.154 s | 1.038 s (file end) | 1.135 s | −0.019 s | −43.9 dB |
+| leap-dialogue counter-1, celestial-chime | 1.154 s | 1.038 s (file end) | 1.487 s | +0.333 s | −30.4 dB |
+| leap-dialogue counter-1, haunted-organ | 1.154 s | 1.038 s (file end) | 1.307 s | +0.153 s | −34.6 dB |
+
+Notes of 1 beat or less are unchanged from the original experiment: their sound lasts 0.27–0.53 s
+past the written length. At the written end their level is 11–30 dB below onset.
+
+**Revised B04 conclusion — WAV export only:**
+- The earlier "2-beat notes end 54 / 115 ms early" finding is **withdrawn**. It was a measurement
+  artifact.
+- Measured to the 0.001 threshold, every case except one reaches or passes its written length.
+  The exception is leap-dialogue counter-1 with music-box, which ends 19 ms early.
+- Duration is still not represented as sustain. At the written end of a 2-beat note the signal is
+  30–46 dB below its onset level, because the envelope decays from the attack onward and is
+  capped by the 900 ms clamp. A listener hears a struck tone that fades, not a held note. This is
+  a timbre and envelope-design property, not truncation.
+- The original experiment also cut off the export file itself. A one-step `.wav` export with a
+  2-beat note ends at the file boundary, before the sound does [measured]. This only matters for
+  a sheet whose last note is long. Last-note cut-off in full-length exports was **not tested**.
+  It is a possible minor export issue for Dev to consider; no change made.
+
+**Live playback (`scheduleStepAt`, Web Audio graph): not measured.** Live playback has no file
+boundary, so this artifact does not apply to it. It has different envelope constants, caps and
+delay feedback (listed in the Phase 2 scope limit above), so the export numbers are not live
+numbers. Live sustain remains a listening-test item.
+
+**Recommendation (unchanged in substance):** do not change the synthesizer or the 900 ms ceiling
+for the hackathon. Describe the voices as struck/decaying, and do not claim notated sustain.
+
+**Verification:** lint PASS, composition 8/8, timeline 12/12, PBT 500/500, build PASS. No
+production file changed. `b04WaveformPadded.ts` is tsc-excluded like the other diagnostics and is
+not covered by CI.
 
 ## Next owner update
 
