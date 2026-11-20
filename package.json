@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "test:composition": "node --import tsx --test src/engine/composition.test.ts"
+    "test:composition": "node --import tsx --test src/engine/composition.test.ts",
+    "test:motion": "node --import tsx --test src/engine/compositionMotion.test.ts"
   },
   "dependencies": {
     "@google/genai": "^3.3.0",

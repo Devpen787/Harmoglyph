@@ -1,0 +1,221 @@
+✖ R4: the same score and beat give identical frames, independent of call history (3.184084ms)
+✖ R4: 30 fps, 60 fps and irregular frame cadences reach the same frame; earlier trail is never rewritten (0.370375ms)
+✔ R2: motion is continuous across onsets and phrase boundaries (no teleport) (0.377167ms)
+✖ R2: the ribbon actually moves between note starts (damped response, not static marks) (0.388542ms)
+✖ R3: rising pitch and repeated pulse produce clearly different contours (0.113625ms)
+✖ R3/R6: Leap Dialogue keeps two independent voices and links simultaneous onsets (0.669ms)
+✖ R6: First Mark stays deliberately simple (0.2845ms)
+✖ R5: editing one pitch changes only motion from that onset onward, without mutating the score (0.347209ms)
+✔ R4: every sample is finite and inside the 600×600 SVG viewport for all presets and beats (0.250209ms)
+✖ R5: the completed artwork is stable, covers every note, and later beats do not change it (0.3445ms)
+✖ R6 negative controls fail closed (0.228292ms)
+✖ R3: the inspector description matches the score relationships (0.165292ms)
+✖ R3/T3: renderer segments give every started note its own selectable, finite SVG shape (0.183708ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 2
+ℹ fail 11
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 305.122708
+
+✖ failing tests:
+
+test at src/engine/compositionMotion.test.ts:1:723
+✖ R4: the same score and beat give identical frames, independent of call history (3.184084ms)
+  AssertionError [ERR_ASSERTION]: first-mark produces ribbon samples
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:19:12)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.start (node:internal/test_runner/test:959:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:332:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at src/engine/compositionMotion.test.ts:1:1170
+✖ R4: 30 fps, 60 fps and irregular frame cadences reach the same frame; earlier trail is never rewritten (0.370375ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'samples')
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:33:41)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:332:3)
+
+test at src/engine/compositionMotion.test.ts:1:2444
+✖ R2: the ribbon actually moves between note starts (damped response, not static marks) (0.388542ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'samples')
+      at sampleAt (<repo>/src/engine/compositionMotion.test.ts:9:23)
+      at rAt (<repo>/src/engine/compositionMotion.test.ts:54:30)
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:56:22)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7)
+
+test at src/engine/compositionMotion.test.ts:1:3114
+✖ R3: rising pitch and repeated pulse produce clearly different contours (0.113625ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'samples')
+      at sampleAt (<repo>/src/engine/compositionMotion.test.ts:9:23)
+      at <anonymous> (<repo>/src/engine/compositionMotion.test.ts:64:70)
+      at Array.map (<anonymous>)
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:64:59)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7)
+
+test at src/engine/compositionMotion.test.ts:1:4036
+✖ R3/R6: Leap Dialogue keeps two independent voices and links simultaneous onsets (0.669ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+  + []
+  - [
+  -   'counter',
+  -   'lead'
+  - ]
+
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:79:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'counter', 'lead' ],
+    operator: 'deepStrictEqual'
+  }
+
+test at src/engine/compositionMotion.test.ts:1:5104
+✖ R6: First Mark stays deliberately simple (0.2845ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:93:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual'
+  }
+
+test at src/engine/compositionMotion.test.ts:1:5437
+✖ R5: editing one pitch changes only motion from that onset onward, without mutating the score (0.347209ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'samples')
+      at before (<repo>/src/engine/compositionMotion.test.ts:108:53)
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:109:20)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7)
+
+test at src/engine/compositionMotion.test.ts:1:7124
+✖ R5: the completed artwork is stable, covers every note, and later beats do not change it (0.3445ms)
+  AssertionError [ERR_ASSERTION]: first-mark clamps after the end
+  + actual - expected
+
+    {
+  +   beat: 14,
+  -   beat: 4,
+      relationships: [],
+      span: 0,
+      tracks: []
+    }
+
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:136:12)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: { beat: 14, span: 0, tracks: [], relationships: [] },
+    expected: { beat: 4, span: 0, tracks: [], relationships: [] },
+    operator: 'deepStrictEqual'
+  }
+
+test at src/engine/compositionMotion.test.ts:1:7608
+✖ R6 negative controls fail closed (0.228292ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:145:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /Invalid composition/,
+    operator: 'throws'
+  }
+
+test at src/engine/compositionMotion.test.ts:1:8504
+✖ R3: the inspector description matches the score relationships (0.165292ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  null !== 'lead-1'
+
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:158:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'lead-1',
+    operator: 'strictEqual'
+  }
+
+test at src/engine/compositionMotion.test.ts:1:9078
+✖ R3/T3: renderer segments give every started note its own selectable, finite SVG shape (0.183708ms)
+  AssertionError [ERR_ASSERTION]: first-mark: one segment per note
+  + actual - expected
+
+  + []
+  - [
+  -   'lead-1'
+  - ]
+
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:171:12)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'lead-1' ],
+    operator: 'deepStrictEqual'
+  }

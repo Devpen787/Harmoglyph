@@ -1204,6 +1204,127 @@ Report format: one line per step, pass / fail / unsure, plus what was heard.
 **W2 go/no-go: NO-GO** until both are done. If the listening results show no failures and the
 eligibility check is clean, W2 can begin. E06 and E08 are W2-era items under the roadmap.
 
+## W2-A Signature Music-to-Motion — first Ribbon slice (20 Nov 2026)
+
+**Branch / PR:** `work/w2-signature-motion-2026-11-20`, draft PR #5, stacked on PR #4 (`2b653ec`).
+**Spec:** `.kiro/specs/harmoglyph-motion/{requirements,design,tasks}.md`. The exact commit SHA and
+CI result are posted as a PR #5 comment, because a document can't contain its own commit SHA.
+**Not changed:** `audioSynth.ts` (synthesis, envelopes, 900 ms ceiling), W1 scheduling,
+Orbit/Bloom/Weave, formula/3D features. No new dependency.
+
+Evidence labels: **[measured]** observed from running code or the real app; **[aesthetic]**
+Kiro's subjective judgement, not a test result.
+
+### What was built
+
+| File | Change |
+|---|---|
+| `src/engine/compositionMotion.ts` (new) | Pure Ribbon kernel: `computeRibbonFrame`, `describeNoteMotion`, `ribbonSegments`, `RIBBON_MAPPINGS` |
+| `src/engine/compositionMotion.test.ts` (new) | 13 behaviour tests |
+| `src/components/CompositionJourneyView.tsx` | Ribbon added to the grammar switch, ribbon layer in the existing SVG, inspector "Music → ribbon motion" block |
+| `package.json`, `.github/workflows/w0-baseline.yml` | `npm run test:motion` and a CI step |
+| `scripts/w2-capture-ribbon.ts` (new, tsc-excluded) | Real-app screenshot and interaction capture |
+
+**Model.** For each track:
+- Angle = 2π·beat/total, the same mapping as the arc grammars.
+- Radius: r(b) = r₀ + Σ (rᵢ − rᵢ₋₁)·s(b − onsetᵢ), where rᵢ is the existing `deriveGeometry`
+  pitch+voice radius and s is the closed-form step response of an under-damped spring
+  (ω = 7.5 rad/beat, ζ = 0.42).
+- Consequences: position and its rate of change are continuous across onsets, overshoot is
+  about 23% of the interval, and repeated pitches add no radial motion.
+- Thickness = base + Σ velocity·(written-duration plateau + smooth onset swell).
+- Each track is its own ribbon. Simultaneous onsets on different tracks are drawn as dashed
+  counterpoint links.
+
+**Data flow.** The frame is computed in render from `progress`, which is the existing
+audio-clock playhead, or `totalBeats` when "Complete art" is shown. No timer or stored state
+drives the art. The inspector lists which mappings are derived from the score and which are
+design choices.
+
+### Tests
+
+- **T1 before implementation [measured]:** against a typed stub, 11 of 13 tests fail. The 2 that
+  pass do so only because the stub returns no tracks; the determinism test asserts non-empty
+  tracks, so they can't stay vacuous. Log: `docs/evidence/w2/t1-failing-run-2026-11-20.txt`.
+- **After implementation [measured]:** 13/13 pass. Coverage:
+  - determinism, and 30 fps / 60 fps / irregular cadence giving the same frame
+  - earlier trail never rewritten as time advances
+  - no teleport (largest step 8.42 px, limit 12)
+  - damped overshoot exists
+  - rising contour differs from repeated pulse; every onset swells, even at the same pitch
+  - Leap Dialogue: 2 tracks, all 12 note IDs, 4 counterpoint links at beats 0, 2, 4, 6
+  - First Mark: one note, zero radial motion
+  - pitch edit changes only motion from that onset onward and doesn't mutate the score
+  - all samples finite and inside the viewport; completed frame stable past the end
+  - negative controls throw: NaN pitch, NaN/∞ beat, NaN damping, ω = 0, step = 0, unknown note
+  - one closed SVG segment per note
+- **Mutation checks [measured]:** an instant pitch jump fails the 2 continuity/motion tests.
+  A wall-clock dependence fails 3 determinism/motion tests. Log:
+  `docs/evidence/w2/t2-mutation-checks-2026-11-20.txt`.
+- **Full local suite [measured]:** lint PASS, composition 8/8, timeline 12/12, motion 13/13,
+  PBT 500/500, build PASS.
+
+### Real-app check (headed Chrome for Testing 156, `npm run dev`) [measured]
+
+Raw: `docs/evidence/w2/ui-check-2026-11-20.json`; screenshots: `docs/evidence/w2/screenshots/`
+(scrub, two live frames, complete, per preset); overview: `screenshots/contact-sheet.png`.
+
+| Preset | Segments complete | Head moved between live frames 0.4 s apart |
+|---|---|---|
+| First Mark | 1 | yes |
+| Glass Garden | 16 | yes |
+| Ascending Light | 8 | yes |
+| Pulse Study | 16 | yes |
+| Leap Dialogue | 12 (2 ribbons) | yes |
+
+- Click and keyboard (Tab focus + Enter) selection open the Ribbon inspector block for the
+  chosen note.
+- Save SVG produced `leap-dialogue-ribbon-harmoglyph.svg` containing the ribbon group and 12
+  ribbon paths.
+- Orbit still renders arc marks with no ribbon paths.
+- Page errors: only the two known 404s.
+
+**Audio start-up observation [measured, not diagnosed]:** in 1 of 3 capture runs, the first
+Play of the browser session left the playhead and ribbon head frozen at the start beat for at
+least 1.3 s. In the other two runs, including one ordered specifically to test this, motion
+began normally. The playhead follows the AudioContext clock, so this is audio start-up
+behaviour in Chrome for Testing, not ribbon logic. It belongs to the pending W1 listening test
+(first play).
+
+### Visual assessment [aesthetic, Kiro]
+
+- The five pieces produce distinct shapes:
+  - First Mark: a single calm ring
+  - Ascending Light: an outward spiral
+  - Pulse Study: a regular lobed loop
+  - Glass Garden: a livelier rise and fall
+  - Leap Dialogue: two separated ribbons, counterline inside
+- The live frames read as a moving drawing head rather than a reveal.
+- Open design questions for Dev:
+  1. The ribbon continues through rests at base thickness, and rests are attributed to the
+     preceding note. First Mark's one-beat note therefore draws a full four-beat ring.
+     Duration shows only as the thicker plateau, which is subtle.
+  2. Ribbons are thin (about 2–7 units) and may need more visual weight.
+  3. Counterpoint links are faint.
+  4. The default-selected first note shows a white highlight at the top in every view.
+
+### Limits
+
+- Automated tests prove determinism, bounds, attribution and causality. They do not prove
+  beauty or fluidity; that is Dev's visual review.
+- Screenshots come from Chrome for Testing launched by Playwright, not Dev's Chrome; no sound
+  was judged.
+- Frame cost was not profiled. Each frame recomputes about 260–770 samples per track in render.
+- `scripts/w2-capture-ribbon.ts` is tsc-excluded and not run in CI; it needs the global
+  Playwright install.
+- No mobile/responsive screenshots were taken; the layout code is unchanged apart from the
+  added grammar button.
+
+### Next gate
+
+ChatGPT code review of the W2 commit and CI, plus Dev visual review of the contact sheet and the
+live app, deciding the four design questions above. Do not merge; do not start W3.
+
 ## Next owner update
 
 When Kiro and browser checks are completed, append evidence links next to the
