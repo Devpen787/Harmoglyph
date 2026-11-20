@@ -24,5 +24,5 @@
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
-  "exclude": ["dist", "src/engine/e01e02e03b04.diagnostic.ts", "src/engine/browserSchedulingDiagnostic.ts", "src/engine/productionPathDiagnostic.ts", "src/engine/b04WaveformMeasurement.ts", "src/engine/headedBrowserProbe.ts", "src/engine/b04WaveformPadded.ts"]
+  "exclude": ["dist", "src/engine/e01e02e03b04.diagnostic.ts", "src/engine/browserSchedulingDiagnostic.ts", "src/engine/productionPathDiagnostic.ts", "src/engine/b04WaveformMeasurement.ts", "src/engine/headedBrowserProbe.ts", "src/engine/b04WaveformPadded.ts", "scripts/w2-capture-ribbon.ts"]
 }

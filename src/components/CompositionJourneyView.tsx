@@ -8,8 +8,9 @@ import {
   type CompositionNote, type GeometryMark, type MusicalComposition,
 } from '../engine/composition';
 import { beatAtAudioTime, CompositionLookaheadCursor, planCompositionTimeline } from '../engine/compositionTimeline';
+import { computeRibbonFrame, describeNoteMotion, ribbonSegments, RIBBON_MAPPINGS } from '../engine/compositionMotion';
 
-type ArtGrammar = 'orbit' | 'bloom' | 'weave';
+type ArtGrammar = 'orbit' | 'bloom' | 'weave' | 'ribbon';
 
 interface Props {
   composition: MusicalComposition;
@@ -72,6 +73,16 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
   const currentPhrase = Math.min(Math.ceil(span / composition.beatsPerBar), Math.floor(progress / composition.beatsPerBar) + 1);
   const barCount = Math.ceil(span / composition.beatsPerBar);
   const canOpen3d = canProjectToSpreadsheet(composition);
+  // Ribbon is a pure function of (score, beat): the audio-clock playhead drives it, nothing else.
+  const ribbon = useMemo(() => {
+    if (grammar !== 'ribbon' || invalid.length) return null;
+    const frame = computeRibbonFrame(composition, progress);
+    return { frame, segments: frame.tracks.flatMap((track) => ribbonSegments(track).map((seg) => ({ ...seg, trackIndex: track.trackIndex }))) };
+  }, [grammar, composition, progress, invalid.length]);
+  const selectedMotion = useMemo(() => {
+    if (grammar !== 'ribbon' || invalid.length || !selected) return null;
+    try { return describeNoteMotion(composition, selected.id); } catch { return null; }
+  }, [grammar, composition, selected, invalid.length]);
 
   const stopTransport = () => {
     setPlaying(false);
@@ -308,7 +319,7 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
             <div className="relative z-10 px-5 md:px-7 pt-6 flex flex-wrap items-start justify-between gap-3">
               <div><div className="text-[10px] font-semibold tracking-[.24em] uppercase text-[#bda5db]">02 / The visual score</div><h2 className="font-serif text-2xl md:text-3xl mt-1">{composition.title}</h2><p className="text-[11px] text-[#a999bc] mt-1">Every stroke represents an actual note · {grammar.toUpperCase()} interpretation</p></div>
               <div className="flex gap-1 rounded-full p-1 bg-[#281d3b]/80 border border-[#473456]" aria-label="Visual interpretation">
-                {(['orbit','bloom','weave'] as ArtGrammar[]).map((style) => <button type="button" key={style} aria-pressed={grammar === style} onClick={() => setGrammar(style)} className={`rounded-full px-3 py-1.5 text-xs capitalize transition ${grammar === style ? 'bg-[#d7c7f2] text-[#21162d] font-bold' : 'text-[#bbadcc] hover:text-white'}`}>{style}</button>)}
+                {(['orbit','bloom','weave','ribbon'] as ArtGrammar[]).map((style) => <button type="button" key={style} aria-pressed={grammar === style} onClick={() => setGrammar(style)} className={`rounded-full px-3 py-1.5 text-xs capitalize transition ${grammar === style ? 'bg-[#d7c7f2] text-[#21162d] font-bold' : 'text-[#bbadcc] hover:text-white'}`}>{style}</button>)}
               </div>
             </div>
             <div className="relative z-10 flex-1 min-h-[480px] flex items-center justify-center px-2">
@@ -335,7 +346,18 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
                   }).join(' ');
                   return <path key={track.id} d={path} fill="none" stroke={PHRASE_COLORS[index % PHRASE_COLORS.length]} strokeWidth="2.2" strokeOpacity=".32" strokeDasharray="4 7"/>;
                 })}
-                {marks.map((mark) => {
+                {ribbon && <g aria-label="Melodic ribbon">
+                  {ribbon.frame.relationships.map((rel) => <line key={rel.noteIds.join('-')} x1={rel.from.x} y1={rel.from.y} x2={rel.to.x} y2={rel.to.y} stroke="#e7dcff" strokeOpacity=".35" strokeWidth="1.2" strokeDasharray="2 5"><title>{`Counterpoint: ${rel.noteIds.join(' + ')} start together, ${Math.abs(rel.semitones)} semitones apart`}</title></line>)}
+                  {ribbon.segments.map((seg) => {
+                    const note = notes.find((n) => n.id === seg.noteId)!;
+                    const color = PHRASE_COLORS[(Math.floor(note.startBeat / composition.beatsPerBar) + seg.trackIndex) % PHRASE_COLORS.length];
+                    const isSelected = selected?.id === seg.noteId;
+                    const select = () => { setSelectedId(seg.noteId); setShowMath(true); };
+                    return <path key={seg.noteId} d={seg.d} fill={color} fillOpacity={selected && showMath && !performing && !isSelected ? .5 : .9} stroke={isSelected ? '#fff' : color} strokeOpacity={isSelected ? .9 : .35} strokeWidth={isSelected ? 1.4 : .6} strokeLinejoin="round" filter={isSelected ? 'url(#note-glow)' : undefined} role="button" tabIndex={0} aria-label={`Inspect ${noteName(note.midi)}, beat ${format(note.startBeat + 1, 1)}, ${note.trackId} ribbon`} onClick={select} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); select(); } }}/>;
+                  })}
+                  {!showComplete && ribbon.frame.tracks.map((track) => track.head && <circle key={track.trackId} cx={track.head.x} cy={track.head.y} r={track.head.width * .55 + 2} fill="#fff" fillOpacity=".9" filter="url(#note-glow)"/>)}
+                </g>}
+                {grammar !== 'ribbon' && marks.map((mark) => {
                   const note = notes.find((n) => n.id === mark.noteId)!;
                   const paintedFraction = showComplete ? 1 : clamp((progress - note.startBeat) / note.durationBeats, 0, 1);
                   if (paintedFraction <= 0) return null;
@@ -387,7 +409,15 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
                 <div className="flex justify-between gap-2"><span>Energy / line width</span><b>{format(selectedMark.strokeWidth,2)} units</b></div>
               </div></div>
               <div className="bg-[#f7f3fa] border border-[#e9e1ee] rounded-xl p-3 text-xs text-[#554a60] space-y-1"><div className="font-bold text-[#6e4aa6]">Traceable formulas</div><div className="font-mono text-[11px] leading-5">f = 440 × 2^((m − 69)/12)<br/>θ = 2π × onset / total<br/>Δθ = 2π × duration / total</div><div>Harmonic partials: {selectedMark.harmonicHz.map((hz) => `${Math.round(hz)}Hz`).join(' · ')}</div></div>
-              <div className="rounded-xl border-l-[3px] border-[#8f63d4] bg-[#faf7fd] px-3 py-3 text-[11px] text-[#74687d] leading-relaxed"><b className="text-[#4b3a60]">Derived:</b> pitch, timing, frequency ratios, angular span and modeled partials. <b className="text-[#4b3a60]">Designed:</b> radius scale, palette, glow, note thickness and Orbit/Bloom/Weave grammar. None is claimed to be the unique picture of a song.</div>
+              {selectedMotion && <div><div className="text-[10px] uppercase tracking-[.16em] text-[#8b7e94] font-bold">Music → ribbon motion</div><div className="mt-2 space-y-2 text-xs">
+                <div className="flex justify-between gap-2 border-b border-[#eee8ef] pb-2"><span>Interval from previous note</span><b>{selectedMotion.intervalSemitones === null ? 'first note of this voice' : `${selectedMotion.intervalSemitones > 0 ? '+' : ''}${selectedMotion.intervalSemitones} semitones`}</b></div>
+                <div className="flex justify-between gap-2 border-b border-[#eee8ef] pb-2"><span>Ribbon moves by</span><b>{format(selectedMotion.radiusChange,1)} units</b></div>
+                <div className="flex justify-between gap-2 border-b border-[#eee8ef] pb-2"><span>Spring overshoot</span><b>{format(selectedMotion.peakOvershoot,1)} units</b></div>
+                <div className="flex justify-between gap-2 border-b border-[#eee8ef] pb-2"><span>Peak thickness / velocity</span><b>{format(selectedMotion.peakWidth,2)} units</b></div>
+                <div className="flex justify-between gap-2"><span>Starts together with</span><b>{selectedMotion.counterpointNoteIds.length ? selectedMotion.counterpointNoteIds.join(', ') : '—'}</b></div>
+              </div>
+              <div className="mt-2 bg-[#f7f3fa] border border-[#e9e1ee] rounded-xl p-3 text-[11px] text-[#554a60] space-y-1"><div className="font-bold text-[#6e4aa6]">How the ribbon is computed</div><div className="font-mono leading-5">r(b) = r₀ + Σ Δrᵢ · s(b − onsetᵢ)<br/>s = damped spring step (ω, ζ)</div><div><b>Derived:</b> {RIBBON_MAPPINGS.derived.join('; ')}.</div><div><b>Designed:</b> {RIBBON_MAPPINGS.designed.join('; ')}.</div></div></div>}
+              <div className="rounded-xl border-l-[3px] border-[#8f63d4] bg-[#faf7fd] px-3 py-3 text-[11px] text-[#74687d] leading-relaxed"><b className="text-[#4b3a60]">Derived:</b> pitch, timing, frequency ratios, angular span and modeled partials. <b className="text-[#4b3a60]">Designed:</b> radius scale, palette, glow, note thickness and Orbit/Bloom/Weave/Ribbon grammar. None is claimed to be the unique picture of a song.</div>
             </div> : <p className="text-sm text-[#807187]">Select a note in the score or artwork and reveal the mapping that produced its mark.</p>}
             <div className="mt-5 pt-4 border-t border-[#eee7ef] space-y-2">
               <div className="text-[10px] uppercase font-bold tracking-[.14em] text-[#85778f]">04 / Bridge to the original app</div>

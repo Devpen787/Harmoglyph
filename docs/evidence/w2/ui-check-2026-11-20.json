@@ -1,0 +1,123 @@
+{
+  "generatedAt": "2026-11-20T13:05:46.513Z",
+  "browser": "156.0.8078.4",
+  "presets": {
+    "first-mark": {
+      "totalBeats": 4,
+      "scrubBeat": 2,
+      "segmentsAtScrub": 1,
+      "segmentsComplete": 1,
+      "completeGeometrySize": 4129,
+      "liveHeadA": [
+        [
+          "173.74804668274805",
+          "217.8975987952944"
+        ]
+      ],
+      "liveHeadB": [],
+      "headMovedDuringPlayback": true
+    },
+    "glass-garden": {
+      "totalBeats": 16,
+      "scrubBeat": 9,
+      "segmentsAtScrub": 9,
+      "segmentsComplete": 16,
+      "completeGeometrySize": 16846,
+      "liveHeadA": [
+        [
+          "124.37991981818715",
+          "423.1271855193338"
+        ]
+      ],
+      "liveHeadB": [
+        [
+          "93.73339427960843",
+          "347.0429359623126"
+        ]
+      ],
+      "headMovedDuringPlayback": true
+    },
+    "ascending-light": {
+      "totalBeats": 8,
+      "scrubBeat": 4.5,
+      "segmentsAtScrub": 5,
+      "segmentsComplete": 8,
+      "completeGeometrySize": 8463,
+      "liveHeadA": [
+        [
+          "120.24242309368569",
+          "344.5996742663553"
+        ]
+      ],
+      "liveHeadB": [
+        [
+          "122.90800126070766",
+          "220.782920733462"
+        ]
+      ],
+      "headMovedDuringPlayback": true
+    },
+    "pulse-study": {
+      "totalBeats": 8,
+      "scrubBeat": 4.5,
+      "segmentsAtScrub": 9,
+      "segmentsComplete": 16,
+      "completeGeometrySize": 8735,
+      "liveHeadA": [
+        [
+          "133.98471017791533",
+          "280.41674995874797"
+        ]
+      ],
+      "liveHeadB": [
+        [
+          "214.34487202664405",
+          "157.30665942105333"
+        ]
+      ],
+      "headMovedDuringPlayback": true
+    },
+    "leap-dialogue": {
+      "totalBeats": 8,
+      "scrubBeat": 4.5,
+      "segmentsAtScrub": 8,
+      "segmentsComplete": 12,
+      "completeGeometrySize": 16786,
+      "liveHeadA": [
+        [
+          "123.48712855830556",
+          "322.31920177182656"
+        ],
+        [
+          "167.03623574146425",
+          "316.8126270825984"
+        ]
+      ],
+      "liveHeadB": [
+        [
+          "127.84113813415979",
+          "189.73500458465557"
+        ],
+        [
+          "180.61060738808848",
+          "223.5330050029491"
+        ]
+      ],
+      "headMovedDuringPlayback": true
+    }
+  },
+  "checks": {
+    "clickSelectShowsMotionBlock": true,
+    "clickSelectedText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · LEAD | C4 | Beat 1.0 · 1 beat(s) · 261.63 Hz | MUSIC → MATHEMATICS | Frequency | 261.63 Hz | Ratio to C4 | 1.0000 : 1 | Angle / note onset | 0.0° | Arc / note duration | 45.0°",
+    "keyboardSelectLabel": "Inspect E5, beat 3.0, lead ribbon",
+    "keyboardSelectedText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · LEAD | E5 | Beat 3.0 · 1 beat(s) · 659.26 Hz | MUSIC → MATHEMATICS",
+    "savedSvgFilename": "leap-dialogue-ribbon-harmoglyph.svg",
+    "savedSvgHasRibbonGroup": true,
+    "savedSvgRibbonPaths": 12,
+    "orbitStillRenders": true
+  },
+  "pageErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+}

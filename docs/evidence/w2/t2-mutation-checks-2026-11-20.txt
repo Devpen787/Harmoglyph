@@ -1,0 +1,10 @@
+Mutation checks on src/engine/compositionMotion.ts (temporary env-gated edits, file restored; final suite 13/13).
+teleport: stepResponse returns 1 immediately after onset (no spring)
+  -> FAIL "R2: motion is continuous across onsets" and "R2: the ribbon actually moves between note starts"
+clock: stepResponse depends on Date.now()
+  -> FAIL "R4: same score and beat give identical frames", "R4: 30/60/irregular cadences", "R2: ribbon actually moves"
+Margins on real implementation (frame at totalBeats):
+  max step between consecutive samples: 8.42 px (test limit 12)
+  max thickness step: 0.98 (test limit 1.5)
+  radius ranges: first-mark 150.6 constant; glass-garden 144.6-214.5; ascending-light 150.6-197.2; pulse-study 143.0-208.5; leap-dialogue 115.0-219.7
+  counterpoint links: leap-dialogue 4, others 0

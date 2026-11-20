@@ -1,0 +1,83 @@
+{
+  "generatedAt": "2026-11-20T13:04:51.797Z",
+  "browser": "156.0.8078.4",
+  "presets": {
+    "glass-garden": {
+      "totalBeats": 16,
+      "scrubBeat": 9,
+      "segmentsAtScrub": 9,
+      "segmentsComplete": 16,
+      "completeGeometrySize": 16846,
+      "liveHeadA": [
+        [
+          "126.1623554911676",
+          "425.2175979216783"
+        ]
+      ],
+      "liveHeadB": [
+        [
+          "93.73339427960838",
+          "347.0429359623124"
+        ]
+      ],
+      "headMovedDuringPlayback": true
+    },
+    "first-mark": {
+      "totalBeats": 4,
+      "scrubBeat": 2,
+      "segmentsAtScrub": 1,
+      "segmentsComplete": 1,
+      "completeGeometrySize": 4129,
+      "liveHeadA": [
+        [
+          "182.7761488228751",
+          "205.45409202295815"
+        ]
+      ],
+      "liveHeadB": [],
+      "headMovedDuringPlayback": true
+    },
+    "leap-dialogue": {
+      "totalBeats": 8,
+      "scrubBeat": 4.5,
+      "segmentsAtScrub": 8,
+      "segmentsComplete": 12,
+      "completeGeometrySize": 16786,
+      "liveHeadA": [
+        [
+          "123.48712855830541",
+          "322.31920177182565"
+        ],
+        [
+          "167.03623574146414",
+          "316.8126270825977"
+        ]
+      ],
+      "liveHeadB": [
+        [
+          "130.99820542548667",
+          "186.01852767433184"
+        ],
+        [
+          "182.6011867714138",
+          "220.82161248778613"
+        ]
+      ],
+      "headMovedDuringPlayback": true
+    }
+  },
+  "checks": {
+    "clickSelectShowsMotionBlock": true,
+    "clickSelectedText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · LEAD | C4 | Beat 1.0 · 1 beat(s) · 261.63 Hz | MUSIC → MATHEMATICS | Frequency | 261.63 Hz | Ratio to C4 | 1.0000 : 1 | Angle / note onset | 0.0° | Arc / note duration | 45.0°",
+    "keyboardSelectLabel": "Inspect E5, beat 3.0, lead ribbon",
+    "keyboardSelectedText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · LEAD | E5 | Beat 3.0 · 1 beat(s) · 659.26 Hz | MUSIC → MATHEMATICS",
+    "savedSvgFilename": "leap-dialogue-ribbon-harmoglyph.svg",
+    "savedSvgHasRibbonGroup": true,
+    "savedSvgRibbonPaths": 12,
+    "orbitStillRenders": true
+  },
+  "pageErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+}
