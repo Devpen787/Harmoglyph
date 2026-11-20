@@ -1,0 +1,15 @@
+# PostFileSave hook observation — 2026-11-20T10:33Z
+# Method: background ps watcher (self-excluding regex); agent fs_write of byte-identical src/engine/b04WaveformPadded.ts (sha256 288dab63...2633 before and after)
+## Trial 1 (save window 10:29:45–10:30:18 UTC): processes seen
+76401 Fri Nov 20 11:30:09 2026     /bin/sh -c npm run lint && npm run test:composition && node --import tsx --test src/engine/compositionTimeline.test.ts && node --import tsx --input-type=module -e "import { runPbtInvariants } from './src/engine/pbtSuite.ts';
+76423 Fri Nov 20 11:30:09 2026     ~/Harmoglyph/node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit
+76463 Fri Nov 20 11:30:10 2026     node --import tsx --test src/engine/composition.test.ts
+76464 Fri Nov 20 11:30:10 2026     /opt/homebrew/Cellar/node/24.1.0/bin/node --import tsx src/engine/composition.test.ts
+76476 Fri Nov 20 11:30:11 2026     node --import tsx --input-type=module -e import { runPbtInvariants } from './src/engine/pbtSuite.ts'; const checks = runPbtInvariants(20261116, 100); console.log(JSON.stringify(checks.map(({ id, passed, passedCount, trials })
+79983 Fri Nov 20 11:32:07 2026     /bin/sh -c npm run lint && npm run test:composition && node --import tsx --test src/engine/compositionTimeline.test.ts && node --import tsx --input-type=module -e "import { runPbtInvariants } from './src/engine/pbtSuite.ts';
+80016 Fri Nov 20 11:32:07 2026     ~/Harmoglyph/node_modules/@typescript/typescript-darwin-arm64/lib/tsc --noEmit
+80084 Fri Nov 20 11:32:08 2026     node --import tsx --test src/engine/compositionTimeline.test.ts
+80098 Fri Nov 20 11:32:09 2026     node --import tsx --input-type=module -e import { runPbtInvariants } from './src/engine/pbtSuite.ts'; const checks = runPbtInvariants(20261116, 100); console.log(JSON.stringify(checks.map(({ id, passed, passedCount, trials })
+WATCH_DONE
+## Trial 2 (save window 10:31:47–10:32:15 UTC): hook process with parent
+pid=79983 ppid=21561 parent=~/Library/Application Support/kiro-cli/node --experimental-wasm-modules ~/Library/Application Support/kiro-cli/kas/3.4.0-57d start=Fri Nov 20 11:32:07 2026

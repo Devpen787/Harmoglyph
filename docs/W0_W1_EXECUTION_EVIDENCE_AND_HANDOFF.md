@@ -1,7 +1,7 @@
 # Harmoglyph — W0 baseline + W1 clock spike: evidence and Kiro handoff
 
 **As of:** 18 November 2026, updated with W0 eligibility analysis, B04 PCM waveform measurements, and Phase 3 manual test procedure.
-**Status:** W0 risk/unresolved (AI Studio pre-history not independently verifiable); W1 source CI-verified; B04 PCM-measured (offline export path); real browser audio gate requires manual test by Dev.
+**Status (20 Nov 2026):** W0 eligibility RISK (AI Studio pre-history unverified); W1 source CI-verified; B04 measured for WAV export only; PostFileSave hook dispatch independently observed (result not surfaced); real-browser listening test prepared but NOT yet performed.
 
 ## Provenance / scope
 - GitHub main baseline: `c6b55866342147a4de0eff01551b6a26ad6cf317`
@@ -1117,6 +1117,92 @@ for the hackathon. Describe the voices as struck/decaying, and do not claim nota
 **Verification:** lint PASS, composition 8/8, timeline 12/12, PBT 500/500, build PASS. No
 production file changed. `b04WaveformPadded.ts` is tsc-excluded like the other diagnostics and is
 not covered by CI.
+
+## Session 20 Nov 2026 — hook dispatch observation and listening-test preparation
+
+**Starting head:** `1eaa17b6156931ba207ac86a42725541cd13e09f`, in sync with `origin`. No
+application or engine code changed in this session. Two agent saves of
+`src/engine/b04WaveformPadded.ts` were byte-identical (SHA-256 `288dab63…2633` before and after;
+`git diff` empty).
+
+### Executed by Kiro this session
+
+**1. I02 — PostFileSave hook dispatch, independently observed.**
+
+Method: a background `ps` watcher polled every 0.2 s for processes matching the hook command's
+stages. Its regex used `[t]sc`-style patterns so it could not match its own command line, and an
+empty baseline was confirmed before each trial. Kiro then saved a file matching the hook's
+matcher `(^|/)src/engine/.*\.ts$` with byte-identical content and issued no other commands
+during the window.
+
+| Trial | Save window (UTC) | Observed [measured] |
+|---|---|---|
+| 1 | 10:29:45–10:30:18 | `/bin/sh -c npm run lint && npm run test:composition && …runPbtInvariants…` started 10:30:09 (pid 76401), the hook's exact `command` string. Then `tsc --noEmit`, `composition.test.ts` and `compositionTimeline.test.ts` processes appeared in sequence. |
+| 2 | 10:31:47–10:32:15 | Same command started 10:32:07 (pid 79983). **Parent pid 21561 = Kiro CLI agent runtime** (`kiro-cli/kas/3.4.0-57d662e2…/node_modules/@kiro/agent`), not a shell launched by a Kiro tool call. |
+
+Raw log: `docs/evidence/i02-hook-dispatch-observation-2026-11-20.txt`.
+
+Conclusion: the v1 `PostFileSave` hook in `.kiro/hooks/pbt-on-formula-save.json` **is registered
+and executes automatically** on agent file saves in Kiro CLI 3.4.0.
+
+Limits:
+- The hook's stdout and exit status are **not returned to the agent**. Whether each hook run
+  passed is not observed; the same command passes when run manually.
+- The 18 Nov statement "two matching saves produced no hook output" meant "no output shown to the
+  agent", not "hook did not run". That session had no process watcher, so whether the hook ran
+  then is unknown.
+- The withdrawn session-2 claim stays withdrawn. Its cited evidence was agent-written text.
+- This is Kiro CLI only. The Kiro IDE (also running on this Mac) was not tested.
+
+Suggested independent confirmation by Dev (optional): run `/hooks` in an interactive Kiro CLI
+session and check that `harmoglyph-engine-verification` is listed.
+
+**2. Application started for the listening test.** `npm run dev` on port 3000:
+`/api/health` → `{"status":"ok"}`, `/` → HTTP 200 [measured]. Nothing was heard or judged by Kiro.
+
+### Requires Dev's participation — NOT yet performed
+
+The listening checklist below was given to Dev on 20 Nov. **No results have been reported, so
+no listening outcome is recorded here.** Playwright scheduling traces (18 Nov) are not a
+substitute.
+
+| # | Check | Register IDs | Status |
+|---|---|---|---|
+| 1 | Pulse Study first play: first note audible, pulse even | E01/E02 unlock, E08 | pending Dev |
+| 2 | Leap Dialogue: two lines audible; long low notes held or fading | B03, B04 (live) | pending Dev |
+| 3 | Ascending Light pause: no note after Pause; Resume continues without repeats | E04, D07 | pending Dev |
+| 4 | Seek to middle, Resume: no earlier notes | E04, D07 | pending Dev |
+| 5 | Glass Garden, switch tab 5 s, return: stopped, no hanging note, button label | E07 | pending Dev |
+| 6 | Legacy sheet player (tab right of Compose & Art, Play · BPM, ~10 s, Stop): even rhythm, clean stop | E01 | pending Dev |
+| 7 | Console errors beyond the two known 404s; Chrome version; speakers or headphones | E07, environment | pending Dev |
+
+Report format: one line per step, pass / fail / unsure, plus what was heard.
+
+### Reconciliation against the review register (as of this commit)
+
+| ID | Status | Basis |
+|---|---|---|
+| E01 legacy `setInterval` baseline | **Open** | Source analysis only; no measurement or listening (step 6 pending) |
+| E02 composer clock vs playhead | Partial | Headed-Chrome scheduling trace 18 Nov; audible/visual onset not observed |
+| E03 native look-ahead vs alternatives | Partial | Design comparison recorded 18 Nov; no Tone.js; no measured jitter of real output |
+| E04 single timebase under play/pause/resume/seek | Partial | Unit tests and headed-Chrome trace; audible check pending (steps 3–4) |
+| E05 audio / simulation / rAF separation | Partial | Source and unit-test evidence; no frame-drop measurement |
+| E06 motion continuity | **Open** | Not measured |
+| E07 tab switch, suspension, output latency, reload | **Open** | Automated hidden-tab attempts failed (18 Nov); step 5 pending |
+| E08 sync budget | **Open** | No tolerance defined or observed |
+| B04 duration vs sustain | Partial | WAV export measured with padding control (18 Nov). Live playback pending (step 2) |
+| I02 real hook trigger | **Dispatch observed** | Process-level evidence above; hook pass/fail not surfaced, so not fully closed |
+| I03 Kiro logs tied to commits | Partial | Kiro CLI sessions authored `086f9ea` and evidence commits; no exported Kiro session log |
+| I04 PBT, tests, typecheck, build, negative case | **Pass (scoped)** | CI runs `44553609395` and earlier; negative controls in timeline tests and B04 padding |
+
+### Next recommended gate
+
+1. Dev runs the 7-step listening checklist and posts results to PR #4. This is the only route to
+   closing E01, E04 (audible), E07 and B04 (live).
+2. Dev checks AI Studio project creation date and history (W0 eligibility, unchanged since 18 Nov).
+
+**W2 go/no-go: NO-GO** until both are done. If the listening results show no failures and the
+eligibility check is clean, W2 can begin. E06 and E08 are W2-era items under the roadmap.
 
 ## Next owner update
 
