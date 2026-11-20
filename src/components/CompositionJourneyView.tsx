@@ -7,6 +7,7 @@ import {
   projectToSpreadsheet, sortedNotes, totalBeats, validateComposition,
   type CompositionNote, type GeometryMark, type MusicalComposition,
 } from '../engine/composition';
+import { beatAtAudioTime, CompositionLookaheadCursor, planCompositionTimeline } from '../engine/compositionTimeline';
 
 type ArtGrammar = 'orbit' | 'bloom' | 'weave';
 
@@ -36,6 +37,12 @@ const bloomPath = (mark: GeometryMark, sweep: number) => {
   return `M ${format(a.x)} ${format(a.y)} Q ${format(outer.x)} ${format(outer.y)} ${format(b.x)} ${format(b.y)} Q ${format(inner.x)} ${format(inner.y)} ${format(a.x)} ${format(a.y)} Z`;
 };
 
+interface ActiveTransport {
+  originAudioSeconds: number;
+  fromBeat: number;
+  cursor: CompositionLookaheadCursor;
+}
+
 const MIDI_OPTIONS = Array.from({ length: 37 }, (_, i) => 48 + i);
 const durationOptions = [.5, 1, 1.5, 2, 3, 4];
 const countLabel = (count: number) => String(count).padStart(2, '0');
@@ -51,7 +58,7 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
   const [showComplete, setShowComplete] = useState(true);
   const [showMath, setShowMath] = useState(true);
   const [playhead, setPlayhead] = useState(0);
-  const playedRef = useRef(new Set<string>());
+  const transportRef = useRef<ActiveTransport | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   const notes = useMemo(() => sortedNotes(composition), [composition]);
@@ -66,8 +73,14 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
   const barCount = Math.ceil(span / composition.beatsPerBar);
   const canOpen3d = canProjectToSpreadsheet(composition);
 
-  const commit = (next: MusicalComposition, fromPreset = false) => {
+  const stopTransport = () => {
     setPlaying(false);
+    transportRef.current = null;
+    chimeraAudio.stopScheduledNotes();
+  };
+
+  const commit = (next: MusicalComposition, fromPreset = false) => {
+    stopTransport();
     setPlayhead(0);
     setShowComplete(true);
     onChange(fromPreset ? next : { ...next, id: 'custom' });
@@ -115,50 +128,83 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
   };
 
   const play = () => {
-    if (playing) { setPlaying(false); return; }
+    if (playing) { stopTransport(); return; }
     if (invalid.length) return;
     const start = showComplete || playhead >= span ? 0 : playhead;
+    // Unlock the AudioContext in the explicit user gesture and reserve a short lead.
+    const origin = chimeraAudio.preparePlayback(0.15);
+    if (origin === null) return;
+    chimeraAudio.stopScheduledNotes();
+    transportRef.current = {
+      originAudioSeconds: origin,
+      fromBeat: start,
+      cursor: new CompositionLookaheadCursor(planCompositionTimeline(composition, start)),
+    };
     setShowComplete(false);
     setPlayhead(start);
-    playedRef.current = new Set(notes.filter((n) => n.startBeat < start - .00001).map((n) => n.id));
-    // Start the audio context on the explicit user gesture, not from a delayed animation callback.
-    for (const note of notes.filter((n) => Math.abs(n.startBeat - start) < .00001)) {
-      const voice = composition.tracks.find((t) => t.id === note.trackId)?.voice ?? 'music-box';
-      chimeraAudio.triggerStep(noteAsSynthStep(note, composition.bpm), voice, 'harmonic-sine', 0);
-      playedRef.current.add(note.id);
-    }
     setPlaying(true);
   };
 
   useEffect(() => {
     if (!playing) return;
-    const beginBeat = playhead;
-    const beganAt = performance.now();
-    let frame = 0;
-    const tick = (now: number) => {
-      const beat = Math.min(span, beginBeat + (now - beganAt) / (60000 / composition.bpm));
-      for (const note of notes) {
-        if (note.startBeat > beat + .00001 || playedRef.current.has(note.id)) continue;
-        const voice = composition.tracks.find((t) => t.id === note.trackId)?.voice ?? 'music-box';
-        chimeraAudio.triggerStep(noteAsSynthStep(note, composition.bpm), voice, 'harmonic-sine', 0);
-        playedRef.current.add(note.id);
+    const session = transportRef.current;
+    if (!session) return;
+
+    const scheduleUpcoming = () => {
+      const audioNow = chimeraAudio.getAudioClockTime();
+      if (audioNow === null) return;
+      // A 180ms look-ahead tolerates moderately delayed JS callbacks while
+      // native Web Audio controls the actual onset timestamps.
+      const upcoming = session.cursor.pull(audioNow - session.originAudioSeconds, 0.18);
+      for (const event of upcoming) {
+        const voice = composition.tracks.find((t) => t.id === event.note.trackId)?.voice ?? 'music-box';
+        chimeraAudio.scheduleStepAt(
+          noteAsSynthStep(event.note, composition.bpm),
+          session.originAudioSeconds + event.startOffsetSeconds,
+          voice,
+          'harmonic-sine',
+          0,
+        );
       }
-      setPlayhead(beat);
-      if (beat >= span) { setPlaying(false); setShowComplete(true); return; }
+    };
+
+    scheduleUpcoming();
+    const scheduler = window.setInterval(scheduleUpcoming, 30);
+    let frame = 0;
+    const tick = () => {
+      const audioNow = chimeraAudio.getAudioClockTime();
+      if (audioNow !== null) {
+        const beat = beatAtAudioTime(
+          composition.bpm, session.fromBeat, session.originAudioSeconds, audioNow, span,
+        );
+        setPlayhead(beat);
+        if (beat >= span) {
+          transportRef.current = null;
+          setPlaying(false);
+          setShowComplete(true);
+          return;
+        }
+      }
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-    // Restarting after a note edit is handled by commit(); the playhead is captured at start.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playing, composition]);
+    return () => {
+      window.clearInterval(scheduler);
+      cancelAnimationFrame(frame);
+    };
+  }, [playing, composition, span]);
 
   useEffect(() => {
     if (!playing) return;
-    const pause = () => { if (document.hidden) setPlaying(false); };
+    const pause = () => { if (document.hidden) stopTransport(); };
     document.addEventListener('visibilitychange', pause);
     return () => document.removeEventListener('visibilitychange', pause);
+    // The playback session is stable while playing. Editing the score calls commit().
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playing]);
+
+  // Prevent scheduled notes from leaking into another route on unmount.
+  useEffect(() => () => chimeraAudio.stopScheduledNotes(), []);
 
   const saveSvg = () => {
     if (!svgRef.current || invalid.length) return;
@@ -316,11 +362,11 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
                 <div><div className="text-[10px] tracking-[.2em] text-[#a996bd] font-bold">{countLabel(painted)} / {countLabel(notes.length)} COMPLETE NOTE MARKS</div><div className="font-serif text-xl mt-1">{showComplete ? 'One score. One complete artwork.' : playing ? `Painting bar ${currentPhrase} of ${barCount}…` : 'The song is waiting to unfold.'}</div></div>
                 <div className="flex flex-wrap gap-2">
                   <button type="button" onClick={play} disabled={invalid.length > 0} className="rounded-full bg-[#e5cef8] text-[#261a35] px-4 py-2 flex items-center gap-2 text-xs font-bold hover:bg-white disabled:opacity-50">{playing ? <Pause size={14}/> : <Play size={14}/>} {playing ? 'Pause' : showComplete ? 'Play from start' : 'Resume'}</button>
-                  <button type="button" onClick={() => {setPlaying(false);setPlayhead(span);setShowComplete(true);}} className="rounded-full border border-[#645171] text-[#e4d7f3] px-3 py-2 text-xs">Complete art</button>
-                  <button type="button" onClick={() => {setPlaying(false);setPlayhead(0);setShowComplete(false);}} className="rounded-full border border-[#645171] text-[#e4d7f3] px-3 py-2 text-xs" aria-label="Clear painting"><RotateCcw size={14}/></button>
+                  <button type="button" onClick={() => {stopTransport();setPlayhead(span);setShowComplete(true);}} className="rounded-full border border-[#645171] text-[#e4d7f3] px-3 py-2 text-xs">Complete art</button>
+                  <button type="button" onClick={() => {stopTransport();setPlayhead(0);setShowComplete(false);}} className="rounded-full border border-[#645171] text-[#e4d7f3] px-3 py-2 text-xs" aria-label="Clear painting"><RotateCcw size={14}/></button>
                 </div>
               </div>
-              <label className="block text-[10px] text-[#ab9bbe]">Song position · {format(progress,1)} / {span} beats<input aria-label="Scrub song position" className="w-full block mt-1 accent-[#d5b1f5]" type="range" min="0" max={span} step=".5" value={progress} onChange={(e) => {setPlaying(false);setShowComplete(false);setPlayhead(Number(e.target.value));}}/></label>
+              <label className="block text-[10px] text-[#ab9bbe]">Song position · {format(progress,1)} / {span} beats<input aria-label="Scrub song position" className="w-full block mt-1 accent-[#d5b1f5]" type="range" min="0" max={span} step=".5" value={progress} onChange={(e) => {stopTransport();setShowComplete(false);setPlayhead(Number(e.target.value));}}/></label>
               <div className="flex flex-wrap justify-between gap-2 items-center">
                 <div className="flex flex-wrap gap-1.5">{Array.from({length:barCount},(_,i)=><span key={i} className={`rounded-full text-[10px] px-2 py-1 border ${i + 1 === currentPhrase ? 'bg-[#665085] text-white border-[#9175b0]' : 'border-[#433453] text-[#a696ba]'}`}>Phrase {i+1}</span>)}</div>
                 <div className="flex gap-3"><button type="button" className="text-xs text-[#c7b4e0] flex items-center gap-1" onClick={() => setPerforming((prev) => !prev)}><Eye size={13}/> {performing ? 'Exit show' : 'Full show'}</button><button type="button" className="text-xs text-[#c7b4e0] flex items-center gap-1" onClick={saveSvg} disabled={invalid.length > 0}><Download size={13}/> Save SVG</button></div>

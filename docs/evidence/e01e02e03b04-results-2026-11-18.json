@@ -1,0 +1,732 @@
+{
+  "runs": [
+    {
+      "label": "E03-A: normal-poll/pulse-study",
+      "scoreId": "pulse-study",
+      "bpm": 132,
+      "events": [
+        {
+          "noteId": "lead-1",
+          "nominalOffsetSec": 0,
+          "jsCallbackTimeSec": 1.0282000000178815,
+          "audioCtxClockSec": 0.017414965986394557,
+          "scheduledAudioSec": 0.12580498866213152,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-2",
+          "nominalOffsetSec": 0.22727272727272727,
+          "jsCallbackTimeSec": 1.2083000000119208,
+          "audioCtxClockSec": 0.19736961451247165,
+          "scheduledAudioSec": 0.3530777159348588,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-3",
+          "nominalOffsetSec": 0.45454545454545453,
+          "jsCallbackTimeSec": 1.418100000023842,
+          "audioCtxClockSec": 0.40634920634920635,
+          "scheduledAudioSec": 0.5803504432075861,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-4",
+          "nominalOffsetSec": 0.6818181818181818,
+          "jsCallbackTimeSec": 1.658,
+          "audioCtxClockSec": 0.6443537414965986,
+          "scheduledAudioSec": 0.8076231704803133,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-5",
+          "nominalOffsetSec": 0.9090909090909091,
+          "jsCallbackTimeSec": 1.868800000011921,
+          "audioCtxClockSec": 0.8591383219954648,
+          "scheduledAudioSec": 1.0348958977530405,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-6",
+          "nominalOffsetSec": 1.1363636363636362,
+          "jsCallbackTimeSec": 2.108300000011921,
+          "audioCtxClockSec": 1.0971428571428572,
+          "scheduledAudioSec": 1.2621686250257678,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-7",
+          "nominalOffsetSec": 1.3636363636363635,
+          "jsCallbackTimeSec": 2.3489000000059606,
+          "audioCtxClockSec": 1.3351473922902495,
+          "scheduledAudioSec": 1.489441352298495,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-8",
+          "nominalOffsetSec": 1.5909090909090908,
+          "jsCallbackTimeSec": 2.5587000000178812,
+          "audioCtxClockSec": 1.5441269841269842,
+          "scheduledAudioSec": 1.7167140795712224,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-9",
+          "nominalOffsetSec": 1.8181818181818181,
+          "jsCallbackTimeSec": 2.7982000000178813,
+          "audioCtxClockSec": 1.787936507936508,
+          "scheduledAudioSec": 1.9439868068439496,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-10",
+          "nominalOffsetSec": 2.0454545454545454,
+          "jsCallbackTimeSec": 3.0085,
+          "audioCtxClockSec": 1.9969160997732427,
+          "scheduledAudioSec": 2.171259534116677,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-11",
+          "nominalOffsetSec": 2.2727272727272725,
+          "jsCallbackTimeSec": 3.2479000000059606,
+          "audioCtxClockSec": 2.234920634920635,
+          "scheduledAudioSec": 2.398532261389404,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-12",
+          "nominalOffsetSec": 2.5,
+          "jsCallbackTimeSec": 3.4885,
+          "audioCtxClockSec": 2.478730158730159,
+          "scheduledAudioSec": 2.6258049886621313,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-13",
+          "nominalOffsetSec": 2.727272727272727,
+          "jsCallbackTimeSec": 3.698200000017881,
+          "audioCtxClockSec": 2.6877097505668934,
+          "scheduledAudioSec": 2.853077715934859,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-14",
+          "nominalOffsetSec": 2.9545454545454546,
+          "jsCallbackTimeSec": 3.9388000000119208,
+          "audioCtxClockSec": 2.9257142857142857,
+          "scheduledAudioSec": 3.0803504432075863,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-15",
+          "nominalOffsetSec": 3.1818181818181817,
+          "jsCallbackTimeSec": 4.1479000000059605,
+          "audioCtxClockSec": 3.1346938775510202,
+          "scheduledAudioSec": 3.307623170480313,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-16",
+          "nominalOffsetSec": 3.409090909090909,
+          "jsCallbackTimeSec": 4.38840000000596,
+          "audioCtxClockSec": 3.378503401360544,
+          "scheduledAudioSec": 3.5348958977530405,
+          "lateByMs": 0,
+          "classifiedLate": false
+        }
+      ],
+      "pollIntervalMs": 30,
+      "horizonMs": 180,
+      "originAudioSec": 0.12580498866213152,
+      "originPerfNowSec": 1.117,
+      "audioCtxFrozen": false,
+      "durationMismatchNotes": []
+    },
+    {
+      "label": "E03-B: normal-poll/leap-dialogue",
+      "scoreId": "leap-dialogue",
+      "bpm": 104,
+      "events": [
+        {
+          "noteId": "counter-1",
+          "nominalOffsetSec": 0,
+          "jsCallbackTimeSec": 2.564300000011921,
+          "audioCtxClockSec": 0.09287981859410431,
+          "scheduledAudioSec": 0.17804988662131518,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-1",
+          "nominalOffsetSec": 0,
+          "jsCallbackTimeSec": 2.564300000011921,
+          "audioCtxClockSec": 0.09287981859410431,
+          "scheduledAudioSec": 0.17804988662131518,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-2",
+          "nominalOffsetSec": 0.5769230769230769,
+          "jsCallbackTimeSec": 3.074,
+          "audioCtxClockSec": 0.5979138321995465,
+          "scheduledAudioSec": 0.754972963544392,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "counter-2",
+          "nominalOffsetSec": 1.1538461538461537,
+          "jsCallbackTimeSec": 3.643800000011921,
+          "audioCtxClockSec": 1.172607709750567,
+          "scheduledAudioSec": 1.331896040467469,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-3",
+          "nominalOffsetSec": 1.1538461538461537,
+          "jsCallbackTimeSec": 3.643800000011921,
+          "audioCtxClockSec": 1.172607709750567,
+          "scheduledAudioSec": 1.331896040467469,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-4",
+          "nominalOffsetSec": 1.7307692307692306,
+          "jsCallbackTimeSec": 4.214700000017881,
+          "audioCtxClockSec": 1.7414965986394557,
+          "scheduledAudioSec": 1.9088191173905458,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "counter-3",
+          "nominalOffsetSec": 2.3076923076923075,
+          "jsCallbackTimeSec": 4.78409999999404,
+          "audioCtxClockSec": 2.3103854875283445,
+          "scheduledAudioSec": 2.4857421943136226,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-5",
+          "nominalOffsetSec": 2.3076923076923075,
+          "jsCallbackTimeSec": 4.78409999999404,
+          "audioCtxClockSec": 2.3103854875283445,
+          "scheduledAudioSec": 2.4857421943136226,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-6",
+          "nominalOffsetSec": 2.884615384615384,
+          "jsCallbackTimeSec": 5.384400000005961,
+          "audioCtxClockSec": 2.9082993197278912,
+          "scheduledAudioSec": 3.0626652712366993,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "counter-4",
+          "nominalOffsetSec": 3.4615384615384612,
+          "jsCallbackTimeSec": 5.954,
+          "audioCtxClockSec": 3.4829931972789114,
+          "scheduledAudioSec": 3.6395883481597764,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-7",
+          "nominalOffsetSec": 3.4615384615384612,
+          "jsCallbackTimeSec": 5.954,
+          "audioCtxClockSec": 3.4829931972789114,
+          "scheduledAudioSec": 3.6395883481597764,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-8",
+          "nominalOffsetSec": 4.038461538461538,
+          "jsCallbackTimeSec": 6.524700000017881,
+          "audioCtxClockSec": 4.051882086167801,
+          "scheduledAudioSec": 4.216511425082854,
+          "lateByMs": 0,
+          "classifiedLate": false
+        }
+      ],
+      "pollIntervalMs": 30,
+      "horizonMs": 180,
+      "originAudioSec": 0.17804988662131518,
+      "originPerfNowSec": 2.6527000000178815,
+      "audioCtxFrozen": false,
+      "durationMismatchNotes": [
+        {
+          "noteId": "counter-1",
+          "scoreDurationSec": 1.1538461538461537,
+          "synthDecaySec": 0.9,
+          "gapSec": 0.2538461538461537
+        },
+        {
+          "noteId": "counter-2",
+          "scoreDurationSec": 1.1538461538461537,
+          "synthDecaySec": 0.9,
+          "gapSec": 0.2538461538461537
+        },
+        {
+          "noteId": "counter-3",
+          "scoreDurationSec": 1.1538461538461537,
+          "synthDecaySec": 0.9,
+          "gapSec": 0.2538461538461537
+        },
+        {
+          "noteId": "counter-4",
+          "scoreDurationSec": 1.1538461538461537,
+          "synthDecaySec": 0.9,
+          "gapSec": 0.2538461538461537
+        }
+      ]
+    },
+    {
+      "label": "E03-C: normal-poll/ascending-light",
+      "scoreId": "ascending-light",
+      "bpm": 96,
+      "events": [
+        {
+          "noteId": "lead-1",
+          "nominalOffsetSec": 0,
+          "jsCallbackTimeSec": 0.36440000000596046,
+          "audioCtxClockSec": 0.10448979591836735,
+          "scheduledAudioSec": 0.19546485260770974,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-2",
+          "nominalOffsetSec": 0.625,
+          "jsCallbackTimeSec": 0.9051999999880791,
+          "audioCtxClockSec": 0.6443537414965986,
+          "scheduledAudioSec": 0.8204648526077097,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-3",
+          "nominalOffsetSec": 1.25,
+          "jsCallbackTimeSec": 1.5345,
+          "audioCtxClockSec": 1.2770975056689342,
+          "scheduledAudioSec": 1.4454648526077096,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-4",
+          "nominalOffsetSec": 1.875,
+          "jsCallbackTimeSec": 2.1654000000059606,
+          "audioCtxClockSec": 1.9040362811791383,
+          "scheduledAudioSec": 2.0704648526077096,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-5",
+          "nominalOffsetSec": 2.5,
+          "jsCallbackTimeSec": 2.7949000000059603,
+          "audioCtxClockSec": 2.536780045351474,
+          "scheduledAudioSec": 2.6954648526077096,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-6",
+          "nominalOffsetSec": 3.125,
+          "jsCallbackTimeSec": 3.4250999999940395,
+          "audioCtxClockSec": 3.163718820861678,
+          "scheduledAudioSec": 3.3204648526077096,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-7",
+          "nominalOffsetSec": 3.75,
+          "jsCallbackTimeSec": 4.025199999988079,
+          "audioCtxClockSec": 3.767437641723356,
+          "scheduledAudioSec": 3.9454648526077096,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-8",
+          "nominalOffsetSec": 4.375,
+          "jsCallbackTimeSec": 4.65459999999404,
+          "audioCtxClockSec": 4.39437641723356,
+          "scheduledAudioSec": 4.57046485260771,
+          "lateByMs": 0,
+          "classifiedLate": false
+        }
+      ],
+      "pollIntervalMs": 30,
+      "horizonMs": 180,
+      "originAudioSec": 0.19546485260770974,
+      "originPerfNowSec": 0.45330000001192094,
+      "audioCtxFrozen": false,
+      "durationMismatchNotes": []
+    },
+    {
+      "label": "E03-D: 400ms-delay/pulse-study",
+      "scoreId": "pulse-study",
+      "bpm": 132,
+      "events": [
+        {
+          "noteId": "lead-1",
+          "nominalOffsetSec": 0,
+          "jsCallbackTimeSec": 0.7210999999940395,
+          "audioCtxClockSec": 0.47020408163265304,
+          "scheduledAudioSec": 0.47020408163265304,
+          "lateByMs": 282.2999999821186,
+          "classifiedLate": true
+        },
+        {
+          "noteId": "lead-2",
+          "nominalOffsetSec": 0.22727272727272727,
+          "jsCallbackTimeSec": 0.7210999999940395,
+          "audioCtxClockSec": 0.47020408163265304,
+          "scheduledAudioSec": 0.47020408163265304,
+          "lateByMs": 55.027272709391355,
+          "classifiedLate": true
+        },
+        {
+          "noteId": "lead-3",
+          "nominalOffsetSec": 0.45454545454545453,
+          "jsCallbackTimeSec": 0.7212000000178814,
+          "audioCtxClockSec": 0.47020408163265304,
+          "scheduledAudioSec": 0.6384003298289013,
+          "lateByMs": 0,
+          "classifiedLate": true
+        },
+        {
+          "noteId": "lead-4",
+          "nominalOffsetSec": 0.6818181818181818,
+          "jsCallbackTimeSec": 0.7212000000178814,
+          "audioCtxClockSec": 0.47020408163265304,
+          "scheduledAudioSec": 0.8656730571016285,
+          "lateByMs": 0,
+          "classifiedLate": true
+        },
+        {
+          "noteId": "lead-5",
+          "nominalOffsetSec": 0.9090909090909091,
+          "jsCallbackTimeSec": 1.1725,
+          "audioCtxClockSec": 0.9229931972789116,
+          "scheduledAudioSec": 1.0929457843743557,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-6",
+          "nominalOffsetSec": 1.1363636363636362,
+          "jsCallbackTimeSec": 1.4127000000178813,
+          "audioCtxClockSec": 1.1609977324263039,
+          "scheduledAudioSec": 1.320218511647083,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-7",
+          "nominalOffsetSec": 1.3636363636363635,
+          "jsCallbackTimeSec": 1.6225,
+          "audioCtxClockSec": 1.3699773242630386,
+          "scheduledAudioSec": 1.5474912389198103,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-8",
+          "nominalOffsetSec": 1.5909090909090908,
+          "jsCallbackTimeSec": 1.8625999999940395,
+          "audioCtxClockSec": 1.607981859410431,
+          "scheduledAudioSec": 1.7747639661925376,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-9",
+          "nominalOffsetSec": 1.8181818181818181,
+          "jsCallbackTimeSec": 2.0724000000059606,
+          "audioCtxClockSec": 1.822766439909297,
+          "scheduledAudioSec": 2.0020366934652647,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-10",
+          "nominalOffsetSec": 2.0454545454545454,
+          "jsCallbackTimeSec": 2.311800000011921,
+          "audioCtxClockSec": 2.0607709750566894,
+          "scheduledAudioSec": 2.229309420737992,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-11",
+          "nominalOffsetSec": 2.2727272727272725,
+          "jsCallbackTimeSec": 2.5527000000178814,
+          "audioCtxClockSec": 2.2987755102040817,
+          "scheduledAudioSec": 2.4565821480107193,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-12",
+          "nominalOffsetSec": 2.5,
+          "jsCallbackTimeSec": 2.762,
+          "audioCtxClockSec": 2.507755102040816,
+          "scheduledAudioSec": 2.683854875283447,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-13",
+          "nominalOffsetSec": 2.727272727272727,
+          "jsCallbackTimeSec": 3.003300000011921,
+          "audioCtxClockSec": 2.75156462585034,
+          "scheduledAudioSec": 2.911127602556174,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-14",
+          "nominalOffsetSec": 2.9545454545454546,
+          "jsCallbackTimeSec": 3.2129000000059604,
+          "audioCtxClockSec": 2.9605442176870747,
+          "scheduledAudioSec": 3.1384003298289014,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-15",
+          "nominalOffsetSec": 3.1818181818181817,
+          "jsCallbackTimeSec": 3.4525999999940393,
+          "audioCtxClockSec": 3.198548752834467,
+          "scheduledAudioSec": 3.3656730571016285,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-16",
+          "nominalOffsetSec": 3.409090909090909,
+          "jsCallbackTimeSec": 3.6629000000059606,
+          "audioCtxClockSec": 3.4133333333333336,
+          "scheduledAudioSec": 3.592945784374356,
+          "lateByMs": 0,
+          "classifiedLate": false
+        }
+      ],
+      "pollIntervalMs": 30,
+      "horizonMs": 180,
+      "originAudioSec": 0.1838548752834467,
+      "originPerfNowSec": 0.43880000001192093,
+      "audioCtxFrozen": false,
+      "durationMismatchNotes": []
+    },
+    {
+      "label": "E03-E: seek-from-beat3/glass-garden",
+      "scoreId": "glass-garden",
+      "bpm": 112,
+      "events": [
+        {
+          "noteId": "lead-1",
+          "nominalOffsetSec": 0,
+          "jsCallbackTimeSec": 0.3212999999821186,
+          "audioCtxClockSec": 0.09868480725623582,
+          "scheduledAudioSec": 0.1838548752834467,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-2",
+          "nominalOffsetSec": 0.5357142857142857,
+          "jsCallbackTimeSec": 0.7712999999821186,
+          "audioCtxClockSec": 0.5456689342403628,
+          "scheduledAudioSec": 0.7195691609977324,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-3",
+          "nominalOffsetSec": 0.8035714285714286,
+          "jsCallbackTimeSec": 1.0405999999940396,
+          "audioCtxClockSec": 0.8185034013605442,
+          "scheduledAudioSec": 0.9874263038548753,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-4",
+          "nominalOffsetSec": 1.0714285714285714,
+          "jsCallbackTimeSec": 1.3103999999761582,
+          "audioCtxClockSec": 1.0855328798185941,
+          "scheduledAudioSec": 1.2552834467120182,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-5",
+          "nominalOffsetSec": 2.142857142857143,
+          "jsCallbackTimeSec": 2.3912999999821185,
+          "audioCtxClockSec": 2.1710657596371883,
+          "scheduledAudioSec": 2.3267120181405896,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-6",
+          "nominalOffsetSec": 2.6785714285714284,
+          "jsCallbackTimeSec": 2.930899999976158,
+          "audioCtxClockSec": 2.7109297052154195,
+          "scheduledAudioSec": 2.862426303854875,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-7",
+          "nominalOffsetSec": 2.946428571428571,
+          "jsCallbackTimeSec": 3.2010999999940397,
+          "audioCtxClockSec": 2.9779591836734696,
+          "scheduledAudioSec": 3.130283446712018,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-8",
+          "nominalOffsetSec": 3.2142857142857144,
+          "jsCallbackTimeSec": 3.471,
+          "audioCtxClockSec": 3.250793650793651,
+          "scheduledAudioSec": 3.398140589569161,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-9",
+          "nominalOffsetSec": 4.285714285714286,
+          "jsCallbackTimeSec": 4.5213999999761585,
+          "audioCtxClockSec": 4.3014965986394555,
+          "scheduledAudioSec": 4.469569160997732,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-10",
+          "nominalOffsetSec": 4.821428571428571,
+          "jsCallbackTimeSec": 5.0613999999761585,
+          "audioCtxClockSec": 4.841360544217687,
+          "scheduledAudioSec": 5.005283446712018,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-11",
+          "nominalOffsetSec": 5.089285714285714,
+          "jsCallbackTimeSec": 5.329899999976158,
+          "audioCtxClockSec": 5.108390022675737,
+          "scheduledAudioSec": 5.273140589569161,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-12",
+          "nominalOffsetSec": 5.357142857142857,
+          "jsCallbackTimeSec": 5.601199999988079,
+          "audioCtxClockSec": 5.381224489795918,
+          "scheduledAudioSec": 5.540997732426304,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-13",
+          "nominalOffsetSec": 6.428571428571429,
+          "jsCallbackTimeSec": 6.680899999976158,
+          "audioCtxClockSec": 6.455147392290249,
+          "scheduledAudioSec": 6.612426303854876,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-14",
+          "nominalOffsetSec": 6.964285714285714,
+          "jsCallbackTimeSec": 7.22009999999404,
+          "audioCtxClockSec": 6.995011337868481,
+          "scheduledAudioSec": 7.148140589569161,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-15",
+          "nominalOffsetSec": 7.232142857142857,
+          "jsCallbackTimeSec": 7.461199999988079,
+          "audioCtxClockSec": 7.238820861678004,
+          "scheduledAudioSec": 7.415997732426304,
+          "lateByMs": 0,
+          "classifiedLate": false
+        },
+        {
+          "noteId": "lead-16",
+          "nominalOffsetSec": 7.5,
+          "jsCallbackTimeSec": 7.729799999982118,
+          "audioCtxClockSec": 7.505850340136054,
+          "scheduledAudioSec": 7.683854875283447,
+          "lateByMs": 0,
+          "classifiedLate": false
+        }
+      ],
+      "pollIntervalMs": 30,
+      "horizonMs": 180,
+      "originAudioSec": 0.1838548752834467,
+      "originPerfNowSec": 0.4093999999761581,
+      "audioCtxFrozen": false,
+      "durationMismatchNotes": [
+        {
+          "noteId": "lead-4",
+          "scoreDurationSec": 1.0714285714285714,
+          "synthDecaySec": 0.9,
+          "gapSec": 0.17142857142857137
+        },
+        {
+          "noteId": "lead-8",
+          "scoreDurationSec": 1.0714285714285714,
+          "synthDecaySec": 0.9,
+          "gapSec": 0.17142857142857137
+        },
+        {
+          "noteId": "lead-12",
+          "scoreDurationSec": 1.0714285714285714,
+          "synthDecaySec": 0.9,
+          "gapSec": 0.17142857142857137
+        },
+        {
+          "noteId": "lead-16",
+          "scoreDurationSec": 1.0714285714285714,
+          "synthDecaySec": 0.9,
+          "gapSec": 0.17142857142857137
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

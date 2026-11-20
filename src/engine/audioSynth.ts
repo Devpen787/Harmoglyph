@@ -15,6 +15,7 @@ class ChimeraAudioEngine {
   private masterGain: GainNode | null = null;
   private delayNode: DelayNode | null = null;
   private sampleBuf = new Float32Array(64);
+  private activeOscillators = new Set<OscillatorNode>();
 
   private ensureContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
@@ -58,8 +59,45 @@ class ChimeraAudioEngine {
     return this.ctx;
   }
 
+  /**
+   * Prepare a short start lead while the user gesture can unlock Web Audio.
+   * A frozen/suspended context has no progressing time; the caller must handle
+   * suspension and must not infer device output latency from this value.
+   */
+  public preparePlayback(leadSeconds = 0.12): number | null {
+    const ctx = this.ensureContext();
+    if (!ctx) return null;
+    return ctx.currentTime + Math.max(0.06, Math.min(0.5, leadSeconds));
+  }
+
+  public getAudioClockTime(): number | null {
+    return this.ctx?.currentTime ?? null;
+  }
+
+  /** Stop scheduled and sounding oscillators on edit, pause or navigation. */
+  public stopScheduledNotes(): void {
+    const now = this.ctx?.currentTime;
+    if (now === undefined) return;
+    for (const oscillator of this.activeOscillators) {
+      try { oscillator.stop(now); } catch { /* Already ended. */ }
+    }
+    this.activeOscillators.clear();
+  }
+
+  /** Existing instant audition path remains supported. */
   public triggerStep(
     step: EvaluatedRowStep,
+    voice: SynthVoiceId = 'music-box',
+    foundation: MathFoundationId = 'harmonic-sine',
+    imperfection = 0,
+  ): void {
+    this.scheduleStepAt(step, undefined, voice, foundation, imperfection);
+  }
+
+  /** Schedule a note against an explicit AudioContext-clock timestamp. */
+  public scheduleStepAt(
+    step: EvaluatedRowStep,
+    startAudioSeconds: number | undefined,
     voice: SynthVoiceId = 'music-box',
     foundation: MathFoundationId = 'harmonic-sine',
     imperfection = 0,
@@ -70,7 +108,10 @@ class ChimeraAudioEngine {
     const ctx = this.ensureContext();
     if (!ctx || !this.masterGain) return;
 
-    const now = ctx.currentTime;
+    // Late notes are made audible now; their nominal target is preserved in
+    // the deterministic timeline for independent late-scheduler measurements.
+    const now = startAudioSeconds !== undefined && Number.isFinite(startAudioSeconds)
+      ? Math.max(ctx.currentTime, startAudioSeconds) : ctx.currentTime;
     const freq = clampFreq(step.freqHz);
     const mathFm = mapMathToSynthParams(step, foundation, imperfection);
     const fmIndex = mathFm.effectiveFmIndex;
@@ -176,16 +217,13 @@ class ChimeraAudioEngine {
     filter.connect(env);
     env.connect(this.masterGain);
 
-    carrier.start(now);
-    chorusOsc.start(now);
-    subOsc.start(now);
-    mod.start(now);
-
     const stopAt = now + decaySec + 0.04;
-    carrier.stop(stopAt);
-    chorusOsc.stop(stopAt);
-    subOsc.stop(stopAt);
-    mod.stop(stopAt);
+    for (const oscillator of [carrier, chorusOsc, subOsc, mod]) {
+      this.activeOscillators.add(oscillator);
+      oscillator.addEventListener('ended', () => this.activeOscillators.delete(oscillator), { once: true });
+      oscillator.start(now);
+      oscillator.stop(stopAt);
+    }
   }
 
   public sampleWaveformInto(

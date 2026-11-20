@@ -1,0 +1,42 @@
+name: Harmoglyph W0 baseline checks
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "package.json"
+      - "bun.lock"
+      - ".github/workflows/w0-baseline.yml"
+      - ".kiro/**"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Environment and baseline identity
+        run: |
+          node --version
+          npm --version
+          git rev-parse HEAD
+      - name: Install dependencies (no audit/fund network requests)
+        run: npm install --no-audit --no-fund
+      - name: Typecheck
+        run: npm run lint
+      - name: Composition invariants
+        run: npm run test:composition
+      - name: W1 deterministic timeline tests
+        run: node --import tsx --test src/engine/compositionTimeline.test.ts
+      - name: Check Kiro hook v1 JSON structure (static only; not Kiro execution)
+        run: |
+          node --input-type=module -e "import assert from 'node:assert/strict'; import fs from 'node:fs'; const hook = JSON.parse(fs.readFileSync('.kiro/hooks/pbt-on-formula-save.json','utf8')); assert.equal(hook.version,'v1'); assert.ok(Array.isArray(hook.hooks)); assert.ok(hook.hooks.some(h => h.trigger === 'PostFileSave' && h.action?.type === 'command')); console.log('Hook JSON shape is valid as a static check; no Kiro runtime has been invoked.');"
+      - name: Original 500 seeded PBT checks
+        run: |
+          node --import tsx --input-type=module -e "import { runPbtInvariants } from './src/engine/pbtSuite.ts'; const checks = runPbtInvariants(20261116, 100); console.log(JSON.stringify(checks.map(({ id, passed, passedCount, trials, counterexample }) => ({ id, passed, passedCount, trials, counterexample })), null, 2)); if (checks.length !== 5 || checks.some(c => !c.passed || c.trials !== 100)) process.exit(1);"
+      - name: Build
+        run: npm run build

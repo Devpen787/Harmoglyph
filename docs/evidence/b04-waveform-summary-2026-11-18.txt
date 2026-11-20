@@ -1,0 +1,70 @@
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+B04 Waveform Measurement — PCM samples from renderSheetToWavBytes
+Path: noteAsSynthStep → renderSheetToWavBytes (offline export path)
+NOT the live Web Audio path (scheduleStepAt uses a different synthesis graph)
+Silence threshold: 0.001 amplitude  |  Window: 50ms RMS
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Score              Note       Voice             Beats  scoreSec  decaySec  gapSec   peak status
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+pulse-study        lead-1     music-box           0.5     0.227     0.737   0.000  0.143 ok
+pulse-study        lead-1     celestial-chime     0.5     0.227     0.759   0.000  0.160 ok
+pulse-study        lead-1     haunted-organ       0.5     0.227     0.752   0.000  0.113 ok
+ascending-light    lead-1     music-box             1     0.625     0.936   0.000  0.166 ok
+ascending-light    lead-1     celestial-chime       1     0.625     1.033   0.000  0.179 ok
+ascending-light    lead-1     haunted-organ         1     0.625     0.997   0.000  0.158 ok
+glass-garden       lead-1     music-box             1     0.536     0.836   0.000  0.163 ok
+glass-garden       lead-1     celestial-chime       1     0.536     0.987   0.000  0.176 ok
+glass-garden       lead-1     haunted-organ         1     0.536     0.959   0.000  0.153 ok
+glass-garden       lead-2     music-box           0.5     0.268     0.762   0.000  0.197 ok
+glass-garden       lead-2     celestial-chime     0.5     0.268     0.793   0.000  0.219 ok
+glass-garden       lead-2     haunted-organ       0.5     0.268     0.780   0.000  0.161 ok
+glass-garden       lead-4     music-box             2     1.071     1.017   0.054  0.250 short-tail
+glass-garden       lead-4     celestial-chime       2     1.071     1.018   0.054  0.265 short-tail
+glass-garden       lead-4     haunted-organ         2     1.071     1.018   0.054  0.242 short-tail
+leap-dialogue      lead-1     music-box             1     0.577     0.851   0.000  0.164 ok
+leap-dialogue      lead-1     celestial-chime       1     0.577     1.002   0.000  0.178 ok
+leap-dialogue      lead-1     haunted-organ         1     0.577     0.981   0.000  0.156 ok
+leap-dialogue      counter-1  music-box             2     1.154     1.038   0.115  0.174 TRUNCATED
+leap-dialogue      counter-1  celestial-chime       2     1.154     1.038   0.115  0.185 TRUNCATED
+leap-dialogue      counter-1  haunted-organ         2     1.154     1.038   0.115  0.169 TRUNCATED
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+RMS envelope detail for 2-beat notes (most critical B04 cases):
+
+glass-garden/lead-4 [music-box] score=1.071s:
+  t:   0.00  0.10  0.20  0.30  0.40  0.50  0.60  0.70  0.80  0.90  1.00
+rms:  0.131 0.088 0.055 0.035 0.021 0.009 0.005 0.004 0.003 0.001 0.001
+  score duration mark at: 1.071s | measured decay end: 1.017s
+
+glass-garden/lead-4 [celestial-chime] score=1.071s:
+  t:   0.00  0.10  0.20  0.30  0.40  0.50  0.60  0.70  0.80  0.90  1.00
+rms:  0.166 0.106 0.061 0.058 0.047 0.025 0.013 0.010 0.010 0.007 0.004
+  score duration mark at: 1.071s | measured decay end: 1.018s
+
+glass-garden/lead-4 [haunted-organ] score=1.071s:
+  t:   0.00  0.10  0.20  0.30  0.40  0.50  0.60  0.70  0.80  0.90  1.00
+rms:  0.110 0.100 0.067 0.048 0.032 0.017 0.011 0.008 0.005 0.003 0.002
+  score duration mark at: 1.071s | measured decay end: 1.018s
+
+leap-dialogue/counter-1 [music-box] score=1.154s:
+  t:   0.00  0.10  0.20  0.30  0.40  0.50  0.60  0.70  0.80  0.90  1.00
+rms:  0.093 0.062 0.047 0.040 0.025 0.020 0.012 0.009 0.005 0.002 0.001
+  score duration mark at: 1.154s | measured decay end: 1.038s
+
+leap-dialogue/counter-1 [celestial-chime] score=1.154s:
+  t:   0.00  0.10  0.20  0.30  0.40  0.50  0.60  0.70  0.80  0.90  1.00
+rms:  0.119 0.089 0.072 0.064 0.043 0.034 0.022 0.016 0.011 0.008 0.005
+  score duration mark at: 1.154s | measured decay end: 1.038s
+
+leap-dialogue/counter-1 [haunted-organ] score=1.154s:
+  t:   0.00  0.10  0.20  0.30  0.40  0.50  0.60  0.70  0.80  0.90  1.00
+rms:  0.081 0.069 0.052 0.049 0.033 0.027 0.018 0.013 0.008 0.006 0.004
+  score duration mark at: 1.154s | measured decay end: 1.038s
+
+MEASUREMENT LIMITS:
+  - renderSheetToWavBytes: PCM math (sin/exp); Web Audio live path uses different oscillator nodes
+  - Silence threshold 0.001 may differ from perceptual silence; earphones matter
+  - Delay echo (0.23s, 0.25 feedback) adds energy after nominal note end
+  - These are measured samples from production code — not approximations
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
