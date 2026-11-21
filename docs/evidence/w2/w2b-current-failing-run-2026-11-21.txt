@@ -1,0 +1,136 @@
+✖ Current: deterministic, cadence-independent, and earlier trail never rewritten (1.732167ms)
+✔ Current: finite, inside the viewport, and continuous for every preset (0.1405ms)
+✖ Current: the melody flows forward (no ring, no loop-back tangle) (0.071334ms)
+✖ Current: pitch steers direction — repeated pitch runs straight, rising pitch climbs (0.106ms)
+✖ Current: silence is never attributed to a note (0.152958ms)
+✖ Current coupling: only simultaneous voices couple, bounded, and only the counterline moves (0.229084ms)
+✖ Current coupling: consonance sets strength (octave pulls harder than tritone) (0.061292ms)
+✖ Current: a pitch edit changes the path only from its onset (earlier shape identical up to the framing shift) (0.076166ms)
+✖ Current: First Mark is one straight stroke plus a rest thread (0.048959ms)
+✖ Current negative controls fail closed (0.166875ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 1
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 169.06175
+
+✖ failing tests:
+
+test at src/engine/compositionCurrent.test.ts:1:1268
+✖ Current: deterministic, cadence-independent, and earlier trail never rewritten (1.732167ms)
+  AssertionError [ERR_ASSERTION]: first-mark produces samples
+      at TestContext.<anonymous> (<repo>/src/engine/compositionCurrent.test.ts:31:12)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.start (node:internal/test_runner/test:959:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:332:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at src/engine/compositionCurrent.test.ts:1:2577
+✖ Current: the melody flows forward (no ring, no loop-back tangle) (0.071334ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'samples')
+      at TestContext.<anonymous> (<repo>/src/engine/compositionCurrent.test.ts:59:69)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7)
+
+test at src/engine/compositionCurrent.test.ts:1:2959
+✖ Current: pitch steers direction — repeated pitch runs straight, rising pitch climbs (0.106ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'samples')
+      at TestContext.<anonymous> (<repo>/src/engine/compositionCurrent.test.ts:67:40)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7)
+
+test at src/engine/compositionCurrent.test.ts:1:3792
+✖ Current: silence is never attributed to a note (0.152958ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'samples')
+      at ribbonSegments (<repo>/src/engine/compositionMotion.ts:284:19)
+      at TestContext.<anonymous> (<repo>/src/engine/compositionCurrent.test.ts:81:16)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7)
+
+test at src/engine/compositionCurrent.test.ts:1:4137
+✖ Current coupling: only simultaneous voices couple, bounded, and only the counterline moves (0.229084ms)
+  AssertionError [ERR_ASSERTION]: every lead/counter overlap is a coupling
+      at TestContext.<anonymous> (<repo>/src/engine/compositionCurrent.test.ts:93:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at src/engine/compositionCurrent.test.ts:1:5553
+✖ Current coupling: consonance sets strength (octave pulls harder than tritone) (0.061292ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'intervalClass')
+      at TestContext.<anonymous> (<repo>/src/engine/compositionCurrent.test.ts:107:25)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7)
+
+test at src/engine/compositionCurrent.test.ts:1:6105
+✖ Current: a pitch edit changes the path only from its onset (earlier shape identical up to the framing shift) (0.076166ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'samples')
+      at TestContext.<anonymous> (<repo>/src/engine/compositionCurrent.test.ts:118:28)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7)
+
+test at src/engine/compositionCurrent.test.ts:1:6817
+✖ Current: First Mark is one straight stroke plus a rest thread (0.048959ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'samples')
+      at TestContext.<anonymous> (<repo>/src/engine/compositionCurrent.test.ts:129:25)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7)
+
+test at src/engine/compositionCurrent.test.ts:1:7126
+✖ Current negative controls fail closed (0.166875ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (<repo>/src/engine/compositionCurrent.test.ts:137:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /Invalid composition/,
+    operator: 'throws'
+  }

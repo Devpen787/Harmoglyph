@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { COMPOSITION_PRESETS, cloneComposition, deriveGeometry, sortedNotes, totalBeats, type MusicalComposition } from './composition.ts';
 import { computeRibbonFrame, describeNoteMotion, ribbonSegments, DEFAULT_RIBBON_CONFIG, type RibbonFrame } from './compositionMotion.ts';
+import { RESTED, assertStrictAttribution } from './motionTestFixtures.ts';
 
 const preset = (id: string): MusicalComposition => cloneComposition(COMPOSITION_PRESETS.find((p) => p.id === id)!);
 const track = (frame: RibbonFrame, id: string) => frame.tracks.find((t) => t.trackId === id)!;
@@ -167,11 +168,38 @@ test('R3: the inspector description matches the score relationships', () => {
 test('R3/T3: renderer segments give every started note its own selectable, finite SVG shape', () => {
   for (const score of COMPOSITION_PRESETS) {
     const frame = computeRibbonFrame(score, totalBeats(score));
-    const segments = frame.tracks.flatMap((t) => ribbonSegments(t));
+    const segments = frame.tracks.flatMap((t) => ribbonSegments(t)).filter((s) => s.kind === 'note');
     assert.deepEqual(segments.map((s) => s.noteId).sort(), score.notes.map((n) => n.id).sort(), `${score.id}: one segment per note`);
     for (const s of segments) {
       assert.match(s.d, /^M [0-9.]+ [0-9.]+( L [0-9.]+ [0-9.]+)+ Z$/, `${score.id}/${s.noteId} path is a closed finite polygon`);
       assert.equal(s.trackId, score.notes.find((n) => n.id === s.noteId)!.trackId);
     }
   }
+});
+
+// ── W2-B: rest attribution ───────────────────────────────────────────────────
+
+test('W2-B: no Ribbon sample attributes silence to a note (all presets + explicit rests)', () => {
+  for (const score of [...COMPOSITION_PRESETS, RESTED]) {
+    assertStrictAttribution(score, computeRibbonFrame(score, totalBeats(score)), score.id);
+  }
+});
+
+test('W2-B: First Mark draws one beat of note and three beats of labelled rest bridge', () => {
+  const frame = computeRibbonFrame(preset('first-mark'), 4);
+  const s = frame.tracks[0].samples;
+  assert.ok(s.filter((x) => x.beat < 1).every((x) => x.kind === 'note' && x.noteId === 'lead-1'), 'beats 0–1 belong to lead-1');
+  assert.ok(s.filter((x) => x.beat >= 1).every((x) => x.kind === 'rest' && x.restAfterNoteId === 'lead-1'), 'beats 1–4 are a rest bridge after lead-1');
+  const segs = ribbonSegments(frame.tracks[0]);
+  assert.deepEqual(segs.map((g) => g.kind), ['note', 'rest']);
+  assert.equal(segs[1].noteId, null, 'the rest bridge claims no note');
+});
+
+test('W2-B: explicit rests become separate bridges while the line stays continuous', () => {
+  const frame = computeRibbonFrame(RESTED, 8);
+  const segs = ribbonSegments(frame.tracks[0]);
+  assert.deepEqual(segs.map((g) => g.kind + ':' + (g.noteId ?? g.restAfterNoteId)), ['note:n1', 'note:n2', 'rest:n2', 'note:n3', 'note:n4', 'rest:n4']);
+  const t = frame.tracks[0].samples;
+  for (let i = 1; i < t.length; i++) assert.ok(Math.hypot(t[i].x - t[i - 1].x, t[i].y - t[i - 1].y) < 12, `jump at ${t[i].beat}`);
+  assert.deepEqual(computeRibbonFrame(RESTED, 99), frame, 'completed artwork (with bridges) is stable');
 });

@@ -21,9 +21,14 @@
  * hold is a smoothstep plateau for the written duration. Every onset is
  * visible as thickness even when the pitch is unchanged.
  *
+ * Attribution (W2-B): a sample names a note only while that note sounds
+ * (onset ≤ b < onset + duration). Samples in silence are kind 'rest', name no
+ * note, and record only which note preceded them. They are a designed visual
+ * bridge that keeps the line continuous, not score data.
+ *
  * Derived from the score: onset, duration, pitch → radius target, interval → size
- * of the move and overshoot, velocity → thickness, track → separate ribbon,
- * simultaneous onsets on different tracks → counterpoint links.
+ * of the move and overshoot, velocity → thickness, track → separate ribbon.
+ * Counterpoint lines are ANNOTATIONS only: voices are computed independently here.
  * Designed (aesthetic): ω, ζ, the radius scale (inherited from deriveGeometry),
  * swell/hold sizes, sampling step, palette and glow.
  */
@@ -57,12 +62,14 @@ export const RIBBON_MAPPINGS = {
     'Size of each move = pitch interval from the previous note on the same voice',
     'Thickness swell = note velocity, starting at the onset',
     'Plateau length = written duration',
-    'Separate ribbon per voice; links join notes that start together',
+    'Separate ribbon per voice',
+    'Silence: thin bridge labelled as rest (designed, owned by no note)',
   ],
   designed: [
     'Spring stiffness ω and damping ζ (how far and how long it overshoots)',
     'Radius scale, swell and plateau sizes',
     'Palette, glow and trail sampling',
+    'Dashed lines between notes that start together: annotation only, no interaction between voices',
   ],
 } as const;
 
@@ -73,7 +80,12 @@ export interface RibbonSample {
   x: number;
   y: number;
   width: number;
+  /** 'note' while a note sounds; 'rest' during silence (decorative bridge). */
+  kind: 'note' | 'rest';
+  /** The sounding note, or null during silence. */
   noteId: string | null;
+  /** During silence: the note that preceded it. Null while a note sounds. */
+  restAfterNoteId: string | null;
   trackId: string;
 }
 
@@ -84,8 +96,10 @@ export interface RibbonTrackFrame {
   head: RibbonSample | null;
 }
 
+/** Visual annotation only: two notes on different voices start together. No coupling is implied. */
 export interface RibbonRelationship {
   kind: 'counterpoint';
+  visualOnly: true;
   beat: number;
   noteIds: [string, string];
   trackIds: [string, string];
@@ -115,12 +129,16 @@ export interface NoteMotionDescription {
 }
 
 export interface RibbonSegment {
-  noteId: string;
+  kind: 'note' | 'rest';
+  /** Sounding note for 'note' segments; null for rest bridges. */
+  noteId: string | null;
+  /** For rest bridges: the note before the silence. */
+  restAfterNoteId: string | null;
   trackId: string;
   d: string;
 }
 
-function validateConfig(config: RibbonConfig): void {
+export function validateConfig(config: RibbonConfig): void {
   const ok =
     Number.isFinite(config.omegaPerBeat) && config.omegaPerBeat > 0 && config.omegaPerBeat <= 60 &&
     Number.isFinite(config.damping) && config.damping > 0 && config.damping < 1 &&
@@ -129,20 +147,20 @@ function validateConfig(config: RibbonConfig): void {
 }
 
 /** Unit step response of an under-damped 2nd-order system. s(τ≤0) = 0, s′(0) = 0, s(∞) = 1. */
-function stepResponse(tau: number, omega: number, zeta: number): number {
+export function stepResponse(tau: number, omega: number, zeta: number): number {
   if (tau <= 0) return 0;
   const root = Math.sqrt(1 - zeta * zeta);
   const wd = omega * root;
   return 1 - Math.exp(-zeta * omega * tau) * (Math.cos(wd * tau) + (zeta / root) * Math.sin(wd * tau));
 }
 
-const smoothstep = (edge0: number, edge1: number, x: number) => {
+export const smoothstep = (edge0: number, edge1: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - edge0) / (edge1 - edge0)));
   return t * t * (3 - 2 * t);
 };
 
 /** Smooth onset swell: 0 at τ = 0, peak 1 at τ = ATTACK_BEATS, then decays. */
-const swell = (tau: number) => (tau <= 0 ? 0 : (tau / ATTACK_BEATS) * Math.exp(1 - tau / ATTACK_BEATS));
+export const swell = (tau: number) => (tau <= 0 ? 0 : (tau / ATTACK_BEATS) * Math.exp(1 - tau / ATTACK_BEATS));
 
 function hold(tau: number, duration: number): number {
   if (tau <= 0 || tau >= duration) return 0;
@@ -150,14 +168,36 @@ function hold(tau: number, duration: number): number {
   return smoothstep(0, ramp, tau) * (1 - smoothstep(duration - ramp, duration, tau));
 }
 
-interface PreparedTrack {
+/** Thickness at beat b from every started note of one voice (shared by all motion grammars). */
+export function widthAt(notes: CompositionNote[], beat: number): number {
+  let width = BASE_WIDTH;
+  for (const note of notes) {
+    const tau = beat - note.startBeat;
+    if (tau < 0) break;
+    width += note.velocity * (HOLD_WIDTH * hold(tau, note.durationBeats) + SWELL_WIDTH * swell(tau));
+  }
+  return width;
+}
+
+/** Which note sounds at beat b, or which note the silence follows. Notes sorted by onset. */
+export function attributionAt(notes: CompositionNote[], beat: number): Pick<RibbonSample, 'kind' | 'noteId' | 'restAfterNoteId'> {
+  let last: CompositionNote | null = null;
+  for (const note of notes) {
+    if (note.startBeat > beat + 1e-9) break;
+    last = note;
+    if (beat < note.startBeat + note.durationBeats - 1e-9) return { kind: 'note', noteId: note.id, restAfterNoteId: null };
+  }
+  return { kind: 'rest', noteId: null, restAfterNoteId: last?.id ?? null };
+}
+
+export interface PreparedTrack {
   trackId: string;
   trackIndex: number;
   notes: CompositionNote[];
   radii: number[];
 }
 
-function prepare(composition: MusicalComposition): { span: number; tracks: PreparedTrack[] } {
+export function prepare(composition: MusicalComposition): { span: number; tracks: PreparedTrack[] } {
   const errors = validateComposition(composition);
   if (errors.length) throw new Error('Invalid composition: ' + errors.join('; '));
   const radiusById = new Map(deriveGeometry(composition).map((m) => [m.noteId, m.radius]));
@@ -174,15 +214,10 @@ function prepare(composition: MusicalComposition): { span: number; tracks: Prepa
 function sampleTrack(track: PreparedTrack, beat: number, span: number, config: RibbonConfig): RibbonSample {
   const { notes, radii } = track;
   let r = radii[0];
-  let width = BASE_WIDTH;
-  let noteId: string | null = null;
-  for (let i = 0; i < notes.length; i++) {
-    const note = notes[i];
-    const tau = beat - note.startBeat;
+  for (let i = 1; i < notes.length; i++) {
+    const tau = beat - notes[i].startBeat;
     if (tau < 0) break;
-    if (i > 0) r += (radii[i] - radii[i - 1]) * stepResponse(tau, config.omegaPerBeat, config.damping);
-    width += note.velocity * (HOLD_WIDTH * hold(tau, note.durationBeats) + SWELL_WIDTH * swell(tau));
-    noteId = note.id; // latest started note owns this point (its sound or its tail)
+    r += (radii[i] - radii[i - 1]) * stepResponse(tau, config.omegaPerBeat, config.damping);
   }
   r = Math.min(R_MAX, Math.max(R_MIN, r));
   const theta = -Math.PI / 2 + (2 * Math.PI * beat) / span;
@@ -192,8 +227,8 @@ function sampleTrack(track: PreparedTrack, beat: number, span: number, config: R
     r,
     x: CENTER + Math.cos(theta) * r,
     y: CENTER + Math.sin(theta) * r,
-    width,
-    noteId,
+    width: widthAt(notes, beat),
+    ...attributionAt(notes, beat),
     trackId: track.trackId,
   };
 }
@@ -232,6 +267,7 @@ export function computeRibbonFrame(composition: MusicalComposition, beat: number
         const pb = sampleTrack(tracks[b], nb.startBeat, span, config);
         relationships.push({
           kind: 'counterpoint',
+          visualOnly: true,
           beat: na.startBeat,
           noteIds: [na.id, nb.id],
           trackIds: [tracks[a].trackId, tracks[b].trackId],
@@ -294,15 +330,18 @@ export function ribbonSegments(track: RibbonTrackFrame): RibbonSegment[] {
     left.push([s[i].x + nx * h, s[i].y + ny * h]);
     right.push([s[i].x - nx * h, s[i].y - ny * h]);
   }
+  const key = (x: RibbonSample) => `${x.kind}:${x.noteId ?? x.restAfterNoteId}`;
   const segments: RibbonSegment[] = [];
   let start = 0;
   for (let i = 1; i <= s.length; i++) {
-    if (i === s.length || s[i].noteId !== s[start].noteId) {
+    if (i === s.length || key(s[i]) !== key(s[start])) {
       const end = Math.min(i, s.length - 1); // include the boundary sample
-      if (end > start && s[start].noteId) {
+      if (end > start) {
         const pts = [...left.slice(start, end + 1), ...right.slice(start, end + 1).reverse()];
         segments.push({
-          noteId: s[start].noteId!,
+          kind: s[start].kind,
+          noteId: s[start].noteId,
+          restAfterNoteId: s[start].restAfterNoteId,
           trackId: track.trackId,
           d: 'M ' + pts.map(([x, y]) => `${fmt(x)} ${fmt(y)}`).join(' L ') + ' Z',
         });

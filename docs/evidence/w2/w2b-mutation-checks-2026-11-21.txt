@@ -1,0 +1,9 @@
+W2-B mutation checks (env-gated temporary edits to src/engine/compositionCurrent.ts; file restored; final 10/10)
+flat       consonance fixed at 0.6 for every interval
+           -> FAIL "consonance sets strength (octave > tritone)", "only simultaneous voices couple ... (first pair consonance 1)"
+symmetric  melody also pulled toward the counterline
+           -> FAIL "only the counterline moves", "the melody flows forward"
+opening    steering measured from the voice's opening note instead of the phrase start
+           -> FAIL "pitch steers direction (rising climbs / Glass Garden returns)", "pitch edit changes path only from its onset", "melody flows forward"
+Rest attribution: the three W2-B rest tests failed against the unmodified decb96c engine
+(see w2b-rest-failing-run-2026-11-21.txt), i.e. the original behaviour is itself the negative control.

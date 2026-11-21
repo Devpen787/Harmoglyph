@@ -1,0 +1,159 @@
+{
+  "generatedAt": "2026-11-21T12:38:25.207Z",
+  "node": "v24.1.0",
+  "runsPerCase": 200,
+  "msPerRenderCall": {
+    "first-mark": {
+      "ribbon": {
+        "p50": 0.045,
+        "p95": 0.08,
+        "max": 0.212
+      },
+      "current": {
+        "p50": 0.04,
+        "p95": 0.076,
+        "max": 0.159
+      },
+      "currentColdFirstCall": 0.262
+    },
+    "glass-garden": {
+      "ribbon": {
+        "p50": 0.184,
+        "p95": 0.394,
+        "max": 0.503
+      },
+      "current": {
+        "p50": 0.169,
+        "p95": 0.423,
+        "max": 0.59
+      },
+      "currentColdFirstCall": 1.732
+    },
+    "ascending-light": {
+      "ribbon": {
+        "p50": 0.068,
+        "p95": 0.137,
+        "max": 0.257
+      },
+      "current": {
+        "p50": 0.085,
+        "p95": 0.175,
+        "max": 0.239
+      },
+      "currentColdFirstCall": 0.198
+    },
+    "pulse-study": {
+      "ribbon": {
+        "p50": 0.071,
+        "p95": 0.168,
+        "max": 0.247
+      },
+      "current": {
+        "p50": 0.081,
+        "p95": 0.186,
+        "max": 0.227
+      },
+      "currentColdFirstCall": 0.293
+    },
+    "leap-dialogue": {
+      "ribbon": {
+        "p50": 0.12,
+        "p95": 0.256,
+        "max": 0.333
+      },
+      "current": {
+        "p50": 0.148,
+        "p95": 0.342,
+        "max": 0.567
+      },
+      "currentColdFirstCall": 0.469
+    }
+  },
+  "currentFeatures": {
+    "first-mark": [
+      {
+        "track": "lead",
+        "xSpan": 440,
+        "ySpan": 0,
+        "maxClimbDeg": 0,
+        "maxDescentDeg": 0,
+        "noteSegments": 1,
+        "restBridges": 1,
+        "peakPull": 0
+      },
+      {
+        "couplings": 0
+      }
+    ],
+    "glass-garden": [
+      {
+        "track": "lead",
+        "xSpan": 300,
+        "ySpan": 71.2,
+        "maxClimbDeg": 67.3,
+        "maxDescentDeg": -71.8,
+        "noteSegments": 16,
+        "restBridges": 0,
+        "peakPull": 0
+      },
+      {
+        "couplings": 0
+      }
+    ],
+    "ascending-light": [
+      {
+        "track": "lead",
+        "xSpan": 403.6,
+        "ySpan": 140.8,
+        "maxClimbDeg": 36.5,
+        "maxDescentDeg": -8.6,
+        "noteSegments": 8,
+        "restBridges": 0,
+        "peakPull": 0
+      },
+      {
+        "couplings": 0
+      }
+    ],
+    "pulse-study": [
+      {
+        "track": "lead",
+        "xSpan": 382.5,
+        "ySpan": 130.4,
+        "maxClimbDeg": 71.3,
+        "maxDescentDeg": -14.8,
+        "noteSegments": 16,
+        "restBridges": 0,
+        "peakPull": 0
+      },
+      {
+        "couplings": 0
+      }
+    ],
+    "leap-dialogue": [
+      {
+        "track": "lead",
+        "xSpan": 339,
+        "ySpan": 119.8,
+        "maxClimbDeg": 74.9,
+        "maxDescentDeg": -71.2,
+        "noteSegments": 8,
+        "restBridges": 0,
+        "peakPull": 0
+      },
+      {
+        "track": "counter",
+        "xSpan": 372.5,
+        "ySpan": 105.1,
+        "maxClimbDeg": 53.5,
+        "maxDescentDeg": -12.1,
+        "noteSegments": 4,
+        "restBridges": 0,
+        "peakPull": 0.3
+      },
+      {
+        "couplings": 8
+      }
+    ]
+  }
+}

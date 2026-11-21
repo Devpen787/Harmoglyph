@@ -1325,6 +1325,166 @@ behaviour in Chrome for Testing, not ribbon logic. It belongs to the pending W1 
 ChatGPT code review of the W2 commit and CI, plus Dev visual review of the contact sheet and the
 live app, deciding the four design questions above. Do not merge; do not start W3.
 
+## W2-B — rest attribution, corrected browser check, "Current" candidate (21 Nov 2026)
+
+Response to the PR #5 comment "Independent W2-A review" on `decb96c`. The commit SHA and CI
+result are in the PR #5 comment for this commit. Not changed: `audioSynth.ts`, W1 scheduling,
+Orbit/Bloom/Weave. No new dependency. Labels: **[measured]**, **[aesthetic]** (Kiro's
+subjective judgement), **[blocked]**.
+
+### 1. Rest attribution (review item 1)
+
+- **Rule:** a motion sample has `kind: 'note'` and that note's ID only while the note sounds
+  (onset ≤ b < onset + duration). Silence gives `kind: 'rest'`, `noteId: null` and
+  `restAfterNoteId`.
+- **Rendering:** rests are drawn as faint, non-focusable bridges titled "Silence after X: a
+  designed bridge, not a note". Continuity and the completed artwork are preserved.
+- **Shared rule:** both grammars use the same `attributionAt`.
+- **Tests [measured]:**
+  - A strict-attribution invariant over all presets plus a new explicit-rest fixture (rests at
+    beats 2–3 and 6–8).
+  - First Mark gives one beat of note and three beats of rest bridge.
+  - The rest fixture splits into `note, note, rest, note, note, rest`.
+  - These failed on the unmodified engine (`docs/evidence/w2/w2b-rest-failing-run-2026-11-21.txt`)
+    and pass now.
+- **Changed test:** the existing segment test now counts only `note` segments.
+- **Test infrastructure:** assertions without messages caused Node's assertion-message
+  generation to hang under tsx, so all new assertions carry explicit messages.
+
+### 2. Browser check correction (review item 2)
+
+The W2-A `headMovedDuringPlayback` was a false positive. It treated a head disappearing at the
+end of playback as movement, so `docs/evidence/w2/ui-check-2026-11-20.json` is **superseded**
+on that field.
+
+The corrected rule in `scripts/w2-capture-ribbon.ts`:
+- Restart from beat 0.
+- Take two observations 0.3 s apart.
+- Both must show the Pause button (playback active) and the same number of head positions.
+- The displacement must be greater than 1 px.
+
+**Result [measured]: false for all 10 runs (5 presets × 2 grammars).** Both observations were
+valid, but the displacement was 0.
+
+Cause [measured]:
+- In this session the page's `AudioContext` reports `running`, but `currentTime` stays at
+  0.0058 s for at least 2.4 s.
+- This reproduces on `about:blank` with and without `--disable-features=AudioServiceOutOfProcess`.
+- macOS `coreaudiod` is running and the default output is the MacBook Pro Speakers.
+- The playhead follows the audio clock by design, so the playhead label stays at 0.0 and the art
+  doesn't move.
+
+This is a machine audio stall, not motion-engine logic. Restarting system audio needs admin
+rights and was not attempted. **[blocked]** Live-motion browser evidence must be rerun once
+audio works. It also strengthens the pending W1 listening test: if the audio clock stalls, the
+composer freezes visibly.
+
+### 3. Candidate grammar "Current" (review items 3–4)
+
+`src/engine/compositionCurrent.ts`: a pure deterministic grammar on the same score, playhead
+and helpers. The circular Ribbon stays selectable as the baseline.
+
+- **Direction:** heading = −H·tanh(κ·(pitch − phrase start)/H), κ = 7.5°/semitone, H = 80°.
+  Both pitch terms are spring-smoothed, and the phrase is the bar.
+  - Each phrase starts level and a repeated pitch runs straight.
+  - Notes above the phrase's first note climb; notes below it descend.
+  - Since |heading| < 90°, every voice flows left to right and cannot loop back.
+- **Speed:** 1 + ½·velocity·onset swell, so each onset pushes the stream forward.
+- **Scale:** the longest voice spans 440 units. The scale depends only on rhythm and velocity,
+  so a pitch edit shifts earlier geometry by at most a translation.
+- **Framing:** the drawing is centred on the uncoupled paths.
+- **Real coupling:** while a melody note and another voice's note overlap, the other voice moves
+  by λ(b)·(melody − self).
+  - λ(b) = 0.3·Σ consonance·smoothstep window, bounded to [0, 0.3].
+  - Consonance by interval class: octave 1, fifth .85, fourth .7, thirds/sixths .55,
+    seconds/sevenths .3, semitone/major-seventh/tritone .15.
+  - It is one-directional: the melody is never moved.
+  - It is drawn as faint threads whose opacity is proportional to λ, and listed per note in the
+    inspector.
+- **Ribbon links:** Ribbon's dashed links are relabelled "annotation only; the voices do not
+  affect each other".
+- **Design history:** steering from the voice's *opening* note made any melody above its first
+  note climb forever. Steering was changed to measure from the phrase start before
+  finalisation; the mutation check below shows the difference.
+- **Layout:** Current hides the circular guides and the central badge, and adds a small "time
+  flows left to right" caption instead.
+
+**Tests:**
+- 10 Current tests, written first; 9 failed against a typed stub
+  (`w2b-current-failing-run-2026-11-21.txt`). The tenth (bounds) passed only because the stub
+  returned no tracks.
+- They cover:
+  - determinism and a stable earlier trail
+  - bounds and continuity
+  - forward flow with no loop-back
+  - steering: repeated pitch straight, rising pitch climbs, Glass Garden rises and returns
+  - strict rest attribution
+  - coupling only between simultaneous voices, bounded, melody unmoved
+  - octave pull stronger than tritone pull
+  - pitch edits affect only later geometry, up to framing
+  - First Mark as a single straight stroke
+  - negative controls
+- **Mutation checks [measured]:** consonance-blind coupling, symmetric coupling and
+  opening-note steering each fail 2–3 tests (`w2b-mutation-checks-2026-11-21.txt`).
+
+### 4. What the music changes in Current [measured, `w2b-motion-bench-2026-11-21.json`]
+
+| Preset | Silhouette | Score cause |
+|---|---|---|
+| First Mark | One straight stroke (xSpan 440, ySpan 0) plus a rest thread | One note: no interval, no steering; three beats of silence |
+| Glass Garden | Two hills (ySpan 71; climbs to 67°, descends to 72°) | Phrases 1 and 3 rise from their first notes, phrases 2 and 4 fall |
+| Ascending Light | Steady climb (ySpan 141, max 36.5°) | Each bar is a rising scale fragment |
+| Pulse Study | Stepped rise with flat runs (max 71°) | Repeated C4s run level; 5ths/octave above the phrase start climb |
+| Leap Dialogue | Two streams, counterline pulled up to 30% toward the melody, 8 couplings | Every lead/counter overlap; strongest pull where they form an octave |
+
+### 5. Focus, profiling, checks [measured, `w2b-ui-check-2026-11-21.json`]
+
+- **Keyboard focus:**
+  - Tab-focused segments have `outline-style: none`, a white 2.4 px stroke dashed 3/2, and
+    `:focus-visible` = true, in both grammars.
+  - The rectangular box is gone: `leap-dialogue-{ribbon,current}-keyboard-focus.png`.
+  - Enter opens the matching inspector block ("Music → ribbon motion" / "Music → current motion").
+- **Saved SVGs:** Save SVG produced `leap-dialogue-ribbon-harmoglyph.svg` and
+  `leap-dialogue-current-harmoglyph.svg`, each with 12 note paths. Orbit still renders.
+- **Cost in Node:** one render-path call (frame plus SVG segments) costs at most p50 0.18 ms,
+  p95 0.42 ms and max 0.59 ms across presets for either grammar. The first uncached Current
+  call costs at most 1.7 ms (Glass Garden).
+- **Browser frame intervals:** 239 rAF intervals during "playback" in headed Chrome for Testing
+  156: p50 8.3 ms, p95 9.7–10.1 ms, max ≤ 10.4 ms, with no frame over 20 ms, for each of
+  Orbit/Ribbon/Current.
+  - **Caveat:** the audio clock was frozen, so the playhead did not advance and React may have
+    skipped re-renders. This shows the page does not jank while idle-playing. It does not
+    measure motion-render cost under real playback; the Node figures are the better estimate.
+- **Local suite:** lint PASS (`scripts/` is now type-checked; the capture script loads
+  Playwright by string import), composition 8/8, timeline 12/12, motion 26/26 (16 Ribbon +
+  10 Current), PBT 500/500, build PASS.
+
+### 6. Visual comparison [aesthetic, Kiro]
+
+`docs/evidence/w2/w2b-screenshots/ab-contact-sheet.png` has rows Ribbon in-progress, Current
+in-progress, Ribbon complete, Current complete, with columns for the five presets.
+
+- **Ribbon:** tidy rings; songs differ mostly by small radial wobble.
+- **Current:** the phrase structure is far more legible (Glass Garden's two arches, Pulse
+  Study's steps, Leap Dialogue's pulled counterline).
+- Risks of Current for Dev's decision:
+  1. It is compact and thin, e.g. Glass Garden uses about the middle third of the canvas.
+  2. It can read as a line chart rather than an artwork.
+  3. The coupling threads look like hatching.
+  4. It does not yet use the circular canvas's full area.
+
+These are candidate directions, not approvals.
+
+### Open / next gate
+
+1. **[blocked]** Live-motion browser evidence: rerun `scripts/w2-capture-ribbon.ts` once the
+   Mac's audio clock advances (check `new AudioContext().currentTime` in a fresh tab).
+2. Dev visual selection: Ribbon, Current, or Current with the risks above addressed.
+3. ChatGPT technical review of the W2-B commit and CI.
+4. W0 AI Studio provenance and the W1 listening test remain separate gates.
+
+No merge, deployment, synth change or W3.
+
 ## Next owner update
 
 When Kiro and browser checks are completed, append evidence links next to the

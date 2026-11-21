@@ -1,97 +1,139 @@
 /**
- * W2-A evidence capture against the REAL Compose & Art route (dev server on :3000).
- * Headed Chrome for Testing via the global Playwright install (no new dependency).
+ * W2 evidence capture against the REAL Compose & Art route (dev server on :3000).
+ * Headed Chrome for Testing via the global Playwright install (no new dependency;
+ * loaded through a string import so this file still type-checks without its types).
  *
- * Captures per preset: scrubbed mid-song frame, two live-playback frames 0.4 s
- * apart, and the completed artwork. Also checks click + keyboard selection,
- * the Ribbon inspector block, Orbit still rendering, and Save SVG content.
+ * For Ribbon (baseline) and Current (candidate), per preset:
+ *  - in-progress frame (scrubbed to 55 %) and completed artwork screenshots
+ *  - live-motion check: two observations 0.3 s apart, BOTH while the Pause
+ *    button is showing (playback active), BOTH with head positions, and a
+ *    measured displacement > 1 px. Disappearance at the end is NOT movement.
+ * Plus keyboard focus treatment, inspector, Save SVG, Orbit preservation and
+ * an rAF frame-interval profile during playback (orbit / ribbon / current).
  *
- * Run: node --import tsx scripts/w2-capture-ribbon.ts > docs/evidence/w2/ui-check.json
+ * Run: node --import tsx scripts/w2-capture-ribbon.ts > docs/evidence/w2/w2b-ui-check.json
  */
 import fs from 'node:fs';
 
 const CHROMIUM = process.env.HG_CHROMIUM ??
   `${process.env.HOME}/Library/Caches/ms-playwright/chromium-1248/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`;
 const URL = process.env.HG_URL ?? 'http://localhost:3000';
-const OUT = 'docs/evidence/w2/screenshots';
+const OUT = process.env.HG_OUT ?? 'docs/evidence/w2/w2b-screenshots';
 const PRESETS = (process.env.HG_PRESETS ?? 'first-mark,glass-garden,ascending-light,pulse-study,leap-dialogue').split(',');
+const GRAMMARS = ['ribbon', 'current'] as const;
+const MIN_DISPLACEMENT_PX = 1;
+
+type Head = [number, number];
+interface Observation { playing: boolean; heads: Head[]; atMs: number }
 
 async function main() {
-  const pw = await import('playwright');
+  const moduleName = 'playwright';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pw: any = await import(moduleName);
   fs.mkdirSync(OUT, { recursive: true });
   const browser = await pw.chromium.launch({ headless: false, executablePath: CHROMIUM });
   const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 }, acceptDownloads: true });
   const page = await ctx.newPage();
   const errors: string[] = [];
-  page.on('pageerror', (e) => errors.push(String(e).slice(0, 300)));
-  page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text().slice(0, 200)); });
-  const report: Record<string, unknown> = { generatedAt: new Date().toISOString(), browser: browser.version(), presets: {}, checks: {}, pageErrors: errors };
-  const presets = report.presets as Record<string, unknown>;
-  const checks = report.checks as Record<string, unknown>;
+  page.on('pageerror', (e: unknown) => errors.push(String(e).slice(0, 300)));
+  page.on('console', (m: { type(): string; text(): string }) => { if (m.type() === 'error') errors.push(m.text().slice(0, 200)); });
+  const report: Record<string, any> = { generatedAt: new Date().toISOString(), browser: browser.version(), minDisplacementPx: MIN_DISPLACEMENT_PX, runs: {}, checks: {}, frameProfile: {}, pageErrors: errors };
 
   await page.goto(URL, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#composition-preset');
   const svg = page.locator('svg[role="img"]').first();
-  const ribbonBtn = page.getByRole('button', { name: /^ribbon$/i });
-  const segCount = () => page.locator('g[aria-label="Melodic ribbon"] path[role="button"]').count();
-  const segSignature = () => page.locator('g[aria-label="Melodic ribbon"] path[role="button"]').evaluateAll((els) => els.map((e) => e.getAttribute('d')).join('|').length);
-  const headPos = () => page.locator('g[aria-label="Melodic ribbon"] circle').evaluateAll((els) => els.map((e) => [e.getAttribute('cx'), e.getAttribute('cy')]));
+  const layer = (g: string) => page.locator(`g[aria-label="${g === 'ribbon' ? 'Melodic ribbon' : 'Melodic current'}"]`);
+  const pauseVisible = async () => (await page.getByRole('button', { name: /^Pause$/ }).count()) > 0;
+  const observe = async (g: string): Promise<Observation> => ({
+    playing: await pauseVisible(),
+    heads: (await layer(g).locator(':scope > circle').evaluateAll((els: Element[]) => els.map((e) => [Number(e.getAttribute('cx')), Number(e.getAttribute('cy'))]))) as Head[],
+    atMs: Date.now(),
+  });
 
-  for (const id of PRESETS) {
-    await page.selectOption('#composition-preset', id);
-    await ribbonBtn.click();
-    const span = Number(await page.locator('input[aria-label="Scrub song position"]').getAttribute('max'));
-    const mid = Math.round(span * 0.55 * 2) / 2;
-    await page.locator('input[aria-label="Scrub song position"]').fill(String(mid));
-    await page.waitForTimeout(150);
-    await svg.screenshot({ path: `${OUT}/${id}-scrub-beat${mid}.png` });
-    const midSegments = await segCount();
+  // Warm up audio once so the first measured Play is not the session's first audio start.
+  await page.getByRole('button', { name: /Play from start|Resume/ }).click();
+  await page.waitForTimeout(800);
+  await page.getByRole('button', { name: /^Pause$/ }).click().catch(() => {});
 
-    await page.getByRole('button', { name: /Play from start|Resume/ }).click();
-    await page.waitForTimeout(900);
-    const h1 = await headPos();
-    await svg.screenshot({ path: `${OUT}/${id}-live-a.png` });
-    await page.waitForTimeout(400);
-    const h2 = await headPos();
-    await svg.screenshot({ path: `${OUT}/${id}-live-b.png` });
-    await page.getByRole('button', { name: /Pause/ }).click().catch(() => {});
+  for (const g of GRAMMARS) {
+    for (const id of PRESETS) {
+      await page.selectOption('#composition-preset', id);
+      await page.getByRole('button', { name: new RegExp(`^${g}$`, 'i') }).click();
+      const scrub = page.locator('input[aria-label="Scrub song position"]');
+      const span = Number(await scrub.getAttribute('max'));
+      const mid = Math.round(span * 0.55 * 2) / 2;
+      await scrub.fill(String(mid));
+      await page.waitForTimeout(150);
+      await svg.screenshot({ path: `${OUT}/${id}-${g}-progress-beat${mid}.png` });
+      const progressParts = await layer(g).locator('path').count();
+      await page.getByRole('button', { name: 'Complete art' }).click();
+      await page.waitForTimeout(150);
+      await svg.screenshot({ path: `${OUT}/${id}-${g}-complete.png` });
+      const notePaths = await layer(g).locator('path[role="button"]').count();
+      const restPaths = await layer(g).locator('path[aria-hidden="true"]').count();
 
-    await page.getByRole('button', { name: 'Complete art' }).click();
-    await page.waitForTimeout(150);
-    await svg.screenshot({ path: `${OUT}/${id}-complete.png` });
-    presets[id] = {
-      totalBeats: span, scrubBeat: mid, segmentsAtScrub: midSegments,
-      segmentsComplete: await segCount(), completeGeometrySize: await segSignature(),
-      liveHeadA: h1, liveHeadB: h2, headMovedDuringPlayback: JSON.stringify(h1) !== JSON.stringify(h2) && h1.length > 0,
-    };
+      // Live motion: restart from beat 0, observe twice while playing.
+      await page.getByRole('button', { name: 'Clear painting' }).click();
+      await page.getByRole('button', { name: /Play from start|Resume/ }).click();
+      await page.waitForTimeout(350);
+      const a = await observe(g);
+      await page.waitForTimeout(300);
+      const b = await observe(g);
+      await page.getByRole('button', { name: /^Pause$/ }).click().catch(() => {});
+      const valid = a.playing && b.playing && a.heads.length > 0 && a.heads.length === b.heads.length;
+      const displacement = valid ? Math.max(...a.heads.map((h, i) => Math.hypot(b.heads[i][0] - h[0], b.heads[i][1] - h[1]))) : null;
+      report.runs[`${g}/${id}`] = {
+        totalBeats: span, progressBeat: mid, pathsAtProgress: progressParts, notePathsComplete: notePaths, restBridgesComplete: restPaths,
+        observationA: a, observationB: b, validObservationPair: valid, headDisplacementPx: displacement,
+        headMovedDuringPlayback: valid && displacement !== null && displacement > MIN_DISPLACEMENT_PX,
+      };
+    }
   }
 
-  // Selection by click and keyboard updates the Ribbon inspector (Leap Dialogue is loaded).
-  const firstSeg = page.locator('g[aria-label="Melodic ribbon"] path[role="button"]').first();
-  await firstSeg.click({ force: true });
-  const inspector = page.getByLabel('Mathematics and source inspector');
-  checks.clickSelectShowsMotionBlock = await inspector.getByText('Music → ribbon motion').isVisible().catch(() => false);
-  checks.clickSelectedText = (await inspector.innerText()).split('\n').slice(0, 14).join(' | ');
-  const third = page.locator('g[aria-label="Melodic ribbon"] path[role="button"]').nth(2);
-  const thirdLabel = await third.getAttribute('aria-label');
-  await third.focus();
-  await page.keyboard.press('Enter');
-  checks.keyboardSelectLabel = thirdLabel;
-  checks.keyboardSelectedText = (await inspector.innerText()).split('\n').slice(0, 6).join(' | ');
-  await svg.screenshot({ path: `${OUT}/leap-dialogue-selected.png` });
+  // Keyboard focus treatment + inspector, Leap Dialogue, both grammars.
+  await page.selectOption('#composition-preset', 'leap-dialogue');
+  for (const g of GRAMMARS) {
+    await page.getByRole('button', { name: new RegExp(`^${g}$`, 'i') }).click();
+    await page.getByRole('button', { name: 'Complete art' }).click();
+    const seg = layer(g).locator('path[role="button"]').nth(2);
+    await page.keyboard.press('Tab'); // establish keyboard modality so :focus-visible applies
+    await seg.focus();
+    const focusStyle = await page.evaluate(() => { const el = document.activeElement as SVGElement; const cs = getComputedStyle(el); return { label: el.getAttribute('aria-label'), outlineStyle: cs.outlineStyle, stroke: cs.stroke, strokeDasharray: cs.strokeDasharray, strokeWidth: cs.strokeWidth, focusVisible: el.matches(':focus-visible') }; });
+    await svg.screenshot({ path: `${OUT}/leap-dialogue-${g}-keyboard-focus.png` });
+    await page.keyboard.press('Enter');
+    const inspector = page.getByLabel('Mathematics and source inspector');
+    const heading = g === 'ribbon' ? 'Music → ribbon motion' : 'Music → current motion';
+    report.checks[`${g}KeyboardFocus`] = focusStyle;
+    report.checks[`${g}InspectorShown`] = await inspector.getByText(heading).isVisible().catch(() => false);
+    report.checks[`${g}InspectorText`] = (await inspector.innerText()).split('\n').slice(0, 30).join(' | ');
+    const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /Save SVG/ }).click()]);
+    const saved = fs.readFileSync(await download.path(), 'utf8');
+    report.checks[`${g}SavedSvg`] = { file: download.suggestedFilename(), hasLayer: saved.includes(g === 'ribbon' ? 'Melodic ribbon' : 'Melodic current'), notePaths: (saved.match(/role="button"/g) ?? []).length };
+  }
 
-  // Save SVG contains the ribbon geometry.
-  const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /Save SVG/ }).click()]);
-  const saved = fs.readFileSync(await download.path(), 'utf8');
-  checks.savedSvgFilename = download.suggestedFilename();
-  checks.savedSvgHasRibbonGroup = saved.includes('Melodic ribbon');
-  checks.savedSvgRibbonPaths = (saved.match(/role="button"/g) ?? []).length;
-
-  // Orbit (existing grammar) still renders arc marks.
   await page.getByRole('button', { name: /^orbit$/i }).click();
   await page.waitForTimeout(150);
-  checks.orbitStillRenders = (await page.locator('svg[role="img"] path[stroke="transparent"]').count()) > 0 && (await segCount()) === 0;
-  await svg.screenshot({ path: `${OUT}/leap-dialogue-orbit-baseline.png` });
+  report.checks.orbitStillRenders = (await page.locator('svg[role="img"] path[stroke="transparent"]').count()) > 0;
+
+  // rAF frame intervals during playback (Glass Garden ≈ 8.6 s), per grammar.
+  await page.selectOption('#composition-preset', 'glass-garden');
+  for (const g of ['orbit', 'ribbon', 'current']) {
+    await page.getByRole('button', { name: new RegExp(`^${g}$`, 'i') }).click();
+    await page.getByRole('button', { name: 'Clear painting' }).click();
+    await page.getByRole('button', { name: /Play from start|Resume/ }).click();
+    await page.waitForTimeout(300);
+    // Passed as a string: tsx-transformed closures reference a __name helper that does not exist in the page.
+    const intervals: number[] = await page.evaluate(`new Promise((resolve) => {
+      const out = []; let last = performance.now();
+      function tick(now) { out.push(now - last); last = now; if (out.length < 240) requestAnimationFrame(tick); else resolve(out); }
+      requestAnimationFrame(tick);
+    })`);
+    const playingAtEnd = await pauseVisible();
+    await page.getByRole('button', { name: /^Pause$/ }).click().catch(() => {});
+    const sorted = intervals.slice(1).sort((x, y) => x - y);
+    const q = (p: number) => +sorted[Math.min(sorted.length - 1, Math.floor((p / 100) * (sorted.length - 1)))].toFixed(2);
+    report.frameProfile[g] = { frames: sorted.length, p50ms: q(50), p95ms: q(95), p99ms: q(99), maxMs: +sorted.at(-1)!.toFixed(2), over20ms: sorted.filter((x) => x > 20).length, playingThroughout: playingAtEnd };
+  }
 
   await browser.close();
   process.stdout.write(JSON.stringify(report, null, 2) + '\n');

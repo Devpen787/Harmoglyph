@@ -18,3 +18,13 @@ Parallel W0 eligibility origin check and remaining W1 human audio observation re
 - T3: Ribbon added to the existing Compose & Art grammar switch; Orbit/Bloom/Weave unchanged.
 - T4: real-app capture of all five presets in headed Chrome for Testing 156: `docs/evidence/w2/screenshots/`, `docs/evidence/w2/ui-check-2026-11-20.json`.
 - T5: `npm run test:motion` added and wired into `.github/workflows/w0-baseline.yml`.
+
+### W2-B (Kiro CLI, 21 Nov 2026) — response to "Independent W2-A review"
+- [x] Rest attribution: samples name a note only while it sounds; silence is a labelled `rest` bridge. 3 regressions failed on `decb96c`, pass now.
+- [x] Browser check: live motion requires two observations while playing, both with head positions, displacement > 1 px.
+- [x] Candidate grammar "Current" (`src/engine/compositionCurrent.ts`), 10 tests; Ribbon kept as baseline.
+- [x] Real voice coupling in Current (consonance-weighted, one-directional, λ ≤ 0.3); Ribbon links relabelled as annotations.
+- [x] A/B screenshots, 5 presets × 2 grammars × (in-progress, complete): `docs/evidence/w2/w2b-screenshots/ab-contact-sheet.png`.
+- [x] Focus treatment: dashed white stroke on the path at `:focus-visible`, no rectangular outline.
+- [ ] Live-motion browser evidence: BLOCKED. The AudioContext clock on this Mac stays at ~6 ms while reporting `running`, so playback never advances; the corrected check reports false for all 10 runs.
+- [ ] Dev visual selection between Ribbon and Current.
