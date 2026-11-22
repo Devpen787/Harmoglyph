@@ -1,0 +1,233 @@
+{
+  "generatedAt": "2026-11-22T14:26:17.361Z",
+  "browser": "156.0.8078.4",
+  "viewport": "1500x1000",
+  "framing": {
+    "first-mark": {
+      "w2d": {
+        "progressBeat": 2,
+        "transformProgress": "translate(-11.49 -11.49) scale(1.0383)",
+        "transformComplete": "translate(-11.49 -11.49) scale(1.0383)"
+      },
+      "w2e": {
+        "progressBeat": 2,
+        "transformProgress": "translate(-11.49 -11.49) scale(1.0383)",
+        "transformComplete": "translate(-11.49 -11.49) scale(1.0383)"
+      }
+    },
+    "glass-garden": {
+      "w2d": {
+        "progressBeat": 9,
+        "transformProgress": "translate(-138.80 -140.82) scale(1.4667)",
+        "transformComplete": "translate(-138.80 -140.82) scale(1.4667)"
+      },
+      "w2e": {
+        "progressBeat": 9,
+        "transformProgress": "translate(-138.80 -140.82) scale(1.4667)",
+        "transformComplete": "translate(-138.80 -140.82) scale(1.4667)"
+      }
+    },
+    "ascending-light": {
+      "w2d": {
+        "progressBeat": 4.5,
+        "transformProgress": "translate(-36.89 -42.08) scale(1.1239)",
+        "transformComplete": "translate(-36.89 -42.08) scale(1.1239)"
+      },
+      "w2e": {
+        "progressBeat": 4.5,
+        "transformProgress": "translate(-36.89 -42.08) scale(1.1239)",
+        "transformComplete": "translate(-36.89 -42.08) scale(1.1239)"
+      }
+    },
+    "pulse-study": {
+      "w2d": {
+        "progressBeat": 4.5,
+        "transformProgress": "translate(-52.85 -53.38) scale(1.1738)",
+        "transformComplete": "translate(-52.85 -53.38) scale(1.1738)"
+      },
+      "w2e": {
+        "progressBeat": 4.5,
+        "transformProgress": "translate(-52.85 -53.38) scale(1.1738)",
+        "transformComplete": "translate(-52.85 -53.38) scale(1.1738)"
+      }
+    },
+    "leap-dialogue": {
+      "w2d": {
+        "progressBeat": 4.5,
+        "transformProgress": "translate(-63.54 -60.24) scale(1.2134)",
+        "transformComplete": "translate(-63.54 -60.24) scale(1.2134)"
+      },
+      "w2e": {
+        "progressBeat": 4.5,
+        "transformProgress": "translate(-63.54 -60.24) scale(1.2134)",
+        "transformComplete": "translate(-63.54 -60.24) scale(1.2134)"
+      }
+    }
+  },
+  "runs": {
+    "w2d/first-mark": {
+      "valid": true,
+      "headDisplacementPx": 73.95767606477861,
+      "moved": true
+    },
+    "w2d/glass-garden": {
+      "valid": true,
+      "headDisplacementPx": 15.857114420298332,
+      "moved": true
+    },
+    "w2d/ascending-light": {
+      "valid": true,
+      "headDisplacementPx": 27.871407587783324,
+      "moved": true
+    },
+    "w2d/pulse-study": {
+      "valid": true,
+      "headDisplacementPx": 43.67222866807769,
+      "moved": true
+    },
+    "w2d/leap-dialogue": {
+      "valid": true,
+      "headDisplacementPx": 33.23923533144166,
+      "moved": true
+    },
+    "w2e/first-mark": {
+      "valid": true,
+      "headDisplacementPx": 67.15961858127201,
+      "moved": true
+    },
+    "w2e/glass-garden": {
+      "valid": true,
+      "headDisplacementPx": 15.797434719319467,
+      "moved": true
+    },
+    "w2e/ascending-light": {
+      "valid": true,
+      "headDisplacementPx": 27.06352812512256,
+      "moved": true
+    },
+    "w2e/pulse-study": {
+      "valid": true,
+      "headDisplacementPx": 39.00407674230361,
+      "moved": true
+    },
+    "w2e/leap-dialogue": {
+      "valid": true,
+      "headDisplacementPx": 34.35676354340015,
+      "moved": true
+    }
+  },
+  "checks": {
+    "framingIdentical": {
+      "first-mark": true,
+      "glass-garden": true,
+      "ascending-light": true,
+      "pulse-study": true,
+      "leap-dialogue": true
+    },
+    "w2dSvgFile": "leap-dialogue-filament-harmoglyph.svg",
+    "w2dSelection": {
+      "mouseInteriorPointHit": true,
+      "mouseSelectedShowsG3": true,
+      "mouseText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · COUNTER | G3 | Beat 3.0 · 2 beat(s) · 196.00 Hz | MUSIC → MATHEMATICS",
+      "keyboardSelectedShowsE5": true,
+      "keyText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · LEAD | E5 | Beat 3.0 · 1 beat(s) · 659.26 Hz | MUSIC → MATHEMATICS"
+    },
+    "w2dExport": {
+      "hasLayer": true,
+      "notePaths": 12,
+      "bytes": 308593,
+      "repeatIdentical": true,
+      "identicalAfterRestyleRaw": false,
+      "identicalAfterRestyleAttributeOrderNormalised": true
+    },
+    "w2eSvgFile": "leap-dialogue-filament2-harmoglyph.svg",
+    "w2eSelection": {
+      "mouseInteriorPointHit": true,
+      "mouseSelectedShowsG3": true,
+      "mouseText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · COUNTER | G3 | Beat 3.0 · 2 beat(s) · 196.00 Hz | MUSIC → MATHEMATICS",
+      "keyboardSelectedShowsE5": true,
+      "keyText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · LEAD | E5 | Beat 3.0 · 1 beat(s) · 659.26 Hz | MUSIC → MATHEMATICS"
+    },
+    "w2eExport": {
+      "hasLayer": true,
+      "notePaths": 12,
+      "bytes": 447866,
+      "repeatIdentical": true,
+      "identicalAfterRestyleRaw": false,
+      "identicalAfterRestyleAttributeOrderNormalised": true
+    },
+    "w2dFixedViewEdit": {
+      "edit": "Glass Garden lead-5 B4 → E5 (+5 semitones)",
+      "viewBefore": "translate(-138.80 -140.82) scale(1.4667)",
+      "viewAfterRefit": "translate(-168.30 -170.75) scale(1.5652)",
+      "fixedViewApplied": "translate(-153.922 -130.128) scale(1.4667)",
+      "notesWhoseStartMoved": [
+        "Inspect E4, beat 6.5, lead filament (4.7)",
+        "Inspect D4, beat 7.0, lead filament (10.4)",
+        "Inspect F4, beat 9.0, lead filament (23.2)",
+        "Inspect A4, beat 10.0, lead filament (24.7)",
+        "Inspect C5, beat 10.5, lead filament (24.8)",
+        "Inspect E5, beat 11.0, lead filament (24.8)",
+        "Inspect D5, beat 13.0, lead filament (24.8)",
+        "Inspect A4, beat 14.0, lead filament (24.8)",
+        "Inspect G4, beat 14.5, lead filament (24.8)",
+        "Inspect C4, beat 15.0, lead filament (24.8)"
+      ],
+      "notesUnchanged": 6
+    },
+    "w2eFixedViewEdit": {
+      "edit": "Glass Garden lead-5 B4 → E5 (+5 semitones)",
+      "viewBefore": "translate(-138.80 -140.82) scale(1.4667)",
+      "viewAfterRefit": "translate(-168.30 -170.75) scale(1.5652)",
+      "fixedViewApplied": "translate(-153.922 -130.128) scale(1.4667)",
+      "notesWhoseStartMoved": [
+        "Inspect E4, beat 6.5, lead filament2 (4.7)",
+        "Inspect D4, beat 7.0, lead filament2 (10.4)",
+        "Inspect F4, beat 9.0, lead filament2 (23.2)",
+        "Inspect A4, beat 10.0, lead filament2 (24.7)",
+        "Inspect C5, beat 10.5, lead filament2 (24.8)",
+        "Inspect E5, beat 11.0, lead filament2 (24.8)",
+        "Inspect D5, beat 13.0, lead filament2 (24.8)",
+        "Inspect A4, beat 14.0, lead filament2 (24.8)",
+        "Inspect G4, beat 14.5, lead filament2 (24.8)",
+        "Inspect C4, beat 15.0, lead filament2 (24.8)"
+      ],
+      "notesUnchanged": 6
+    }
+  },
+  "frameProfile": {
+    "w2d/glass-garden": {
+      "frames": 239,
+      "p50ms": 8.4,
+      "p95ms": 25.1,
+      "maxMs": 49.8,
+      "over20ms": 22,
+      "playingThroughout": true
+    },
+    "w2e/glass-garden": {
+      "frames": 239,
+      "p50ms": 8.4,
+      "p95ms": 16.8,
+      "maxMs": 25.3,
+      "over20ms": 2,
+      "playingThroughout": true
+    },
+    "w2d/leap-dialogue": {
+      "frames": 239,
+      "p50ms": 8.4,
+      "p95ms": 17.2,
+      "maxMs": 25.8,
+      "over20ms": 7,
+      "playingThroughout": true
+    },
+    "w2e/leap-dialogue": {
+      "frames": 239,
+      "p50ms": 8.4,
+      "p95ms": 24.4,
+      "maxMs": 33.6,
+      "over20ms": 13,
+      "playingThroughout": true
+    }
+  },
+  "pageErrors": []
+}

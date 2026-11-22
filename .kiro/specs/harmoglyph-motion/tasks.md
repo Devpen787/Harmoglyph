@@ -41,3 +41,9 @@ Parallel W0 eligibility origin check and remaining W1 human audio observation re
 - [x] Filament material (`src/engine/filamentMaterial.ts`, 7 tests written first): each voice is a bundle of 36 hashed (non-random) strands on the existing motion coordinates; works on Current and Ribbon frames.
 - [x] DAO-inspired palette while Filament is selected: black ground, bone white, one warm hue per voice; other styles unchanged. No new fonts.
 - [ ] Dev visual review (open questions in handoff W2-D section).
+
+### W2-E (Kiro CLI, 22 Nov 2026) — Filament II volume variant, W2-D kept as A/B baseline
+- [x] `buildFilamentLayer(..., { variant: 'volume' })`; default stays W2-D (fingerprint `43f014de77daa5d4` unchanged).
+- [x] Volume from note thickness; First Mark sparse control; rests identical to W2-D; coupling bends eased across each real coupling window, zero outside and with zero coupling. 5 focused tests (4 failed first).
+- [x] Real-app A/B at matching beats/viewport/framing, fixed-view Glass Garden edit, mouse + keyboard selection, export determinism, playback motion.
+- [ ] Dev visual review (tradeoffs in handoff W2-E section).

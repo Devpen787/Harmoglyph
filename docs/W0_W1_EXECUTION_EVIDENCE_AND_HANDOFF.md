@@ -1754,6 +1754,141 @@ complete, Filament in progress, Filament complete, Filament edit and coupling.
 No merge, deployment, synth/scheduling change or W3. The W1 listening test and the W0 AI Studio
 provenance check remain separate gates.
 
+## W2-E — Filament II volume variant vs W2-D baseline (22 Nov 2026)
+
+**Assignment:** start from `40cded7b`; build one Filament variant inside the existing Compose &
+Art view, keeping W2-D as the A/B baseline. The commit SHA and CI result are in the PR #5 comment.
+
+**Scope held:** changes are limited to the Filament rendering layer (`filamentMaterial.ts`), the
+style switcher wiring in `CompositionJourneyView.tsx`, tests, and a capture script. The diff on
+`audioSynth.ts`, `compositionTimeline.ts`, `compositionMotion.ts`, `compositionCurrent.ts` and
+`currentMaterial.ts` is empty. Typography, page chrome, audio and W3 were not touched.
+
+**Baseline preserved [measured]:** a fingerprint of W2-D's full output (view, strand paths,
+opacities, widths, kinds and cores for 5 presets × 3 beats) is `43f014de77daa5d4` both at
+`40cded7b` and after this work. "Filament" is still W2-D; the variant is "Filament II".
+
+### What the variant changes (`buildFilamentLayer(..., { variant: 'volume' })`)
+
+1. **Volume:** sounding-note strands use 54 lanes instead of 36, with half-width
+   = 1.9·thickness + 4.2·(thickness − 2.2).
+   - The second term is the note's own contribution to thickness (velocity × onset swell and
+     duration plateau) from the motion engine.
+   - Rests use exactly W2-D's rest strands: the same lanes, narrow spread, dim and dotted.
+2. **Coupling edges:**
+   - Bends come only from real coupling windows: contiguous λ > 0 in the completed frame, bounded
+     by the λ = 0 samples on either side.
+   - Within a window, a reaching strand bends by
+     0.8 · reach · (peak λ / λmax) · sin²(π·progress)^(1 + threshold).
+   - So the bend rises across the whole window instead of the 0.25-beat λ ramp. It is exactly 0
+     at the window edges and everywhere outside, and its strength still comes from the window's
+     consonance.
+   - Windows are taken from the completed frame, so the earlier trail never changes during
+     playback.
+3. **View:** the same canvas fit as W2-D, so framing is identical (tested and measured).
+
+### Tests [measured]
+
+5 focused tests; 4 failed first against an option that was accepted but ignored
+(`w2e-variant-failing-run.txt`). The framing test passed vacuously while the variant equalled the
+baseline.
+- **Default:** the default equals an explicit W2-D; the variant is deterministic and different.
+- **Framing:** identical view in all presets plus the rest fixture; every variant point inside the
+  canvas.
+- **Volume:** Glass Garden and Ascending Light have 54 lanes and a mean bundle extent at least
+  1.6× W2-D's. Velocity still widens the bundle by more than 1.3×.
+- **First Mark sparse control:** note strands only during its one beat; note ink below 0.3× Glass
+  Garden's; rest strands (and the rest fixture's) byte-identical to W2-D.
+- **Coupling:**
+  - every bend > 0 lies where the motion engine's λ > 0
+  - edge steepness below 0.6× W2-D's
+  - at least 6 strands still bend more than 0.2
+  - the melody never bends
+  - λmax = 0 gives zero bends everywhere; one-voice presets never bend
+
+Three test definitions were corrected during the work, and are disclosed here:
+1. The velocity check sampled after First Mark's note had ended; it now uses beat 0.75, like the
+   W2-D test.
+2. The sparse metric originally counted First Mark's W2-D rest thread. It now measures note
+   strands; the measured ratio is ≈ 0.24, and the guard is set at 0.3 rather than tuned down.
+3. The note-only-during-the-note check ignored each strand's shared join point.
+
+**Design correction:** the first easing attempt (a per-strand staggered smootherstep on λ) made
+the edges **steeper** (0.892 vs 0.525). It was replaced by the window-wide easing above.
+
+**Totals:** motion + material suites 48/48, typecheck, composition 8/8, timeline 12/12,
+PBT 500/500, build PASS.
+
+### Real-app A/B [measured, headed Chrome for Testing 156, 1500×1000]
+
+Script: `scripts/w2e-filament-ab.ts`. Raw: `w2e-ab-check.json`, `w2e-profile-fresh-{1,2}.json`.
+Images: `docs/evidence/w2/w2e-screenshots/`.
+
+- **Matching captures:** for each preset, W2-D and W2-E were captured at the same beat (55% of
+  span, rounded to 0.5) and when complete. The group transforms are **identical** for all five
+  presets in both states.
+- **Live motion:** 10/10 moved. Displacements were 15.8–74.0 px for W2-D and 15.8–67.2 px for
+  W2-E, with both observations valid during playback.
+  - A first-of-session W2-D / First Mark stall (0 px) in the previous run didn't recur. It matches
+    the known intermittent audio start-up stall.
+- **Selection:**
+  - **Mouse:** a click at a verified interior point of G3 (counter, beat 3) selected G3 in both
+    styles.
+  - **Keyboard:** Tab plus Enter on E5 (lead, beat 3) selected E5.
+- **SVG export** (Leap Dialogue): 12 note paths; 309 KB (W2-D) and 448 KB (W2-E).
+  - Two consecutive exports are byte-identical.
+  - After switching to Orbit and back, the export is identical once each element's attributes are
+    sorted.
+  - The raw bytes differ only because React places the selected note's `filter` attribute in a
+    different position after an update than after a fresh mount. Each file contains exactly one
+    glow filter.
+- **Fixed-view edit** (Glass Garden lead-5 B4 → E5, +5 semitones). After the edit the pre-edit
+  view is restored and aligned on the first note; on-screen alignment error ≤ 0.02 px. Images:
+  `edit-{w2d,w2e}-before.png`, `-after-fixed-view.png`, `-after-refit.png` (product framing) and
+  `-diff-fixed-view.png` (red = changed).
+  - **Geometry:**
+    - Before beat 4, every strand point matches to within 0.011 units (rounding).
+    - The first point that moves is at beat 5.06 (0-based), right after the edited note.
+    - The first 6 note shapes stay fixed; notes 7–16 shift by 4.7–24.8 units.
+  - **Pixels:** the left 35% of the image differs by ~380 pixels, which is the selection-outline
+    change; the edited region differs by thousands.
+  - **Why the change starts after the edited note:** B4 is the first note of its phrase, and
+    Current steers by pitch relative to the phrase start. Raising it leaves its own direction
+    unchanged and lowers the rest of the phrase relative to it.
+  - **Product framing:** in the app, the view re-fits after the edit (scale 1.4667 → 1.5652), so
+    the whole drawing moves on screen.
+- **Frame intervals:** inconclusive. W2-D and W2-E were measured during playback on Glass Garden
+  and Leap Dialogue, in the main run and two fresh-browser runs.
+  - Fresh run 1: W2-D Glass Garden p95 25.1 ms (32 frames over 20 ms) against W2-E 16.7 ms (5).
+  - Fresh run 2: everything slowed to a median of about 16 ms, with W2-E Glass Garden p95 41 ms
+    and Leap Dialogue p95 42–49 ms for both.
+  - Earlier W2-D-only runs measured p95 ≈ 9 ms.
+  - Machine load dominates, so no claim is made that either is faster. Both drop frames under
+    load, and W2-E carries about 50% more path data (up to 384–448 KB per frame). A canvas
+    renderer for live playback may be needed.
+
+### A/B images for Dev
+
+- `w2e-ab-contact-sheet.png`: rows W2-D in-progress, W2-E in-progress, W2-D complete, W2-E
+  complete, then the fixed-view edit (W2-D before/after, W2-E before/after, W2-E diff).
+- `leap-dialogue-coupling-closeup-w2d-vs-w2e.png`: same crop of Leap Dialogue, both styles.
+
+### Tradeoffs [aesthetic, Kiro]
+
+- **Volume:** Glass Garden, Ascending Light and Pulse Study now read as fuller, twisted ropes
+  instead of a thin braid. But the bundle pinches to a knot at every onset, because the swell
+  starts at zero there, so long passages look like a string of beads. Some outer strands curl at
+  sharp turns.
+- **Coupling:** the comb-like steps are gone; strands ease in and out of each window. The cost is
+  that the reach toward the melody is visibly weaker, so the coupling reads less strongly than in
+  W2-D. More amplitude would bring it back at the cost of some smoothness.
+- **First Mark:** stays sparse: a short teardrop where the note sounds, then W2-D's unchanged
+  silent thread.
+- **Cost:** about 50% more path data and a larger export, with unresolved frame-time behaviour
+  under load.
+
+Stopped for ChatGPT engineering review and Dev visual review. No merge or deployment.
+
 ## Next owner update
 
 When Kiro and browser checks are completed, append evidence links next to the
