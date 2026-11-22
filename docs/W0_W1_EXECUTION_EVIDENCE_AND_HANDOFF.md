@@ -1204,6 +1204,771 @@ Report format: one line per step, pass / fail / unsure, plus what was heard.
 **W2 go/no-go: NO-GO** until both are done. If the listening results show no failures and the
 eligibility check is clean, W2 can begin. E06 and E08 are W2-era items under the roadmap.
 
+## W2-A Signature Music-to-Motion — first Ribbon slice (20 Nov 2026)
+
+**Branch / PR:** `work/w2-signature-motion-2026-11-20`, draft PR #5, stacked on PR #4 (`2b653ec`).
+**Spec:** `.kiro/specs/harmoglyph-motion/{requirements,design,tasks}.md`. The exact commit SHA and
+CI result are posted as a PR #5 comment, because a document can't contain its own commit SHA.
+**Not changed:** `audioSynth.ts` (synthesis, envelopes, 900 ms ceiling), W1 scheduling,
+Orbit/Bloom/Weave, formula/3D features. No new dependency.
+
+Evidence labels: **[measured]** observed from running code or the real app; **[aesthetic]**
+Kiro's subjective judgement, not a test result.
+
+### What was built
+
+| File | Change |
+|---|---|
+| `src/engine/compositionMotion.ts` (new) | Pure Ribbon kernel: `computeRibbonFrame`, `describeNoteMotion`, `ribbonSegments`, `RIBBON_MAPPINGS` |
+| `src/engine/compositionMotion.test.ts` (new) | 13 behaviour tests |
+| `src/components/CompositionJourneyView.tsx` | Ribbon added to the grammar switch, ribbon layer in the existing SVG, inspector "Music → ribbon motion" block |
+| `package.json`, `.github/workflows/w0-baseline.yml` | `npm run test:motion` and a CI step |
+| `scripts/w2-capture-ribbon.ts` (new, tsc-excluded) | Real-app screenshot and interaction capture |
+
+**Model.** For each track:
+- Angle = 2π·beat/total, the same mapping as the arc grammars.
+- Radius: r(b) = r₀ + Σ (rᵢ − rᵢ₋₁)·s(b − onsetᵢ), where rᵢ is the existing `deriveGeometry`
+  pitch+voice radius and s is the closed-form step response of an under-damped spring
+  (ω = 7.5 rad/beat, ζ = 0.42).
+- Consequences: position and its rate of change are continuous across onsets, overshoot is
+  about 23% of the interval, and repeated pitches add no radial motion.
+- Thickness = base + Σ velocity·(written-duration plateau + smooth onset swell).
+- Each track is its own ribbon. Simultaneous onsets on different tracks are drawn as dashed
+  counterpoint links.
+
+**Data flow.** The frame is computed in render from `progress`, which is the existing
+audio-clock playhead, or `totalBeats` when "Complete art" is shown. No timer or stored state
+drives the art. The inspector lists which mappings are derived from the score and which are
+design choices.
+
+### Tests
+
+- **T1 before implementation [measured]:** against a typed stub, 11 of 13 tests fail. The 2 that
+  pass do so only because the stub returns no tracks; the determinism test asserts non-empty
+  tracks, so they can't stay vacuous. Log: `docs/evidence/w2/t1-failing-run-2026-11-20.txt`.
+- **After implementation [measured]:** 13/13 pass. Coverage:
+  - determinism, and 30 fps / 60 fps / irregular cadence giving the same frame
+  - earlier trail never rewritten as time advances
+  - no teleport (largest step 8.42 px, limit 12)
+  - damped overshoot exists
+  - rising contour differs from repeated pulse; every onset swells, even at the same pitch
+  - Leap Dialogue: 2 tracks, all 12 note IDs, 4 counterpoint links at beats 0, 2, 4, 6
+  - First Mark: one note, zero radial motion
+  - pitch edit changes only motion from that onset onward and doesn't mutate the score
+  - all samples finite and inside the viewport; completed frame stable past the end
+  - negative controls throw: NaN pitch, NaN/∞ beat, NaN damping, ω = 0, step = 0, unknown note
+  - one closed SVG segment per note
+- **Mutation checks [measured]:** an instant pitch jump fails the 2 continuity/motion tests.
+  A wall-clock dependence fails 3 determinism/motion tests. Log:
+  `docs/evidence/w2/t2-mutation-checks-2026-11-20.txt`.
+- **Full local suite [measured]:** lint PASS, composition 8/8, timeline 12/12, motion 13/13,
+  PBT 500/500, build PASS.
+
+### Real-app check (headed Chrome for Testing 156, `npm run dev`) [measured]
+
+Raw: `docs/evidence/w2/ui-check-2026-11-20.json`; screenshots: `docs/evidence/w2/screenshots/`
+(scrub, two live frames, complete, per preset); overview: `screenshots/contact-sheet.png`.
+
+| Preset | Segments complete | Head moved between live frames 0.4 s apart |
+|---|---|---|
+| First Mark | 1 | yes |
+| Glass Garden | 16 | yes |
+| Ascending Light | 8 | yes |
+| Pulse Study | 16 | yes |
+| Leap Dialogue | 12 (2 ribbons) | yes |
+
+- Click and keyboard (Tab focus + Enter) selection open the Ribbon inspector block for the
+  chosen note.
+- Save SVG produced `leap-dialogue-ribbon-harmoglyph.svg` containing the ribbon group and 12
+  ribbon paths.
+- Orbit still renders arc marks with no ribbon paths.
+- Page errors: only the two known 404s.
+
+**Audio start-up observation [measured, not diagnosed]:** in 1 of 3 capture runs, the first
+Play of the browser session left the playhead and ribbon head frozen at the start beat for at
+least 1.3 s. In the other two runs, including one ordered specifically to test this, motion
+began normally. The playhead follows the AudioContext clock, so this is audio start-up
+behaviour in Chrome for Testing, not ribbon logic. It belongs to the pending W1 listening test
+(first play).
+
+### Visual assessment [aesthetic, Kiro]
+
+- The five pieces produce distinct shapes:
+  - First Mark: a single calm ring
+  - Ascending Light: an outward spiral
+  - Pulse Study: a regular lobed loop
+  - Glass Garden: a livelier rise and fall
+  - Leap Dialogue: two separated ribbons, counterline inside
+- The live frames read as a moving drawing head rather than a reveal.
+- Open design questions for Dev:
+  1. The ribbon continues through rests at base thickness, and rests are attributed to the
+     preceding note. First Mark's one-beat note therefore draws a full four-beat ring.
+     Duration shows only as the thicker plateau, which is subtle.
+  2. Ribbons are thin (about 2–7 units) and may need more visual weight.
+  3. Counterpoint links are faint.
+  4. The default-selected first note shows a white highlight at the top in every view.
+
+### Limits
+
+- Automated tests prove determinism, bounds, attribution and causality. They do not prove
+  beauty or fluidity; that is Dev's visual review.
+- Screenshots come from Chrome for Testing launched by Playwright, not Dev's Chrome; no sound
+  was judged.
+- Frame cost was not profiled. Each frame recomputes about 260–770 samples per track in render.
+- `scripts/w2-capture-ribbon.ts` is tsc-excluded and not run in CI; it needs the global
+  Playwright install.
+- No mobile/responsive screenshots were taken; the layout code is unchanged apart from the
+  added grammar button.
+
+### Next gate
+
+ChatGPT code review of the W2 commit and CI, plus Dev visual review of the contact sheet and the
+live app, deciding the four design questions above. Do not merge; do not start W3.
+
+## W2-B — rest attribution, corrected browser check, "Current" candidate (21 Nov 2026)
+
+Response to the PR #5 comment "Independent W2-A review" on `decb96c`. The commit SHA and CI
+result are in the PR #5 comment for this commit. Not changed: `audioSynth.ts`, W1 scheduling,
+Orbit/Bloom/Weave. No new dependency. Labels: **[measured]**, **[aesthetic]** (Kiro's
+subjective judgement), **[blocked]**.
+
+### 1. Rest attribution (review item 1)
+
+- **Rule:** a motion sample has `kind: 'note'` and that note's ID only while the note sounds
+  (onset ≤ b < onset + duration). Silence gives `kind: 'rest'`, `noteId: null` and
+  `restAfterNoteId`.
+- **Rendering:** rests are drawn as faint, non-focusable bridges titled "Silence after X: a
+  designed bridge, not a note". Continuity and the completed artwork are preserved.
+- **Shared rule:** both grammars use the same `attributionAt`.
+- **Tests [measured]:**
+  - A strict-attribution invariant over all presets plus a new explicit-rest fixture (rests at
+    beats 2–3 and 6–8).
+  - First Mark gives one beat of note and three beats of rest bridge.
+  - The rest fixture splits into `note, note, rest, note, note, rest`.
+  - These failed on the unmodified engine (`docs/evidence/w2/w2b-rest-failing-run-2026-11-21.txt`)
+    and pass now.
+- **Changed test:** the existing segment test now counts only `note` segments.
+- **Test infrastructure:** assertions without messages caused Node's assertion-message
+  generation to hang under tsx, so all new assertions carry explicit messages.
+
+### 2. Browser check correction (review item 2)
+
+The W2-A `headMovedDuringPlayback` was a false positive. It treated a head disappearing at the
+end of playback as movement, so `docs/evidence/w2/ui-check-2026-11-20.json` is **superseded**
+on that field.
+
+The corrected rule in `scripts/w2-capture-ribbon.ts`:
+- Restart from beat 0.
+- Take two observations 0.3 s apart.
+- Both must show the Pause button (playback active) and the same number of head positions.
+- The displacement must be greater than 1 px.
+
+**Result [measured]: false for all 10 runs (5 presets × 2 grammars).** Both observations were
+valid, but the displacement was 0.
+
+Cause [measured]:
+- In this session the page's `AudioContext` reports `running`, but `currentTime` stays at
+  0.0058 s for at least 2.4 s.
+- This reproduces on `about:blank` with and without `--disable-features=AudioServiceOutOfProcess`.
+- macOS `coreaudiod` is running and the default output is the MacBook Pro Speakers.
+- The playhead follows the audio clock by design, so the playhead label stays at 0.0 and the art
+  doesn't move.
+
+This is a machine audio stall, not motion-engine logic. Restarting system audio needs admin
+rights and was not attempted. **[blocked]** Live-motion browser evidence must be rerun once
+audio works. It also strengthens the pending W1 listening test: if the audio clock stalls, the
+composer freezes visibly.
+
+### 3. Candidate grammar "Current" (review items 3–4)
+
+`src/engine/compositionCurrent.ts`: a pure deterministic grammar on the same score, playhead
+and helpers. The circular Ribbon stays selectable as the baseline.
+
+- **Direction:** heading = −H·tanh(κ·(pitch − phrase start)/H), κ = 7.5°/semitone, H = 80°.
+  Both pitch terms are spring-smoothed, and the phrase is the bar.
+  - Each phrase starts level and a repeated pitch runs straight.
+  - Notes above the phrase's first note climb; notes below it descend.
+  - Since |heading| < 90°, every voice flows left to right and cannot loop back.
+- **Speed:** 1 + ½·velocity·onset swell, so each onset pushes the stream forward.
+- **Scale:** the longest voice spans 440 units. The scale depends only on rhythm and velocity,
+  so a pitch edit shifts earlier geometry by at most a translation.
+- **Framing:** the drawing is centred on the uncoupled paths.
+- **Real coupling:** while a melody note and another voice's note overlap, the other voice moves
+  by λ(b)·(melody − self).
+  - λ(b) = 0.3·Σ consonance·smoothstep window, bounded to [0, 0.3].
+  - Consonance by interval class: octave 1, fifth .85, fourth .7, thirds/sixths .55,
+    seconds/sevenths .3, semitone/major-seventh/tritone .15.
+  - It is one-directional: the melody is never moved.
+  - It is drawn as faint threads whose opacity is proportional to λ, and listed per note in the
+    inspector.
+- **Ribbon links:** Ribbon's dashed links are relabelled "annotation only; the voices do not
+  affect each other".
+- **Design history:** steering from the voice's *opening* note made any melody above its first
+  note climb forever. Steering was changed to measure from the phrase start before
+  finalisation; the mutation check below shows the difference.
+- **Layout:** Current hides the circular guides and the central badge, and adds a small "time
+  flows left to right" caption instead.
+
+**Tests:**
+- 10 Current tests, written first; 9 failed against a typed stub
+  (`w2b-current-failing-run-2026-11-21.txt`). The tenth (bounds) passed only because the stub
+  returned no tracks.
+- They cover:
+  - determinism and a stable earlier trail
+  - bounds and continuity
+  - forward flow with no loop-back
+  - steering: repeated pitch straight, rising pitch climbs, Glass Garden rises and returns
+  - strict rest attribution
+  - coupling only between simultaneous voices, bounded, melody unmoved
+  - octave pull stronger than tritone pull
+  - pitch edits affect only later geometry, up to framing
+  - First Mark as a single straight stroke
+  - negative controls
+- **Mutation checks [measured]:** consonance-blind coupling, symmetric coupling and
+  opening-note steering each fail 2–3 tests (`w2b-mutation-checks-2026-11-21.txt`).
+
+### 4. What the music changes in Current [measured, `w2b-motion-bench-2026-11-21.json`]
+
+| Preset | Silhouette | Score cause |
+|---|---|---|
+| First Mark | One straight stroke (xSpan 440, ySpan 0) plus a rest thread | One note: no interval, no steering; three beats of silence |
+| Glass Garden | Two hills (ySpan 71; climbs to 67°, descends to 72°) | Phrases 1 and 3 rise from their first notes, phrases 2 and 4 fall |
+| Ascending Light | Steady climb (ySpan 141, max 36.5°) | Each bar is a rising scale fragment |
+| Pulse Study | Stepped rise with flat runs (max 71°) | Repeated C4s run level; 5ths/octave above the phrase start climb |
+| Leap Dialogue | Two streams, counterline pulled up to 30% toward the melody, 8 couplings | Every lead/counter overlap; strongest pull where they form an octave |
+
+### 5. Focus, profiling, checks [measured, `w2b-ui-check-2026-11-21.json`]
+
+- **Keyboard focus:**
+  - Tab-focused segments have `outline-style: none`, a white 2.4 px stroke dashed 3/2, and
+    `:focus-visible` = true, in both grammars.
+  - The rectangular box is gone: `leap-dialogue-{ribbon,current}-keyboard-focus.png`.
+  - Enter opens the matching inspector block ("Music → ribbon motion" / "Music → current motion").
+- **Saved SVGs:** Save SVG produced `leap-dialogue-ribbon-harmoglyph.svg` and
+  `leap-dialogue-current-harmoglyph.svg`, each with 12 note paths. Orbit still renders.
+- **Cost in Node:** one render-path call (frame plus SVG segments) costs at most p50 0.18 ms,
+  p95 0.42 ms and max 0.59 ms across presets for either grammar. The first uncached Current
+  call costs at most 1.7 ms (Glass Garden).
+- **Browser frame intervals:** 239 rAF intervals during "playback" in headed Chrome for Testing
+  156: p50 8.3 ms, p95 9.7–10.1 ms, max ≤ 10.4 ms, with no frame over 20 ms, for each of
+  Orbit/Ribbon/Current.
+  - **Caveat:** the audio clock was frozen, so the playhead did not advance and React may have
+    skipped re-renders. This shows the page does not jank while idle-playing. It does not
+    measure motion-render cost under real playback; the Node figures are the better estimate.
+- **Local suite:** lint PASS (`scripts/` is now type-checked; the capture script loads
+  Playwright by string import), composition 8/8, timeline 12/12, motion 26/26 (16 Ribbon +
+  10 Current), PBT 500/500, build PASS.
+
+### 6. Visual comparison [aesthetic, Kiro]
+
+`docs/evidence/w2/w2b-screenshots/ab-contact-sheet.png` has rows Ribbon in-progress, Current
+in-progress, Ribbon complete, Current complete, with columns for the five presets.
+
+- **Ribbon:** tidy rings; songs differ mostly by small radial wobble.
+- **Current:** the phrase structure is far more legible (Glass Garden's two arches, Pulse
+  Study's steps, Leap Dialogue's pulled counterline).
+- Risks of Current for Dev's decision:
+  1. It is compact and thin, e.g. Glass Garden uses about the middle third of the canvas.
+  2. It can read as a line chart rather than an artwork.
+  3. The coupling threads look like hatching.
+  4. It does not yet use the circular canvas's full area.
+
+These are candidate directions, not approvals.
+
+### Open / next gate
+
+1. **[blocked]** Live-motion browser evidence: rerun `scripts/w2-capture-ribbon.ts` once the
+   Mac's audio clock advances (check `new AudioContext().currentTime` in a fresh tab).
+2. Dev visual selection: Ribbon, Current, or Current with the risks above addressed.
+3. ChatGPT technical review of the W2-B commit and CI.
+4. W0 AI Studio provenance and the W1 listening test remain separate gates.
+
+No merge, deployment, synth change or W3.
+
+## W2-C — overlap attribution, audio-clock diagnosis, Luminous material (21–22 Nov 2026)
+
+Response to "ChatGPT independent W2-B review" on PR #5 (`6391704`). The commit SHA and CI result
+are in the PR #5 comment for this commit. Not changed: `audioSynth.ts`, `compositionTimeline.ts`
+(W1 scheduling), Orbit/Bloom/Weave, Ribbon and Current motion for scores without overlap. No new
+dependency.
+
+Labels: **[measured]**, **[aesthetic]** (Kiro's subjective judgement), **[proposal]** (not
+implemented).
+
+### 1. Same-track overlap attribution
+
+**Defect [measured]:** `attributionAt` returned only the first sounding note.
+- With A = C4 from beat 0 for 4 beats and B = G4 from beat 1 for 1 beat, the sample at beat 1.5
+  named only A.
+- After B ended, motion stayed on B's pitch while only A sounded.
+- `validateComposition` accepts this score; a test now asserts it.
+
+**Policy (shared by Ribbon and Current):**
+- Every sample lists all sounding notes on its voice: `activeNoteIds`, in onset order.
+- The newest sounding note owns the position (`noteId`) and sets the pitch target.
+- `ownerEvents()` changes the owner at each onset, and again when a note ends while an older one
+  still sounds. Motion then returns to the older note's pitch via the same spring
+  (`springFollow`).
+- Thickness already sums every sounding note, so both contribute.
+- The inspector lists "Also sounding on this voice".
+- Rendering: segments for A, B, A; React keys made unique.
+
+**Tests:**
+- 3 behaviour regressions plus 1 precondition.
+- The shared strict-attribution check now requires the exact list of sounding notes.
+- Failing run: `docs/evidence/w2/w2c-overlap-failing-run-2026-11-21.txt`.
+- Now 36/36 across both motion suites plus the material suite.
+
+**No regression [measured]:** a SHA-256 over 30 Ribbon and Current preset frames (excluding the
+new field) is identical at `6391704` and after the fix (`43fc75eecd71bebd`).
+
+### 2. Frozen AudioContext clock — diagnosis
+
+Script: `scripts/w2-audio-clock-diagnosis.ts`. Raw data:
+`w2c-audio-clock-diagnosis-2026-11-22.json` and `w2c-audio-clock-repetitions-2026-11-22.json`.
+Host: macOS (Darwin 27.2.0, arm64). Browsers: Chrome for Testing 156.0.8078.4 (Playwright cache)
+and the installed Google Chrome 157.0.8103.79 with a throwaway profile. Default output: MacBook Pro
+Speakers. Each run checked a default `AudioContext`, a context with no output device
+(`sinkId: {type: 'none'}`), an `OfflineAudioContext` 1 s render, suspend → resume, and the real
+app's first Play.
+
+| When (UTC) | Configuration | Default clock over 1 s | Output latency | No output device | Offline | App first Play |
+|---|---|---|---|---|---|---|
+| 21 Nov (W2-B) | CfT headed, Playwright defaults | **frozen at 0.0058 s**, every launch | — | not tested | not tested | frozen |
+| 22 Nov 10:36 | CfT headed, defaults (first launch of the day) | **0.000 s (frozen)** | **0** | 0.99 s | OK | advanced 0.3 → 2.6 beats |
+| 22 Nov 10:36 | CfT headless / headed without `--mute-audio` / Chrome 157 | 0.97 s | 0.032 | 0.99 s | OK | advanced |
+| 22 Nov 10:37–10:38 | All four configurations × 5 repeats | 0.97–0.98 s, **0/20 frozen** | 0.032 | 0.98–1.0 s | OK | (skipped) |
+
+Earlier: on 18 Nov (W1 probe) the same CfT headed defaults advanced normally.
+
+Findings [measured]:
+1. **Frozen pattern:** `state: 'running'` while `currentTime` stays at one render quantum plus base
+   latency (0.0058 s) and `outputLatency` is 0.
+2. **Web Audio itself works:** in the same frozen session, the no-output context advanced 0.99 s
+   and offline rendering produced a correct sine (RMS 0.707).
+3. **Recoverable:** a `suspend()` → `resume()` cycle restored the clock (+0.49 s in 0.5 s).
+4. **Not specific to Harmoglyph:** it reproduces on `about:blank`, and Harmoglyph's own first Play
+   advanced in every 22 Nov run.
+5. **Intermittent:** constant through the 21 Nov session, seen only at the first launch on 22 Nov,
+   then 0/20.
+
+Conclusion: an intermittent stall in the browser's real-time output-device stream, observed only
+in Chrome for Testing headed with Playwright's default `--mute-audio`. No evidence proves a
+macOS, hardware or Harmoglyph cause; none is claimed. System audio services, permissions and
+production scheduling were not touched.
+
+**Product risk [proposal, not implemented]:** Harmoglyph doesn't detect a stalled clock, so the
+composition silently freezes with the Pause button showing. Possible minimal remedy, which needs
+approval because it touches the W1 playback path: if `currentTime` has not advanced 400 ms after
+Play, call `suspend()`/`resume()` once, then show "Audio output is not responding".
+
+**Manual verification for Dev (one check, about 1 minute, your normal Chrome):**
+1. Open `http://localhost:3000` (`npm run dev`), then DevTools → Console.
+2. Paste:
+   `const c = new AudioContext(); await c.resume(); const t = c.currentTime; setTimeout(() => console.log(c.state, (c.currentTime - t).toFixed(2), c.outputLatency), 1000)`
+3. Expected: `running 1.00 0.03…`. Report the three values.
+4. Then press Play on Pulse Study, and report whether the "Song position" number climbs and
+   whether you hear the notes.
+
+### 3. Live motion in the real app — now verified [measured]
+
+With the audio clock advancing on 22 Nov, the corrected W2-B rule was rerun (`w2c-ui-check-2026-11-22.json`).
+The rule requires two observations 0.3 s apart, both during playback with heads present, and
+displacement > 1 px.
+
+**15/15 runs moved** (Ribbon, Current and Luminous × 5 presets). Head displacement ranged from
+14.3 px (Glass Garden, Current/Luminous) to 145 px (First Mark, Ribbon).
+
+These are scheduling-clock and DOM observations. No sound was judged.
+
+### 4. Luminous — visual material for Current
+
+`src/engine/currentMaterial.ts` (pure, read-only) is exposed as the "Luminous" style. It reuses
+Current's frame exactly; motion, score and audio are unchanged. Current's original appearance
+stays selectable.
+
+Elements, each from existing motion data:
+- **Canvas fit:** uniform scale 1–2, from the completed drawing, fixed during playback.
+- **Phrase columns** at bar lines.
+- **Translucent sheet** per voice, depth = note thickness (velocity × duration), plus one echo line.
+- **Glow underlay and bright core line.**
+- **Onset node** per note, radius ∝ velocity.
+- **Dotted thread** for silence only; zero-length end-of-note silences aren't drawn.
+- **Coupling membrane** wherever the real pull λ > 0, opacity ∝ mean λ.
+
+**Tests:** 6, written first; 5 failed against a stub (`w2c-luminous-failing-run-2026-11-22.txt`).
+The no-mutation test passed vacuously on the stub. They cover:
+- no mutation of frozen frames, and determinism
+- fixed view inside the canvas, using at least 380 px of width
+- finite paths, and one onset node per note ordered by velocity
+- rest threads only for real silences (0 / 1 / 2 for Glass Garden / First Mark / rest fixture)
+- membranes only with coupling: zero when λmax = 0 (control), bounded by λmax
+- one sheet, echo and core per voice; ordered phrase columns
+
+### 5. Real-app checks [measured, headed CfT 156]
+
+- **Keyboard focus**, all three styles: `outline: none`, white 2.4 px dashed stroke,
+  `:focus-visible` true; Enter opens the inspector.
+- **Save SVG:** `leap-dialogue-{ribbon,current,luminous}-harmoglyph.svg`, each with 12 note paths
+  (24 / 32 / 84 KB). Orbit still renders.
+- **Coupling example:** Leap Dialogue counter-1 (C3), selected by keyboard. Inspector: coupled to
+  lead-1 (12 semitones, class 0, consonance 1.00, pull ≤ 30%) and lead-2 (19 semitones, class 7,
+  consonance 0.85, pull ≤ 26%).
+- **Pitch edit:** through the real score editor, Glass Garden lead-5 B4 → E5 (+5). The peak of
+  phrase 2 changes visibly.
+  - All 16 Luminous segment paths changed on screen, because the canvas fit re-frames the whole
+    drawing after an edit.
+  - The engine guarantees only that earlier shapes are unchanged up to that framing (Current test).
+    The material does not isolate the edit on screen.
+- **Frame intervals during real playback** (Glass Garden, 239 frames): every style p50 8.3 ms,
+  max ≤ 17.4 ms, none over 20 ms. Luminous p95 9.2 ms.
+  - An earlier run showed one 317 ms frame in Current that did not recur; recorded, not explained.
+- **Node cost:** see W2-B; Luminous adds a material pass that wasn't separately benchmarked.
+
+### 6. Comparison and critical assessment [aesthetic, Kiro]
+
+Contact sheet: `docs/evidence/w2/w2c-screenshots/w2c-contact-sheet.png`.
+- Rows: Current (before) in-progress, Luminous (after) in-progress, Current complete, Luminous
+  complete.
+- Last row: edit before/after, coupling example and its inspector.
+
+**Why the pieces differ:** the motion, not the palette.
+- First Mark is one level stroke.
+- Glass Garden has two arches.
+- Ascending Light is a steady climb.
+- Pulse Study rises in steps with flat repeated-pitch runs.
+- Leap Dialogue has two streams joined by a membrane that thickens on consonant overlaps.
+
+**Honest verdict: the refinement does not yet succeed as artwork.**
+- Better: it fills the canvas, has depth, and the coupling membrane is much clearer than hatching.
+- Worse: it still reads as a line graph, arguably more so. The white onset nodes look like
+  plotted data points, and the alternating phrase columns look like chart gridlines.
+- The sheets and glow are too faint to change that impression. First Mark remains a bare line.
+
+Suggested directions for Dev's decision (not implemented):
+1. Remove the onset dots and phrase columns.
+2. Make the sheets the primary form.
+3. Or combine Current's motion with a non-Cartesian layout.
+
+### Remaining
+
+- Dev visual review; no style is approved.
+- ChatGPT engineering review of this commit.
+- [proposal] Stalled-clock detection.
+- W1 human listening test and W0 AI Studio provenance remain separate gates.
+
+No merge, deployment, synth change or W3.
+
+## W2-D — Filament material and black/bone/warm palette (22 Nov 2026)
+
+Dev pointed to https://be-of-dao.com/ as the desired look and approved options 1 and 2:
+- **Option 1:** a strand ("Filament") material on the existing motion.
+- **Option 2:** a DAO-inspired palette.
+
+Kiro viewed all eight slides of the reference in a browser. It took the principles (black field,
+bone-white type, one luminous subject, forms built from many fine strands, warm light), not the
+site's identity or its planet/galaxy imagery.
+
+The commit SHA and CI result are in the PR #5 comment. Not changed: `audioSynth.ts`,
+`compositionTimeline.ts`, `compositionMotion.ts`, `compositionCurrent.ts` (the diff is empty);
+Orbit/Bloom/Weave/Ribbon/Current/Luminous appearance. No new dependency and no new fonts
+(Dev did not choose; system fonts kept).
+
+### What was built
+
+`src/engine/filamentMaterial.ts` is pure and read-only. It accepts any motion frame built from
+`RibbonTrackFrame` tracks, so it works on both Current and Ribbon frames. That shows the
+mix-and-match foundation.
+
+Each voice is a bundle of 36 strands along the motion engine's own coordinates:
+- **Bundle width** = note thickness × 1.9 (velocity swell plus written-duration plateau).
+- **Sway:** each strand sways ±0.35 × thickness, continuous in beat.
+- **No randomness:** lane, jitter, weight and sway come from a FNV-1a hash of (track, strand
+  index), not `Math.random`.
+- **Silence:** only the inner strands remain, dimmer and dotted. A single end-of-note sample
+  isn't drawn.
+- **Coupling (Current only):** about 45% of the counterline's strands bend toward the melody by
+  λ/λmax, at most 85% of the way. Melody strands never bend.
+- **Curves:** Catmull-Rom → cubic Bézier curves over every 3rd sample.
+- **Canvas fit:** the same as Luminous (`fitView`, now shared).
+- **UI:** "Filament" is in the style switcher. Note shapes remain keyboard/click hit targets over
+  the strands; selection shows as a bone outline, and focus-visible stays dashed white.
+- **Palette** while Filament is selected: black ground with a faint warm centre glow (purple aura
+  removed), bone `#EEEBE4`, voice hues gold `#F2C47E`, ember `#E2774C`, rose `#E9A5A0`.
+  Strands blend with `mix-blend-mode: screen`.
+
+### Tests [measured]
+
+- 7 Filament tests, written first; 6 failed against a stub (`w2d-filament-failing-run.txt`). The
+  prefix test passed vacuously on the stub's empty output.
+- They cover:
+  - frozen-input purity and determinism
+  - 36 strands per voice, all points inside the canvas, smooth cubic paths
+  - fixed strand prefix during playback
+  - silence keeps under half the lanes, dimmer, and none for Glass Garden
+  - louder note → wider bundle (> 1.3×)
+  - crossing only where coupling λ > 0: none for one-voice scores, none with λmax = 0, melody
+    never bends
+  - works on Ribbon frames
+- An end-of-note rest stub was found and fixed during the work.
+- **Totals:** motion + material suites 43/43, typecheck, composition 8/8, timeline 12/12,
+  PBT 500/500, build PASS.
+
+### Real app [measured, headed Chrome for Testing 156, `w2d-ui-check.json`]
+
+- **Live motion:** 20/20 runs moved (4 styles × 5 presets), with Filament head displacement
+  14.5–63.6 px.
+  - An earlier run in this session had 1 of 20 frozen at beat 0 (Ribbon/First Mark, first
+    measured run). Two reruns of that case moved 133 px and 131 px.
+  - This matches the intermittent audio start-up stall from W2-C.
+- **Frame intervals during playback** (Glass Garden, 239 frames): Filament p50 8.3 ms,
+  p95 9.1 ms, max 9.3 ms, none over 20 ms.
+  - Plain SVG is sufficient on this Mac, so canvas wasn't needed.
+  - Node material cost is p50 0.3–1.8 ms, p95 ≤ 3.6 ms. The largest frames are about 256 KB of
+    path data.
+  - Low-power devices are untested.
+- **Interactions:** keyboard focus and inspector work.
+- **Save SVG:** `leap-dialogue-filament-harmoglyph.svg` with 12 note paths (309 KB).
+- **Coupling inspector** for counter-1: lead-1 (octave, pull ≤ 30%), lead-2 (class 7, ≤ 26%).
+- **Pitch edit** (Glass Garden lead-5 B4 → E5) changes the second arch. All segments re-frame
+  because of the canvas fit.
+
+### Visual assessment [aesthetic, Kiro]
+
+Contact sheet: `docs/evidence/w2/w2d-screenshots/w2d-contact-sheet.png`. Rows: Luminous (W2-C)
+complete, Filament in progress, Filament complete, Filament edit and coupling.
+
+- **Clear step up:** gold filament on black reads as a woven material, not a plotted line, and
+  the data-point dots are gone.
+- **Strongest piece:** Leap Dialogue. The copper counterline's strands visibly reach up into the
+  gold melody where they are coupled.
+- Still open for Dev's decision:
+  1. Single-voice pieces are one narrow braid in the middle of the frame. DAO's subjects fill
+     the frame with dense volume; this would need a wider bundle or a layout that uses the area.
+  2. The coupling curtain shows stepped, comb-like teeth where overlap windows switch.
+     Smoothing would mean softer bend windows in the material.
+  3. First Mark is still a short braid plus a thread.
+  4. Typography and the page chrome (wide-caps titles, "01 / 05" index) are untouched; that was
+     option 3, not approved.
+
+No merge, deployment, synth/scheduling change or W3. The W1 listening test and the W0 AI Studio
+provenance check remain separate gates.
+
+## W2-E — Filament II volume variant vs W2-D baseline (22 Nov 2026)
+
+**Assignment:** start from `40cded7b`; build one Filament variant inside the existing Compose &
+Art view, keeping W2-D as the A/B baseline. The commit SHA and CI result are in the PR #5 comment.
+
+**Scope held:** changes are limited to the Filament rendering layer (`filamentMaterial.ts`), the
+style switcher wiring in `CompositionJourneyView.tsx`, tests, and a capture script. The diff on
+`audioSynth.ts`, `compositionTimeline.ts`, `compositionMotion.ts`, `compositionCurrent.ts` and
+`currentMaterial.ts` is empty. Typography, page chrome, audio and W3 were not touched.
+
+**Baseline preserved [measured]:** a fingerprint of W2-D's full output (view, strand paths,
+opacities, widths, kinds and cores for 5 presets × 3 beats) is `43f014de77daa5d4` both at
+`40cded7b` and after this work. "Filament" is still W2-D; the variant is "Filament II".
+
+### What the variant changes (`buildFilamentLayer(..., { variant: 'volume' })`)
+
+1. **Volume:** sounding-note strands use 54 lanes instead of 36, with half-width
+   = 1.9·thickness + 4.2·(thickness − 2.2).
+   - The second term is the note's own contribution to thickness (velocity × onset swell and
+     duration plateau) from the motion engine.
+   - Rests use exactly W2-D's rest strands: the same lanes, narrow spread, dim and dotted.
+2. **Coupling edges:**
+   - Bends come only from real coupling windows: contiguous λ > 0 in the completed frame, bounded
+     by the λ = 0 samples on either side.
+   - Within a window, a reaching strand bends by
+     0.8 · reach · (peak λ / λmax) · sin²(π·progress)^(1 + threshold).
+   - So the bend rises across the whole window instead of the 0.25-beat λ ramp. It is exactly 0
+     at the window edges and everywhere outside, and its strength still comes from the window's
+     consonance.
+   - Windows are taken from the completed frame, so the earlier trail never changes during
+     playback.
+3. **View:** the same canvas fit as W2-D, so framing is identical (tested and measured).
+
+### Tests [measured]
+
+5 focused tests; 4 failed first against an option that was accepted but ignored
+(`w2e-variant-failing-run.txt`). The framing test passed vacuously while the variant equalled the
+baseline.
+- **Default:** the default equals an explicit W2-D; the variant is deterministic and different.
+- **Framing:** identical view in all presets plus the rest fixture; every variant point inside the
+  canvas.
+- **Volume:** Glass Garden and Ascending Light have 54 lanes and a mean bundle extent at least
+  1.6× W2-D's. Velocity still widens the bundle by more than 1.3×.
+- **First Mark sparse control:** note strands only during its one beat; note ink below 0.3× Glass
+  Garden's; rest strands (and the rest fixture's) byte-identical to W2-D.
+- **Coupling:**
+  - every bend > 0 lies where the motion engine's λ > 0
+  - edge steepness below 0.6× W2-D's
+  - at least 6 strands still bend more than 0.2
+  - the melody never bends
+  - λmax = 0 gives zero bends everywhere; one-voice presets never bend
+
+Three test definitions were corrected during the work, and are disclosed here:
+1. The velocity check sampled after First Mark's note had ended; it now uses beat 0.75, like the
+   W2-D test.
+2. The sparse metric originally counted First Mark's W2-D rest thread. It now measures note
+   strands; the measured ratio is ≈ 0.24, and the guard is set at 0.3 rather than tuned down.
+3. The note-only-during-the-note check ignored each strand's shared join point.
+
+**Design correction:** the first easing attempt (a per-strand staggered smootherstep on λ) made
+the edges **steeper** (0.892 vs 0.525). It was replaced by the window-wide easing above.
+
+**Totals:** motion + material suites 48/48, typecheck, composition 8/8, timeline 12/12,
+PBT 500/500, build PASS.
+
+### Real-app A/B [measured, headed Chrome for Testing 156, 1500×1000]
+
+Script: `scripts/w2e-filament-ab.ts`. Raw: `w2e-ab-check.json`, `w2e-profile-fresh-{1,2}.json`.
+Images: `docs/evidence/w2/w2e-screenshots/`.
+
+- **Matching captures:** for each preset, W2-D and W2-E were captured at the same beat (55% of
+  span, rounded to 0.5) and when complete. The group transforms are **identical** for all five
+  presets in both states.
+- **Live motion:** 10/10 moved. Displacements were 15.8–74.0 px for W2-D and 15.8–67.2 px for
+  W2-E, with both observations valid during playback.
+  - A first-of-session W2-D / First Mark stall (0 px) in the previous run didn't recur. It matches
+    the known intermittent audio start-up stall.
+- **Selection:**
+  - **Mouse:** a click at a verified interior point of G3 (counter, beat 3) selected G3 in both
+    styles.
+  - **Keyboard:** Tab plus Enter on E5 (lead, beat 3) selected E5.
+- **SVG export** (Leap Dialogue): 12 note paths; 309 KB (W2-D) and 448 KB (W2-E).
+  - Two consecutive exports are byte-identical.
+  - After switching to Orbit and back, the export is identical once each element's attributes are
+    sorted.
+  - The raw bytes differ only because React places the selected note's `filter` attribute in a
+    different position after an update than after a fresh mount. Each file contains exactly one
+    glow filter.
+- **Fixed-view edit** (Glass Garden lead-5 B4 → E5, +5 semitones). After the edit the pre-edit
+  view is restored and aligned on the first note; on-screen alignment error ≤ 0.02 px. Images:
+  `edit-{w2d,w2e}-before.png`, `-after-fixed-view.png`, `-after-refit.png` (product framing) and
+  `-diff-fixed-view.png` (red = changed).
+  - **Geometry:**
+    - Before beat 4, every strand point matches to within 0.011 units (rounding).
+    - The first point that moves is at beat 5.06 (0-based), right after the edited note.
+    - The first 6 note shapes stay fixed; notes 7–16 shift by 4.7–24.8 units.
+  - **Pixels:** the left 35% of the image differs by ~380 pixels, which is the selection-outline
+    change; the edited region differs by thousands.
+  - **Why the change starts after the edited note:** B4 is the first note of its phrase, and
+    Current steers by pitch relative to the phrase start. Raising it leaves its own direction
+    unchanged and lowers the rest of the phrase relative to it.
+  - **Product framing:** in the app, the view re-fits after the edit (scale 1.4667 → 1.5652), so
+    the whole drawing moves on screen.
+- **Frame intervals:** inconclusive. W2-D and W2-E were measured during playback on Glass Garden
+  and Leap Dialogue, in the main run and two fresh-browser runs.
+  - Fresh run 1: W2-D Glass Garden p95 25.1 ms (32 frames over 20 ms) against W2-E 16.7 ms (5).
+  - Fresh run 2: everything slowed to a median of about 16 ms, with W2-E Glass Garden p95 41 ms
+    and Leap Dialogue p95 42–49 ms for both.
+  - Earlier W2-D-only runs measured p95 ≈ 9 ms.
+  - Machine load dominates, so no claim is made that either is faster. Both drop frames under
+    load, and W2-E carries about 50% more path data (up to 384–448 KB per frame). A canvas
+    renderer for live playback may be needed.
+
+### A/B images for Dev
+
+- `w2e-ab-contact-sheet.png`: rows W2-D in-progress, W2-E in-progress, W2-D complete, W2-E
+  complete, then the fixed-view edit (W2-D before/after, W2-E before/after, W2-E diff).
+- `leap-dialogue-coupling-closeup-w2d-vs-w2e.png`: same crop of Leap Dialogue, both styles.
+
+### Tradeoffs [aesthetic, Kiro]
+
+- **Volume:** Glass Garden, Ascending Light and Pulse Study now read as fuller, twisted ropes
+  instead of a thin braid. But the bundle pinches to a knot at every onset, because the swell
+  starts at zero there, so long passages look like a string of beads. Some outer strands curl at
+  sharp turns.
+- **Coupling:** the comb-like steps are gone; strands ease in and out of each window. The cost is
+  that the reach toward the melody is visibly weaker, so the coupling reads less strongly than in
+  W2-D. More amplitude would bring it back at the cost of some smoothness.
+- **First Mark:** stays sparse: a short teardrop where the note sounds, then W2-D's unchanged
+  silent thread.
+- **Cost:** about 50% more path data and a larger export, with unresolved frame-time behaviour
+  under load.
+
+Stopped for ChatGPT engineering review and Dev visual review. No merge or deployment.
+
+## W2-F — static Leap Dialogue sculpture, relief vs depth-separated (22 Nov 2026)
+
+Task: the "Next Kiro implementation" item under "Link the sculpture and the score" in
+`.kiro/specs/harmoglyph-motion/tasks.md` (added by Dev in `bc9d329`, fast-forwarded before work;
+no local edits were overwritten). The commit SHA and CI result are in the PR #5 comment "W2-F".
+
+**Not changed:** the synth, scheduling, both motion engines, the Filament material (W2-D
+fingerprint still `43f014de77daa5d4`), and the existing `HarmonicThreeStage`. No new dependency;
+three.js and `OrbitControls` were already used by the 3D stage.
+
+### What was built
+
+- **`src/engine/scoreSculpture.ts`:** pure and deterministic, independent of playback. It takes
+  Current's completed frame, the same paths as the 2D art.
+  - X/Y = the 2D path.
+  - Tube radius = 0.6 × note thickness while a note sounds, 0.3 × in silence, so rests stay
+    visibly thinner.
+  - Surface lift = 2.2 × (thickness − base).
+  - **Relief:** both voices on one plane, a shallow relief at most 16 units deep.
+  - **Separated:** melody at z = +45 and the counterline 90 deeper.
+  - **Struts** join the counterline to the melody only where the real coupling λ > 0; strength
+    λ/λmax.
+  - **Anchors** place every note that starts at a requested beat on its voice's path.
+- **`src/components/ScoreSculptureView.tsx`:** a three.js viewer reusing the 3D stage's conventions
+  (`OrbitControls` with damping and auto-rotate, `RoomEnvironment`, ACES tone mapping).
+  - One tube per note or rest run, carrying `noteId`, track and kind for the later
+    selection-linking task.
+  - Anchor spheres and labels; Front / Side / Oblique buttons; an auto-rotate toggle; the camera
+    angle exposed as `data-azimuth` / `data-polar`.
+  - The `HarmonicThreeStage` component itself is not reused: it renders the monophonic A1:F48
+    sheet, and polyphonic transfer into it is deliberately refused.
+- **Compose & Art:** a "3D sculpture" toggle beside Full show, with Relief / Separated pills while
+  it's shown. The SVG stays mounted but hidden, so the 2D styles and Save SVG are unaffected.
+
+### Tests [measured]
+
+6 tests, written first; all 6 failed against a stub (`w2f-sculpture-failing-run.txt`). They cover:
+- static and deterministic output
+- built from the Current completed frame: every point's X/Y, note ID and kind match a motion
+  sample; both voices and all 12 notes kept
+- the three anchors resolve to `lead-1 C4 + counter-1 C3` (beat 0), `lead-3 E5 + counter-2 G3`
+  (beat 2) and `lead-7 D5 + counter-4 G3` (beat 6), each sitting on its voice's path at its onset
+- relief and separated share X/Y exactly; relief depth range ≤ 16; separated planes ≥ 60 apart
+- rest radius below every note radius
+- struts only where λ > 0, none with zero coupling, none for one voice
+
+Totals: motion + material + sculpture suites 54/54, typecheck, composition 8/8, timeline 12/12,
+PBT 500/500, build PASS.
+
+### Real app [measured, headed Chrome for Testing 156, 1500×1000]
+
+Script: `scripts/w2f-sculpture-check.ts`. Raw: `w2f-sculpture-check.json`.
+- **Views:** captured with auto-rotate off. Front, side and oblique land at azimuth/polar
+  ≈ 0°/90°, 90°/90° and 42°/66° for both depths.
+  - Images: `w2f-screenshots/leap-dialogue-{relief,separated}-{front,side,oblique}.png`.
+  - Overview: `w2f-screenshots/w2f-sculpture-contact-sheet.png`.
+- **Anchors in the page:** `beat 1 · C4 + C3` (`lead-1,counter-1`), `beat 3 · E5 + G3`
+  (`lead-3,counter-2`) and `beat 7 · D5 + G3` (`lead-7,counter-4`), in both depths.
+- **Rotation after playback ends:** playback was observed running and then ended (button back to
+  "Play from start").
+  - Auto-rotate then turned the sculpture 16.3° in 1.5 s.
+  - With auto-rotate off, a mouse drag rotated it 90.0°.
+  - Image: `leap-dialogue-separated-after-playback-dragged.png`.
+- **Return to 2D:** the SVG artwork is visible again. No page errors.
+
+### Visual assessment [aesthetic, Kiro]
+
+- **Separated is the more informative study.** The side and oblique views show the melody and
+  counterline as two layers joined by coupling struts. Relief from the side collapses to an
+  edge-on line, so it adds little beyond the 2D art.
+- **Front views** of both depths are the same picture by design.
+- **For Dev's review:**
+  1. The sculpture fills only about a third of the frame; the camera fits the full bounding sphere
+     including depth.
+  2. Anchor spheres are small, and each label sits midway between its two notes.
+  3. The grey struts read somewhat like hatching.
+  4. The tubes use one mean radius per note, so thickness varies note to note, not within a note.
+
+Stopped for visual review. No merge or deployment.
+
 ## Next owner update
 
 When Kiro and browser checks are completed, append evidence links next to the

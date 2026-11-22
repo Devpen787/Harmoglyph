@@ -32,6 +32,8 @@ jobs:
         run: npm run test:composition
       - name: W1 deterministic timeline tests
         run: node --import tsx --test src/engine/compositionTimeline.test.ts
+      - name: W2 motion engine tests (Ribbon)
+        run: npm run test:motion
       - name: Check Kiro hook v1 JSON structure (static only; not Kiro execution)
         run: |
           node --input-type=module -e "import assert from 'node:assert/strict'; import fs from 'node:fs'; const hook = JSON.parse(fs.readFileSync('.kiro/hooks/pbt-on-formula-save.json','utf8')); assert.equal(hook.version,'v1'); assert.ok(Array.isArray(hook.hooks)); assert.ok(hook.hooks.some(h => h.trigger === 'PostFileSave' && h.action?.type === 'command')); console.log('Hook JSON shape is valid as a static check; no Kiro runtime has been invoked.');"

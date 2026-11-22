@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-11-22T14:27:12.783Z",
+  "browser": "156.0.8078.4",
+  "viewport": "1500x1000",
+  "framing": {},
+  "runs": {},
+  "checks": {},
+  "frameProfile": {
+    "w2d/glass-garden": {
+      "frames": 239,
+      "p50ms": 8.4,
+      "p95ms": 25,
+      "maxMs": 33.7,
+      "over20ms": 26,
+      "playingThroughout": true
+    },
+    "w2e/glass-garden": {
+      "frames": 239,
+      "p50ms": 16.1,
+      "p95ms": 41.2,
+      "maxMs": 89.9,
+      "over20ms": 68,
+      "playingThroughout": true
+    },
+    "w2d/leap-dialogue": {
+      "frames": 239,
+      "p50ms": 16.7,
+      "p95ms": 41.7,
+      "maxMs": 57.9,
+      "over20ms": 100,
+      "playingThroughout": false
+    },
+    "w2e/leap-dialogue": {
+      "frames": 239,
+      "p50ms": 16.6,
+      "p95ms": 49.1,
+      "maxMs": 125.2,
+      "over20ms": 97,
+      "playingThroughout": false
+    }
+  },
+  "pageErrors": []
+}

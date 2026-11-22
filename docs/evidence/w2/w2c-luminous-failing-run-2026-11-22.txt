@@ -1,0 +1,131 @@
+✔ Luminous: material only reads the motion frame (no mutation, same frame before/after) (17.543ms)
+✖ Luminous: the view fills the canvas, is fixed during playback, and keeps the art inside 600×600 (2.941959ms)
+✖ Luminous: every layer is finite; each started note has one onset node sized by its velocity (0.737542ms)
+✖ Luminous: rests are dotted threads, never note material (3.771833ms)
+✖ Luminous: coupling membranes exist only where voices really couple, with opacity from the real pull (3.892375ms)
+✖ Luminous: one sheet, echo and core per voice; phrase bands follow the bars (1.826333ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 1
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 313.00725
+
+✖ failing tests:
+
+test at src/engine/currentMaterial.test.ts:1:1603
+✖ Luminous: the view fills the canvas, is fixed during playback, and keeps the art inside 600×600 (2.941959ms)
+  AssertionError [ERR_ASSERTION]: first-mark: uses most of the width (-Infinity)
+      at TestContext.<anonymous> (<repo>/src/engine/currentMaterial.test.ts:36:12)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:332:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at src/engine/currentMaterial.test.ts:1:2519
+✖ Luminous: every layer is finite; each started note has one onset node sized by its velocity (0.737542ms)
+  AssertionError [ERR_ASSERTION]: first-mark: one node per note
+  + actual - expected
+
+  + []
+  - [
+  -   'lead-1'
+  - ]
+
+      at TestContext.<anonymous> (<repo>/src/engine/currentMaterial.test.ts:44:12)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'lead-1' ],
+    operator: 'deepStrictEqual'
+  }
+
+test at src/engine/currentMaterial.test.ts:1:3190
+✖ Luminous: rests are dotted threads, never note material (3.771833ms)
+  AssertionError [ERR_ASSERTION]: First Mark: one rest thread after its note
+
+  0 !== 1
+
+      at TestContext.<anonymous> (<repo>/src/engine/currentMaterial.test.ts:54:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual'
+  }
+
+test at src/engine/currentMaterial.test.ts:1:3568
+✖ Luminous: coupling membranes exist only where voices really couple, with opacity from the real pull (3.892375ms)
+  AssertionError [ERR_ASSERTION]: Leap Dialogue shows coupling
+      at TestContext.<anonymous> (<repo>/src/engine/currentMaterial.test.ts:63:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at src/engine/currentMaterial.test.ts:1:4251
+✖ Luminous: one sheet, echo and core per voice; phrase bands follow the bars (1.826333ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    [
+  +   [],
+  +   [],
+  +   []
+  -   [
+  -     'counter',
+  -     'lead'
+  -   ],
+  -   [
+  -     'counter',
+  -     'lead'
+  -   ],
+  -   [
+  -     'counter',
+  -     'lead'
+  -   ]
+    ]
+
+      at TestContext.<anonymous> (<repo>/src/engine/currentMaterial.test.ts:71:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ [], [], [] ],
+    expected: [ [ 'counter', 'lead' ], [ 'counter', 'lead' ], [ 'counter', 'lead' ] ],
+    operator: 'deepStrictEqual'
+  }

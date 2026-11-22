@@ -1,0 +1,951 @@
+{
+  "startedAt": "2026-11-22T10:37:20.903Z",
+  "host": {
+    "platform": "darwin",
+    "release": "27.2.0",
+    "arch": "arm64"
+  },
+  "configs": {
+    "cft-headed#1": {
+      "launchArgsIgnored": [],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:37:22.888Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9694331065759637,
+          "advancedSec": 0.9694331065759637,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9694
+            ],
+            [
+              "running",
+              0.9752
+            ],
+            [
+              "closed",
+              1.4629
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190476,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9926530612244898
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 5.700000017881393
+        }
+      }
+    },
+    "cft-headed#2": {
+      "launchArgsIgnored": [],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:37:27.298Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9694331065759637,
+          "advancedSec": 0.9694331065759637,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9752
+            ],
+            [
+              "running",
+              0.981
+            ],
+            [
+              "closed",
+              1.4629
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4818140589569161,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9984580498866213
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 1.899999976158142
+        }
+      }
+    },
+    "cft-headed#3": {
+      "launchArgsIgnored": [],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:37:31.528Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9694331065759637,
+          "advancedSec": 0.9694331065759637,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9694
+            ],
+            [
+              "running",
+              0.9752
+            ],
+            [
+              "closed",
+              1.4571
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4818140589569162,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9868480725623583
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 15.300000011920929
+        }
+      }
+    },
+    "cft-headed#4": {
+      "launchArgsIgnored": [],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:37:35.946Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9810430839002268,
+          "advancedSec": 0.9810430839002268,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.981
+            ],
+            [
+              "running",
+              0.9868
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.481814058956916,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9868480725623583
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 7
+        }
+      }
+    },
+    "cft-headed#5": {
+      "launchArgsIgnored": [],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:37:39.819Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9752380952380952,
+          "advancedSec": 0.9752380952380952,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9752
+            ],
+            [
+              "running",
+              0.981
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190475,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9926530612244898
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 5.9000000059604645
+        }
+      }
+    },
+    "cft-headless#1": {
+      "launchArgsIgnored": [],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:37:43.819Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9694331065759637,
+          "advancedSec": 0.9694331065759637,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9694
+            ],
+            [
+              "running",
+              0.9752
+            ],
+            [
+              "closed",
+              1.4571
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4818140589569162,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9984580498866213
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 4.5999999940395355
+        }
+      }
+    },
+    "cft-headless#2": {
+      "launchArgsIgnored": [],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:37:47.976Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9810430839002268,
+          "advancedSec": 0.9810430839002268,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.981
+            ],
+            [
+              "running",
+              0.9868
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.481814058956916,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9810430839002268
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 3.2999999821186066
+        }
+      }
+    },
+    "cft-headless#3": {
+      "launchArgsIgnored": [],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:37:51.934Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9752380952380952,
+          "advancedSec": 0.9752380952380952,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9752
+            ],
+            [
+              "running",
+              0.981
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190475,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9926530612244898
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 6.4000000059604645
+        }
+      }
+    },
+    "cft-headless#4": {
+      "launchArgsIgnored": [],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:37:55.765Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9752380952380952,
+          "advancedSec": 0.9752380952380952,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9752
+            ],
+            [
+              "running",
+              0.981
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190475,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9926530612244898
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 5.4000000059604645
+        }
+      }
+    },
+    "cft-headless#5": {
+      "launchArgsIgnored": [],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:37:59.589Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9810430839002268,
+          "advancedSec": 0.9810430839002268,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.981
+            ],
+            [
+              "running",
+              0.9868
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.481814058956916,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9810430839002268
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 3
+        }
+      }
+    },
+    "cft-headed-unmuted#1": {
+      "launchArgsIgnored": [
+        "--mute-audio"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:38:03.541Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9752380952380952,
+          "advancedSec": 0.9752380952380952,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9752
+            ],
+            [
+              "running",
+              0.981
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190475,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9926530612244898
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 3.7999999821186066
+        }
+      }
+    },
+    "cft-headed-unmuted#2": {
+      "launchArgsIgnored": [
+        "--mute-audio"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:38:08.247Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9694331065759637,
+          "advancedSec": 0.9694331065759637,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9694
+            ],
+            [
+              "running",
+              0.9752
+            ],
+            [
+              "closed",
+              1.4629
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190476,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9868480725623583
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 6.0999999940395355
+        }
+      }
+    },
+    "cft-headed-unmuted#3": {
+      "launchArgsIgnored": [
+        "--mute-audio"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:38:12.515Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9752380952380952,
+          "advancedSec": 0.9752380952380952,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9752
+            ],
+            [
+              "running",
+              0.981
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190475,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9926530612244898
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 3.4000000059604645
+        }
+      }
+    },
+    "cft-headed-unmuted#4": {
+      "launchArgsIgnored": [
+        "--mute-audio"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:38:16.822Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9810430839002268,
+          "advancedSec": 0.9810430839002268,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.981
+            ],
+            [
+              "running",
+              0.9868
+            ],
+            [
+              "closed",
+              1.4803
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.49342403628117903,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9926530612244898
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 4.699999988079071
+        }
+      }
+    },
+    "cft-headed-unmuted#5": {
+      "launchArgsIgnored": [
+        "--mute-audio"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:38:20.931Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9810430839002268,
+          "advancedSec": 0.9810430839002268,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.981
+            ],
+            [
+              "running",
+              0.9868
+            ],
+            [
+              "closed",
+              1.4745
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190476,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9868480725623583
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 11.900000005960464
+        }
+      }
+    },
+    "chrome-stable-headed-temp-profile#1": {
+      "launchArgsIgnored": [
+        "--mute-audio"
+      ],
+      "browserVersion": "157.0.8103.79",
+      "minimal": {
+        "at": "2026-11-22T10:38:25.035Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9752380952380952,
+          "advancedSec": 0.9752380952380952,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9752
+            ],
+            [
+              "running",
+              0.981
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190475,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9926530612244898
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 5.9000000059604645
+        }
+      }
+    },
+    "chrome-stable-headed-temp-profile#2": {
+      "launchArgsIgnored": [
+        "--mute-audio"
+      ],
+      "browserVersion": "157.0.8103.79",
+      "minimal": {
+        "at": "2026-11-22T10:38:29.554Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9752380952380952,
+          "advancedSec": 0.9752380952380952,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9752
+            ],
+            [
+              "running",
+              0.981
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190475,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9868480725623583
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 2.2000000178813934
+        }
+      }
+    },
+    "chrome-stable-headed-temp-profile#3": {
+      "launchArgsIgnored": [
+        "--mute-audio"
+      ],
+      "browserVersion": "157.0.8103.79",
+      "minimal": {
+        "at": "2026-11-22T10:38:34.059Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9694331065759637,
+          "advancedSec": 0.9694331065759637,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9694
+            ],
+            [
+              "running",
+              0.9752
+            ],
+            [
+              "closed",
+              1.4629
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190476,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9926530612244898
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 8.299999982118607
+        }
+      }
+    },
+    "chrome-stable-headed-temp-profile#4": {
+      "launchArgsIgnored": [
+        "--mute-audio"
+      ],
+      "browserVersion": "157.0.8103.79",
+      "minimal": {
+        "at": "2026-11-22T10:38:39.177Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9694331065759637,
+          "advancedSec": 0.9694331065759637,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9694
+            ],
+            [
+              "running",
+              0.9752
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.49342403628117903,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9868480725623583
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 3.2000000178813934
+        }
+      }
+    },
+    "chrome-stable-headed-temp-profile#5": {
+      "launchArgsIgnored": [
+        "--mute-audio"
+      ],
+      "browserVersion": "157.0.8103.79",
+      "minimal": {
+        "at": "2026-11-22T10:38:44.105Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9752380952380952,
+          "advancedSec": 0.9752380952380952,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9752
+            ],
+            [
+              "running",
+              0.981
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190475,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9926530612244898
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 7.100000023841858
+        }
+      }
+    }
+  },
+  "finishedAt": "2026-11-22T10:38:47.817Z"
+}

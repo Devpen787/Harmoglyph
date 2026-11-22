@@ -1,0 +1,161 @@
+
+> react-example@0.0.0 test:motion
+> node --import tsx --test src/engine/compositionMotion.test.ts src/engine/compositionCurrent.test.ts
+
+✔ Current: deterministic, cadence-independent, and earlier trail never rewritten (25.109666ms)
+✔ Current: finite, inside the viewport, and continuous for every preset (8.239625ms)
+✔ Current: the melody flows forward (no ring, no loop-back tangle) (1.922041ms)
+✔ Current: pitch steers direction — repeated pitch runs straight, rising pitch climbs (1.682958ms)
+✖ Current: silence is never attributed to a note (2.535792ms)
+✔ Current coupling: only simultaneous voices couple, bounded, and only the counterline moves (3.031833ms)
+✔ Current coupling: consonance sets strength (octave pulls harder than tritone) (0.379667ms)
+✔ Current: a pitch edit changes the path only from its onset (earlier shape identical up to the framing shift) (4.406375ms)
+✔ Current: First Mark is one straight stroke plus a rest thread (0.685667ms)
+✔ Current negative controls fail closed (0.516542ms)
+✔ R4: the same score and beat give identical frames, independent of call history (20.0465ms)
+✔ R4: 30 fps, 60 fps and irregular frame cadences reach the same frame; earlier trail is never rewritten (53.803542ms)
+✔ R2: motion is continuous across onsets and phrase boundaries (no teleport) (2.155709ms)
+✔ R2: the ribbon actually moves between note starts (damped response, not static marks) (0.681667ms)
+✔ R3: rising pitch and repeated pulse produce clearly different contours (0.679042ms)
+✔ R3/R6: Leap Dialogue keeps two independent voices and links simultaneous onsets (0.706667ms)
+✔ R6: First Mark stays deliberately simple (0.122ms)
+✔ R5: editing one pitch changes only motion from that onset onward, without mutating the score (1.2325ms)
+✔ R4: every sample is finite and inside the 600×600 SVG viewport for all presets and beats (9.406958ms)
+✔ R5: the completed artwork is stable, covers every note, and later beats do not change it (3.08325ms)
+✔ R6 negative controls fail closed (0.8665ms)
+✔ R3: the inspector description matches the score relationships (1.285ms)
+✔ R3/T3: renderer segments give every started note its own selectable, finite SVG shape (5.096958ms)
+✖ W2-B: no Ribbon sample attributes silence to a note (all presets + explicit rests) (3.842667ms)
+✔ W2-B: First Mark draws one beat of note and three beats of labelled rest bridge (0.468334ms)
+✔ W2-B: explicit rests become separate bridges while the line stays continuous (1.251584ms)
+✔ W2-C: overlapping notes on one voice are a valid score (precondition) (0.148416ms)
+✖ W2-C: Ribbon lists every sounding note and the newest owns the motion (0.5015ms)
+✖ W2-C: after the inner note ends, Ribbon motion returns to the still-sounding note (0.280167ms)
+✖ W2-C: Current lists every sounding note and steering follows the newest sounding pitch (1.268ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 25
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 422.417833
+
+✖ failing tests:
+
+test at src/engine/compositionCurrent.test.ts:1:3792
+✖ Current: silence is never attributed to a note (2.535792ms)
+  AssertionError [ERR_ASSERTION]: first-mark: beat 0 active notes
+  + actual - expected
+
+  + undefined
+  - [
+  -   'lead-1'
+  - ]
+
+      at assertStrictAttribution (<repo>/src/engine/motionTestFixtures.ts:37:14)
+      at TestContext.<anonymous> (<repo>/src/engine/compositionCurrent.test.ts:80:57)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: [ 'lead-1' ],
+    operator: 'deepStrictEqual'
+  }
+
+test at src/engine/compositionMotion.test.ts:1:9936
+✖ W2-B: no Ribbon sample attributes silence to a note (all presets + explicit rests) (3.842667ms)
+  AssertionError [ERR_ASSERTION]: first-mark: beat 0 active notes
+  + actual - expected
+
+  + undefined
+  - [
+  -   'lead-1'
+  - ]
+
+      at assertStrictAttribution (<repo>/src/engine/motionTestFixtures.ts:37:14)
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:186:5)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: [ 'lead-1' ],
+    operator: 'deepStrictEqual'
+  }
+
+test at src/engine/compositionMotion.test.ts:1:11454
+✖ W2-C: Ribbon lists every sounding note and the newest owns the motion (0.5015ms)
+  AssertionError [ERR_ASSERTION]: ribbon/overlap: beat 0 active notes
+  + actual - expected
+
+  + undefined
+  - [
+  -   'A'
+  - ]
+
+      at assertStrictAttribution (<repo>/src/engine/motionTestFixtures.ts:37:14)
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:217:3)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: [ 'A' ],
+    operator: 'deepStrictEqual'
+  }
+
+test at src/engine/compositionMotion.test.ts:1:12047
+✖ W2-C: after the inner note ends, Ribbon motion returns to the still-sounding note (0.280167ms)
+  AssertionError [ERR_ASSERTION]: returns to A's pitch once only A sounds (r=177.20, A=150.60)
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:230:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at src/engine/compositionMotion.test.ts:1:12668
+✖ W2-C: Current lists every sounding note and steering follows the newest sounding pitch (1.268ms)
+  AssertionError [ERR_ASSERTION]: current/overlap: beat 0 active notes
+  + actual - expected
+
+  + undefined
+  - [
+  -   'A'
+  - ]
+
+      at assertStrictAttribution (<repo>/src/engine/motionTestFixtures.ts:37:14)
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:237:3)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: [ 'A' ],
+    operator: 'deepStrictEqual'
+  }

@@ -1,0 +1,388 @@
+{
+  "generatedAt": "2026-11-21T12:41:26.817Z",
+  "browser": "156.0.8078.4",
+  "minDisplacementPx": 1,
+  "runs": {
+    "ribbon/first-mark": {
+      "totalBeats": 4,
+      "progressBeat": 2,
+      "pathsAtProgress": 2,
+      "notePathsComplete": 1,
+      "restBridgesComplete": 1,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            300,
+            149.4
+          ]
+        ],
+        "atMs": 1795264889528
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            300,
+            149.4
+          ]
+        ],
+        "atMs": 1795264889837
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 0,
+      "headMovedDuringPlayback": false
+    },
+    "ribbon/glass-garden": {
+      "totalBeats": 16,
+      "progressBeat": 9,
+      "pathsAtProgress": 9,
+      "notePathsComplete": 16,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            300,
+            149.4
+          ]
+        ],
+        "atMs": 1795264890894
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            300,
+            149.4
+          ]
+        ],
+        "atMs": 1795264891208
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 0,
+      "headMovedDuringPlayback": false
+    },
+    "ribbon/ascending-light": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 5,
+      "notePathsComplete": 8,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            300,
+            149.4
+          ]
+        ],
+        "atMs": 1795264892256
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            300,
+            149.4
+          ]
+        ],
+        "atMs": 1795264892570
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 0,
+      "headMovedDuringPlayback": false
+    },
+    "ribbon/pulse-study": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 9,
+      "notePathsComplete": 16,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            300,
+            149.4
+          ]
+        ],
+        "atMs": 1795264893639
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            300,
+            149.4
+          ]
+        ],
+        "atMs": 1795264893952
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 0,
+      "headMovedDuringPlayback": false
+    },
+    "ribbon/leap-dialogue": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 8,
+      "notePathsComplete": 12,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            300,
+            149.4
+          ],
+          [
+            300,
+            185
+          ]
+        ],
+        "atMs": 1795264895011
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            300,
+            149.4
+          ],
+          [
+            300,
+            185
+          ]
+        ],
+        "atMs": 1795264895355
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 0,
+      "headMovedDuringPlayback": false
+    },
+    "current/first-mark": {
+      "totalBeats": 4,
+      "progressBeat": 2,
+      "pathsAtProgress": 2,
+      "notePathsComplete": 1,
+      "restBridgesComplete": 1,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            79.99999999456253,
+            300
+          ]
+        ],
+        "atMs": 1795264896487
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            79.99999999456253,
+            300
+          ]
+        ],
+        "atMs": 1795264896801
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 0,
+      "headMovedDuringPlayback": false
+    },
+    "current/glass-garden": {
+      "totalBeats": 16,
+      "progressBeat": 9,
+      "pathsAtProgress": 9,
+      "notePathsComplete": 16,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            149.9941067084639,
+            335.66449088877664
+          ]
+        ],
+        "atMs": 1795264897842
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            149.9941067084639,
+            335.66449088877664
+          ]
+        ],
+        "atMs": 1795264898153
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 0,
+      "headMovedDuringPlayback": false
+    },
+    "current/ascending-light": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 5,
+      "notePathsComplete": 8,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            98.15640783069773,
+            369.76537111523334
+          ]
+        ],
+        "atMs": 1795264899203
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            98.15640783069773,
+            369.76537111523334
+          ]
+        ],
+        "atMs": 1795264899512
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 0,
+      "headMovedDuringPlayback": false
+    },
+    "current/pulse-study": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 9,
+      "notePathsComplete": 16,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            108.51999158457829,
+            364.96803097565197
+          ]
+        ],
+        "atMs": 1795264900519
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            108.51999158457829,
+            364.96803097565197
+          ]
+        ],
+        "atMs": 1795264900828
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 0,
+      "headMovedDuringPlayback": false
+    },
+    "current/leap-dialogue": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 8,
+      "notePathsComplete": 12,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            113.76410904868149,
+            325.010444607019
+          ],
+          [
+            113.76410904868149,
+            395.010444607019
+          ]
+        ],
+        "atMs": 1795264901847
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            113.76410904868149,
+            325.010444607019
+          ],
+          [
+            113.76410904868149,
+            395.010444607019
+          ]
+        ],
+        "atMs": 1795264902157
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 0,
+      "headMovedDuringPlayback": false
+    }
+  },
+  "checks": {
+    "ribbonKeyboardFocus": {
+      "label": "Inspect E5, beat 3.0, lead ribbon",
+      "outlineStyle": "none",
+      "stroke": "rgb(255, 255, 255)",
+      "strokeDasharray": "3px, 2px",
+      "strokeWidth": "2.4px",
+      "focusVisible": true
+    },
+    "ribbonInspectorShown": true,
+    "ribbonInspectorText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · LEAD | E5 | Beat 3.0 · 1 beat(s) · 659.26 Hz | MUSIC → MATHEMATICS | Frequency | 659.26 Hz | Ratio to C4 | 2.5198 : 1 | Angle / note onset | 90.0° | Arc / note duration | 45.0° | Radius / pitch + voice | 211.4 units | Energy / line width | 7.27 units | Traceable formulas | f = 440 × 2^((m − 69)/12) | θ = 2π × onset / total | Δθ = 2π × duration / total | Harmonic partials: 659Hz · 1319Hz · 1978Hz · 2637Hz · 3296Hz | MUSIC → RIBBON MOTION | Interval from previous note | +9 semitones | Ribbon moves by | 34.2 units | Spring overshoot | 8.0 units",
+    "ribbonSavedSvg": {
+      "file": "leap-dialogue-ribbon-harmoglyph.svg",
+      "hasLayer": true,
+      "notePaths": 12
+    },
+    "currentKeyboardFocus": {
+      "label": "Inspect E5, beat 3.0, lead current",
+      "outlineStyle": "none",
+      "stroke": "rgb(255, 255, 255)",
+      "strokeDasharray": "3px, 2px",
+      "strokeWidth": "2.4px",
+      "focusVisible": true
+    },
+    "currentInspectorShown": true,
+    "currentInspectorText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · LEAD | E5 | Beat 3.0 · 1 beat(s) · 659.26 Hz | MUSIC → MATHEMATICS | Frequency | 659.26 Hz | Ratio to C4 | 2.5198 : 1 | Angle / note onset | 90.0° | Arc / note duration | 45.0° | Radius / pitch + voice | 211.4 units | Energy / line width | 7.27 units | Traceable formulas | f = 440 × 2^((m − 69)/12) | θ = 2π × onset / total | Δθ = 2π × duration / total | Harmonic partials: 659Hz · 1319Hz · 1978Hz · 2637Hz · 3296Hz | MUSIC → CURRENT MOTION | Pitch vs phrase start | +16 semitones | Steers toward | 72.4° up | Coupling while sounding | counter-2 · 21 semitones (class 9)",
+    "currentSavedSvg": {
+      "file": "leap-dialogue-current-harmoglyph.svg",
+      "hasLayer": true,
+      "notePaths": 12
+    },
+    "orbitStillRenders": true
+  },
+  "frameProfile": {
+    "orbit": {
+      "frames": 239,
+      "p50ms": 8.3,
+      "p95ms": 9.9,
+      "p99ms": 10.2,
+      "maxMs": 10.4,
+      "over20ms": 0,
+      "playingThroughout": true
+    },
+    "ribbon": {
+      "frames": 239,
+      "p50ms": 8.3,
+      "p95ms": 9.8,
+      "p99ms": 10.1,
+      "maxMs": 10.2,
+      "over20ms": 0,
+      "playingThroughout": true
+    },
+    "current": {
+      "frames": 239,
+      "p50ms": 8.3,
+      "p95ms": 9.8,
+      "p99ms": 10.1,
+      "maxMs": 10.3,
+      "over20ms": 0,
+      "playingThroughout": true
+    }
+  },
+  "pageErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+}

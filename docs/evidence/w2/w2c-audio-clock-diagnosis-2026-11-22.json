@@ -1,0 +1,395 @@
+{
+  "startedAt": "2026-11-22T10:36:21.293Z",
+  "host": {
+    "platform": "darwin",
+    "release": "27.2.0",
+    "arch": "arm64"
+  },
+  "configs": {
+    "cft-headed": {
+      "launchArgsIgnored": [],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:36:24.361Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0,
+          "advancedSec": 0,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0
+            ],
+            [
+              "running",
+              0.0058
+            ],
+            [
+              "closed",
+              0.4934
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190476,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9926530612244898
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 5.0999999940395355
+        }
+      },
+      "appFirstPlay": {
+        "clickAtMs": 1048.5,
+        "ctxLog": [
+          [
+            "new",
+            "running",
+            0,
+            1101.300000011921
+          ],
+          [
+            "statechange",
+            "running",
+            0.023219954648526078,
+            1141.5
+          ]
+        ],
+        "samples": [
+          {
+            "ms": 1453.2000000178814,
+            "state": "running",
+            "t": 0.33668934240362813,
+            "label": "Song position · 0.3 / 16 beats"
+          },
+          {
+            "ms": 1756.5,
+            "state": "running",
+            "t": 0.6385487528344671,
+            "label": "Song position · 0.9 / 16 beats"
+          },
+          {
+            "ms": 2068.7000000178814,
+            "state": "running",
+            "t": 0.9520181405895691,
+            "label": "Song position · 1.5 / 16 beats"
+          },
+          {
+            "ms": 2371.5,
+            "state": "running",
+            "t": 1.253877551020408,
+            "label": "Song position · 2.0 / 16 beats"
+          },
+          {
+            "ms": 2677.9000000059605,
+            "state": "running",
+            "t": 1.5615419501133787,
+            "label": "Song position · 2.6 / 16 beats"
+          }
+        ]
+      }
+    },
+    "cft-headless": {
+      "launchArgsIgnored": [],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:36:33.298Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9694331065759637,
+          "advancedSec": 0.9694331065759637,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9694
+            ],
+            [
+              "running",
+              0.9752
+            ],
+            [
+              "closed",
+              1.4571
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4818140589569162,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9868480725623583
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 4.699999988079071
+        }
+      },
+      "appFirstPlay": {
+        "clickAtMs": 439.69999998807907,
+        "ctxLog": [
+          [
+            "new",
+            "running",
+            0,
+            471.39999997615814
+          ],
+          [
+            "statechange",
+            "running",
+            0.023219954648526078,
+            504.59999999403954
+          ]
+        ],
+        "samples": [
+          {
+            "ms": 815.5999999940395,
+            "state": "running",
+            "t": 0.33668934240362813,
+            "label": "Song position · 0.3 / 16 beats"
+          },
+          {
+            "ms": 1125.8999999761581,
+            "state": "running",
+            "t": 0.6443537414965986,
+            "label": "Song position · 0.9 / 16 beats"
+          },
+          {
+            "ms": 1428.2999999821186,
+            "state": "running",
+            "t": 0.9462131519274376,
+            "label": "Song position · 1.5 / 16 beats"
+          },
+          {
+            "ms": 1734.199999988079,
+            "state": "running",
+            "t": 1.253877551020408,
+            "label": "Song position · 2.0 / 16 beats"
+          },
+          {
+            "ms": 2044.2999999821186,
+            "state": "running",
+            "t": 1.5673469387755101,
+            "label": "Song position · 2.6 / 16 beats"
+          }
+        ]
+      }
+    },
+    "cft-headed-unmuted": {
+      "launchArgsIgnored": [
+        "--mute-audio"
+      ],
+      "browserVersion": "156.0.8078.4",
+      "minimal": {
+        "at": "2026-11-22T10:36:41.136Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9694331065759637,
+          "advancedSec": 0.9694331065759637,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9694
+            ],
+            [
+              "running",
+              0.9752
+            ],
+            [
+              "closed",
+              1.4571
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4818140589569162,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9868480725623583
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 2.7999999821186066
+        }
+      },
+      "appFirstPlay": {
+        "clickAtMs": 447.30000001192093,
+        "ctxLog": [
+          [
+            "new",
+            "running",
+            0,
+            492
+          ],
+          [
+            "statechange",
+            "running",
+            0.046439909297052155,
+            557.5
+          ]
+        ],
+        "samples": [
+          {
+            "ms": 869.3000000119209,
+            "state": "running",
+            "t": 0.3599092970521542,
+            "label": "Song position · 0.4 / 16 beats"
+          },
+          {
+            "ms": 1183.7000000178814,
+            "state": "running",
+            "t": 0.6733786848072563,
+            "label": "Song position · 1.0 / 16 beats"
+          },
+          {
+            "ms": 1486.2000000178814,
+            "state": "running",
+            "t": 0.9752380952380952,
+            "label": "Song position · 1.5 / 16 beats"
+          },
+          {
+            "ms": 1788.7000000178814,
+            "state": "running",
+            "t": 1.2770975056689342,
+            "label": "Song position · 2.1 / 16 beats"
+          },
+          {
+            "ms": 2103.600000023842,
+            "state": "running",
+            "t": 1.5905668934240362,
+            "label": "Song position · 2.7 / 16 beats"
+          }
+        ]
+      }
+    },
+    "chrome-stable-headed-temp-profile": {
+      "launchArgsIgnored": [
+        "--mute-audio"
+      ],
+      "browserVersion": "157.0.8103.79",
+      "minimal": {
+        "at": "2026-11-22T10:36:48.363Z",
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+        "default": {
+          "stateAtCreate": "running",
+          "state": "running",
+          "t0": 0,
+          "t1": 0.9752380952380952,
+          "advancedSec": 0.9752380952380952,
+          "sampleRate": 44100,
+          "baseLatency": 0.005804988662131519,
+          "outputLatency": 0.032
+        },
+        "transitions": {
+          "log": [
+            [
+              "suspended",
+              0.9752
+            ],
+            [
+              "running",
+              0.981
+            ],
+            [
+              "closed",
+              1.4687
+            ]
+          ],
+          "suspendedHeld": true,
+          "afterResumeAdvancedSec": 0.4876190476190475,
+          "state": "running"
+        },
+        "noOutput": {
+          "state": "running",
+          "advancedSec": 0.9926530612244898
+        },
+        "offline": {
+          "renderedSec": 1,
+          "rms": 0.7071062211353529,
+          "ms": 5.199999988079071
+        }
+      },
+      "appFirstPlay": {
+        "clickAtMs": 590.3999999761581,
+        "ctxLog": [
+          [
+            "new",
+            "running",
+            0,
+            2180
+          ],
+          [
+            "statechange",
+            "running",
+            0.034829931972789115,
+            2231.399999976158
+          ]
+        ],
+        "samples": [
+          {
+            "ms": 2543.199999988079,
+            "state": "running",
+            "t": 0.34829931972789113,
+            "label": "Song position · 0.1 / 16 beats"
+          },
+          {
+            "ms": 2846.0999999940395,
+            "state": "running",
+            "t": 0.6501587301587302,
+            "label": "Song position · 0.6 / 16 beats"
+          },
+          {
+            "ms": 3157.2999999821186,
+            "state": "running",
+            "t": 0.9578231292517007,
+            "label": "Song position · 1.5 / 16 beats"
+          },
+          {
+            "ms": 3462.5999999940395,
+            "state": "running",
+            "t": 1.2654875283446712,
+            "label": "Song position · 2.1 / 16 beats"
+          },
+          {
+            "ms": 3766.7999999821186,
+            "state": "running",
+            "t": 1.5673469387755101,
+            "label": "Song position · 2.6 / 16 beats"
+          }
+        ]
+      }
+    }
+  },
+  "finishedAt": "2026-11-22T10:36:56.159Z"
+}

@@ -1,0 +1,122 @@
+✔ R4: the same score and beat give identical frames, independent of call history (11.234042ms)
+✔ R4: 30 fps, 60 fps and irregular frame cadences reach the same frame; earlier trail is never rewritten (25.177875ms)
+✔ R2: motion is continuous across onsets and phrase boundaries (no teleport) (1.2065ms)
+✔ R2: the ribbon actually moves between note starts (damped response, not static marks) (0.382875ms)
+✔ R3: rising pitch and repeated pulse produce clearly different contours (0.368958ms)
+✔ R3/R6: Leap Dialogue keeps two independent voices and links simultaneous onsets (0.288ms)
+✔ R6: First Mark stays deliberately simple (0.068292ms)
+✔ R5: editing one pitch changes only motion from that onset onward, without mutating the score (0.687375ms)
+✔ R4: every sample is finite and inside the 600×600 SVG viewport for all presets and beats (4.9065ms)
+✔ R5: the completed artwork is stable, covers every note, and later beats do not change it (1.728375ms)
+✔ R6 negative controls fail closed (0.480167ms)
+✔ R3: the inspector description matches the score relationships (0.379792ms)
+✖ R3/T3: renderer segments give every started note its own selectable, finite SVG shape (1.831958ms)
+✖ W2-B: no Ribbon sample attributes silence to a note (all presets + explicit rests) (0.3085ms)
+✖ W2-B: First Mark draws one beat of note and three beats of labelled rest bridge (0.145166ms)
+✖ W2-B: explicit rests become separate bridges while the line stays continuous (0.785167ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 12
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 217.964542
+
+✖ failing tests:
+
+test at src/engine/compositionMotion.test.ts:1:9078
+✖ R3/T3: renderer segments give every started note its own selectable, finite SVG shape (1.831958ms)
+  AssertionError [ERR_ASSERTION]: first-mark: one segment per note
+  + actual - expected
+
+  + []
+  - [
+  -   'lead-1'
+  - ]
+
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:171:12)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'lead-1' ],
+    operator: 'deepStrictEqual'
+  }
+
+test at src/engine/compositionMotion.test.ts:1:10971
+✖ W2-B: no Ribbon sample attributes silence to a note (all presets + explicit rests) (0.3085ms)
+  AssertionError [ERR_ASSERTION]: first-mark: unknown kind
+  + actual - expected
+
+  + undefined
+  - 'rest'
+
+      at assertStrictAttribution (<repo>/src/engine/compositionMotion.test.ts:203:16)
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:214:5)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'rest',
+    operator: 'strictEqual'
+  }
+
+test at src/engine/compositionMotion.test.ts:1:11204
+✖ W2-B: First Mark draws one beat of note and three beats of labelled rest bridge (0.145166ms)
+  AssertionError [ERR_ASSERTION]: beats 0–1 belong to lead-1
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:221:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at src/engine/compositionMotion.test.ts:1:11801
+✖ W2-B: explicit rests become separate bridges while the line stays continuous (0.785167ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    [
+  +   'undefined:n1',
+  +   'undefined:n2',
+  +   'undefined:n3',
+  +   'undefined:n4'
+  -   'note:n1',
+  -   'note:n2',
+  -   'rest:n2',
+  -   'note:n3',
+  -   'note:n4',
+  -   'rest:n4'
+    ]
+
+      at TestContext.<anonymous> (<repo>/src/engine/compositionMotion.test.ts:231:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'undefined:n1', 'undefined:n2', 'undefined:n3', 'undefined:n4' ],
+    expected: [ 'note:n1', 'note:n2', 'rest:n2', 'note:n3', 'note:n4', 'rest:n4' ],
+    operator: 'deepStrictEqual'
+  }
