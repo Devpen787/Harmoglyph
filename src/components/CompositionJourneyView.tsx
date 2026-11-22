@@ -8,11 +8,14 @@ import {
   type CompositionNote, type GeometryMark, type MusicalComposition,
 } from '../engine/composition';
 import { beatAtAudioTime, CompositionLookaheadCursor, planCompositionTimeline } from '../engine/compositionTimeline';
-import { computeRibbonFrame, describeNoteMotion, ribbonSegments, RIBBON_MAPPINGS, type RibbonTrackFrame } from '../engine/compositionMotion';
+import { computeRibbonFrame, describeNoteMotion, overlappingNoteIds, ribbonSegments, RIBBON_MAPPINGS, type RibbonTrackFrame } from '../engine/compositionMotion';
+import { buildLuminousLayer, LUMINOUS_MAPPINGS, type LuminousLayer } from '../engine/currentMaterial';
 import { computeCurrentFrame, describeCurrentNote, CURRENT_MAPPINGS, DEFAULT_CURRENT_CONFIG, type CurrentCoupling } from '../engine/compositionCurrent';
 
-type ArtGrammar = 'orbit' | 'bloom' | 'weave' | 'ribbon' | 'current';
-const isMotionGrammar = (g: ArtGrammar) => g === 'ribbon' || g === 'current';
+type ArtGrammar = 'orbit' | 'bloom' | 'weave' | 'ribbon' | 'current' | 'luminous';
+/** Flow grammars share the Current motion engine; 'luminous' is only a different visual material. */
+const isFlowGrammar = (g: ArtGrammar) => g === 'current' || g === 'luminous';
+const isMotionGrammar = (g: ArtGrammar) => g === 'ribbon' || isFlowGrammar(g);
 
 interface Props {
   composition: MusicalComposition;
@@ -82,6 +85,7 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
     let annotations: Array<{ key: string; x1: number; y1: number; x2: number; y2: number; title: string }> = [];
     let threads: Array<{ key: string; x1: number; y1: number; x2: number; y2: number; strength: number }> = [];
     let couplings: CurrentCoupling[] = [];
+    let luminous: LuminousLayer | null = null;
     if (grammar === 'ribbon') {
       const frame = computeRibbonFrame(composition, progress);
       tracks = frame.tracks;
@@ -91,6 +95,7 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
       const frame = computeCurrentFrame(composition, progress);
       tracks = frame.tracks;
       couplings = frame.couplings;
+      if (grammar === 'luminous') luminous = buildLuminousLayer(composition, frame, computeCurrentFrame(composition, span));
       // Draw the real coupling λ as faint threads from each pulled voice to the melody at the same beat.
       const lead = frame.tracks[0];
       const byBeat = new Map(lead.samples.map((x) => [x.beat, x]));
@@ -98,19 +103,20 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
         frame.pull[t.trackId].forEach((l, i) => {
           const q = t.samples[i];
           const p = byBeat.get(q.beat);
-          if (p && l > 0.02 && i % 4 === 0) threads.push({ key: `${t.trackId}-${i}`, x1: q.x, y1: q.y, x2: p.x, y2: p.y, strength: l / DEFAULT_CURRENT_CONFIG.couplingMax });
+          if (!luminous && p && l > 0.02 && i % 4 === 0) threads.push({ key: `${t.trackId}-${i}`, x1: q.x, y1: q.y, x2: p.x, y2: p.y, strength: l / DEFAULT_CURRENT_CONFIG.couplingMax });
         });
       }
     }
     const segments = tracks.flatMap((track) => ribbonSegments(track).map((seg) => ({ ...seg, trackIndex: track.trackIndex })));
-    return { tracks, segments, annotations, threads, couplings };
-  }, [grammar, composition, progress, invalid.length]);
+    return { tracks, segments, annotations, threads, couplings, luminous };
+  }, [grammar, composition, progress, invalid.length, span]);
+  const alsoSounding = useMemo(() => (selected && isMotionGrammar(grammar) ? overlappingNoteIds(composition, selected.id) : []), [grammar, composition, selected]);
   const selectedMotion = useMemo(() => {
     if (grammar !== 'ribbon' || invalid.length || !selected) return null;
     try { return describeNoteMotion(composition, selected.id); } catch { return null; }
   }, [grammar, composition, selected, invalid.length]);
   const selectedCurrent = useMemo(() => {
-    if (grammar !== 'current' || invalid.length || !selected) return null;
+    if (!isFlowGrammar(grammar) || invalid.length || !selected) return null;
     try { return describeCurrentNote(composition, selected.id); } catch { return null; }
   }, [grammar, composition, selected, invalid.length]);
 
@@ -349,18 +355,20 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
             <div className="relative z-10 px-5 md:px-7 pt-6 flex flex-wrap items-start justify-between gap-3">
               <div><div className="text-[10px] font-semibold tracking-[.24em] uppercase text-[#bda5db]">02 / The visual score</div><h2 className="font-serif text-2xl md:text-3xl mt-1">{composition.title}</h2><p className="text-[11px] text-[#a999bc] mt-1">Every stroke represents an actual note · {grammar.toUpperCase()} interpretation</p></div>
               <div className="flex gap-1 rounded-full p-1 bg-[#281d3b]/80 border border-[#473456]" aria-label="Visual interpretation">
-                {(['orbit','bloom','weave','ribbon','current'] as ArtGrammar[]).map((style) => <button type="button" key={style} aria-pressed={grammar === style} onClick={() => setGrammar(style)} className={`rounded-full px-3 py-1.5 text-xs capitalize transition ${grammar === style ? 'bg-[#d7c7f2] text-[#21162d] font-bold' : 'text-[#bbadcc] hover:text-white'}`}>{style}</button>)}
+                {(['orbit','bloom','weave','ribbon','current','luminous'] as ArtGrammar[]).map((style) => <button type="button" key={style} aria-pressed={grammar === style} onClick={() => setGrammar(style)} className={`rounded-full px-3 py-1.5 text-xs capitalize transition ${grammar === style ? 'bg-[#d7c7f2] text-[#21162d] font-bold' : 'text-[#bbadcc] hover:text-white'}`}>{style}</button>)}
               </div>
             </div>
             <div className="relative z-10 flex-1 min-h-[480px] flex items-center justify-center px-2">
               <svg ref={svgRef} viewBox="0 0 600 600" role="img" aria-label={`Mathematical ${grammar} artwork for ${composition.title}; click a score note to inspect its contribution`} className="w-full max-w-[640px] max-h-[620px] drop-shadow-[0_0_32px_rgba(185,133,255,.16)]">
                 <defs>
                   <radialGradient id="art-aura"><stop offset="0" stopColor="#533a75" stopOpacity=".24"/><stop offset="1" stopColor="#1c102f" stopOpacity="0"/></radialGradient>
+                  <filter id="lum-glow" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="4.5"/></filter>
+                  <filter id="lum-soft" x="-10%" y="-40%" width="120%" height="180%"><feGaussianBlur stdDeviation="1.4"/></filter>
                   <filter id="note-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
                 </defs>
                 <circle cx="300" cy="300" r="275" fill="url(#art-aura)"/>
-                {grammar !== 'current' && [140,190,240].map((r) => <circle key={r} cx="300" cy="300" r={r} fill="none" stroke="#c8b4e6" strokeOpacity=".075" strokeWidth="1"/>)}
-                {grammar !== 'current' && Array.from({ length: barCount }, (_, i) => {
+                {!isFlowGrammar(grammar) && [140,190,240].map((r) => <circle key={r} cx="300" cy="300" r={r} fill="none" stroke="#c8b4e6" strokeOpacity=".075" strokeWidth="1"/>)}
+                {!isFlowGrammar(grammar) && Array.from({ length: barCount }, (_, i) => {
                   const a = -Math.PI / 2 + i * (Math.PI * 2 / barCount);
                   const to = point(263,a);
                   return <line key={i} x1="300" y1="300" x2={to.x} y2={to.y} stroke="#d9c9ed" strokeOpacity=".09"/>;
@@ -376,13 +384,26 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
                   }).join(' ');
                   return <path key={track.id} d={path} fill="none" stroke={PHRASE_COLORS[index % PHRASE_COLORS.length]} strokeWidth="2.2" strokeOpacity=".32" strokeDasharray="4 7"/>;
                 })}
-                {motion && <g aria-label={grammar === 'ribbon' ? 'Melodic ribbon' : 'Melodic current'}>
+                {motion && <g aria-label={grammar === 'ribbon' ? 'Melodic ribbon' : grammar === 'luminous' ? 'Melodic current luminous' : 'Melodic current'} transform={motion.luminous?.view.transform || undefined}>
+                  {motion.luminous && (() => {
+                    const L = motion.luminous;
+                    const trackColor = (id: string) => PHRASE_COLORS[(Math.max(0, composition.tracks.findIndex((t) => t.id === id)) * 2) % PHRASE_COLORS.length];
+                    const y0 = -L.view.ty / L.view.scale, h = 600 / L.view.scale;
+                    return <g aria-hidden="true">
+                      {L.phraseBands.map((b) => <rect key={b.index} x={b.x0} y={y0} width={Math.max(0, b.x1 - b.x0)} height={h} fill="#ffffff" fillOpacity={b.index % 2 ? .0 : .028}/>)}
+                      {L.membranes.map((m) => <path key={m.key} d={m.d} fill="#cdb8ff" fillOpacity={.06 + .55 * m.meanPull} stroke="none"><title>{`Coupling: counterline drawn toward the melody, mean λ ${m.meanPull.toFixed(2)}`}</title></path>)}
+                      {L.sheets.map((sh) => <path key={sh.key} d={sh.d} fill={trackColor(sh.trackId)} fillOpacity=".13" filter="url(#lum-soft)"/>)}
+                      {L.echoes.map((e) => <path key={e.key} d={e.d} fill="none" stroke={trackColor(e.trackId)} strokeOpacity=".28" strokeWidth=".7"/>)}
+                      {motion.segments.filter((g) => g.kind === 'note').map((g, i) => <path key={`glow-${i}`} d={g.d} fill={trackColor(g.trackId)} fillOpacity=".55" filter="url(#lum-glow)"/>)}
+                    </g>;
+                  })()}
                   {motion.annotations.map((a) => <line key={a.key} x1={a.x1} y1={a.y1} x2={a.x2} y2={a.y2} stroke="#e7dcff" strokeOpacity=".35" strokeWidth="1.2" strokeDasharray="2 5"><title>{a.title}</title></line>)}
                   {motion.threads.map((t) => <line key={t.key} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke="#d9c7ff" strokeOpacity={.08 + .32 * t.strength} strokeWidth=".9" aria-hidden="true"/>)}
-                  {motion.segments.map((seg) => {
+                  {motion.segments.map((seg, segIndex) => {
                     if (seg.kind === 'rest') {
                       const before = notes.find((n) => n.id === seg.restAfterNoteId);
-                      return <path key={`rest-${seg.trackId}-${seg.restAfterNoteId}`} d={seg.d} fill="#d8c8ed" fillOpacity=".16" stroke="none" aria-hidden="true"><title>{`Silence after ${before ? noteName(before.midi) : 'the previous note'}: a designed bridge, not a note`}</title></path>;
+                      if (motion.luminous) return null; // Luminous draws silence as a dotted thread below
+                      return <path key={`rest-${seg.trackId}-${segIndex}`} d={seg.d} fill="#d8c8ed" fillOpacity=".16" stroke="none" aria-hidden="true"><title>{`Silence after ${before ? noteName(before.midi) : 'the previous note'}: a designed bridge, not a note`}</title></path>;
                     }
                     const noteId = seg.noteId!;
                     const note = notes.find((n) => n.id === noteId)!;
@@ -390,8 +411,13 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
                     const isSelected = selected?.id === noteId;
                     const select = () => { setSelectedId(noteId); setShowMath(true); };
                     // Focus: no rectangular browser outline; a dashed white edge on the path itself (focus-visible only).
-                    return <path key={noteId} d={seg.d} fill={color} fillOpacity={selected && showMath && !performing && !isSelected ? .5 : .9} stroke={isSelected ? '#fff' : color} strokeOpacity={isSelected ? .9 : .35} strokeWidth={isSelected ? 1.4 : .6} strokeLinejoin="round" filter={isSelected ? 'url(#note-glow)' : undefined} className="outline-none focus-visible:[stroke:#ffffff] focus-visible:[stroke-opacity:1] focus-visible:[stroke-width:2.4] focus-visible:[stroke-dasharray:3_2]" role="button" tabIndex={0} aria-label={`Inspect ${noteName(note.midi)}, beat ${format(note.startBeat + 1, 1)}, ${note.trackId} ${grammar}`} onClick={select} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); select(); } }}/>;
+                    return <path key={`note-${seg.trackId}-${segIndex}`} d={seg.d} fill={color} fillOpacity={selected && showMath && !performing && !isSelected ? .5 : .9} stroke={isSelected ? '#fff' : color} strokeOpacity={isSelected ? .9 : .35} strokeWidth={isSelected ? 1.4 : .6} strokeLinejoin="round" filter={isSelected ? 'url(#note-glow)' : undefined} className="outline-none focus-visible:[stroke:#ffffff] focus-visible:[stroke-opacity:1] focus-visible:[stroke-width:2.4] focus-visible:[stroke-dasharray:3_2]" role="button" tabIndex={0} aria-label={`Inspect ${noteName(note.midi)}, beat ${format(note.startBeat + 1, 1)}, ${note.trackId} ${grammar}`} onClick={select} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); select(); } }}/>;
                   })}
+                  {motion.luminous && <g aria-hidden="true">
+                    {motion.luminous.cores.map((c) => <path key={c.key} d={c.d} fill="none" stroke="#fff" strokeOpacity=".55" strokeWidth=".8" strokeLinecap="round"/>)}
+                    {motion.luminous.restThreads.map((r) => <path key={r.key} d={r.d} fill="none" stroke="#e9ddff" strokeOpacity=".55" strokeWidth="1.1" strokeDasharray="1 4" strokeLinecap="round"><title>Silence: a designed bridge, not a note</title></path>)}
+                    {motion.luminous.onsets.map((o) => <circle key={o.noteId} cx={o.x} cy={o.y} r={o.r} fill="#fff" fillOpacity=".85" filter="url(#note-glow)"/>)}
+                  </g>}
                   {!showComplete && motion.tracks.map((track) => track.head && <circle key={track.trackId} cx={track.head.x} cy={track.head.y} r={track.head.width * .55 + 2} fill="#fff" fillOpacity=".9" filter="url(#note-glow)"/>)}
                 </g>}
                 {!isMotionGrammar(grammar) && marks.map((mark) => {
@@ -410,7 +436,7 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
                     <path d={d} fill="none" stroke="transparent" strokeWidth="20" role="button" tabIndex={0} aria-label={`Inspect ${noteName(note.midi)}, beat ${format(note.startBeat + 1,1)}`} onClick={() => {setSelectedId(note.id);setShowMath(true);}} onKeyDown={(event) => {if (event.key === 'Enter' || event.key === ' ') {event.preventDefault();setSelectedId(note.id);setShowMath(true);}}}/>
                   </g>;
                 })}
-                {grammar !== 'current' ? <>
+                {!isFlowGrammar(grammar) ? <>
                   <circle cx="300" cy="300" r="44" fill="#20162f" fillOpacity=".64" stroke="#d8c8ed" strokeOpacity=".12"/>
                   <text x="300" y="298" textAnchor="middle" fill="#f1e9ff" fontSize="15" fontFamily="serif" fontStyle="italic">HG</text>
                   <text x="300" y="315" textAnchor="middle" fill="#9788ab" fontSize="8" letterSpacing="2">{countLabel(notes.length)} NOTES</text>
@@ -453,17 +479,19 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
                 <div className="flex justify-between gap-2 border-b border-[#eee8ef] pb-2"><span>Ribbon moves by</span><b>{format(selectedMotion.radiusChange,1)} units</b></div>
                 <div className="flex justify-between gap-2 border-b border-[#eee8ef] pb-2"><span>Spring overshoot</span><b>{format(selectedMotion.peakOvershoot,1)} units</b></div>
                 <div className="flex justify-between gap-2 border-b border-[#eee8ef] pb-2"><span>Peak thickness / velocity</span><b>{format(selectedMotion.peakWidth,2)} units</b></div>
+                {alsoSounding.length > 0 && <div className="flex justify-between gap-2 border-b border-[#eee8ef] pb-2"><span>Also sounding on this voice</span><b>{alsoSounding.join(', ')}</b></div>}
                 <div className="flex justify-between gap-2"><span>Starts together with</span><b>{selectedMotion.counterpointNoteIds.length ? selectedMotion.counterpointNoteIds.join(', ') : '—'}</b></div>
               </div>
               <div className="mt-2 bg-[#f7f3fa] border border-[#e9e1ee] rounded-xl p-3 text-[11px] text-[#554a60] space-y-1"><div className="font-bold text-[#6e4aa6]">How the ribbon is computed</div><div className="font-mono leading-5">r(b) = r₀ + Σ Δrᵢ · s(b − onsetᵢ)<br/>s = damped spring step (ω, ζ)</div><div><b>Derived:</b> {RIBBON_MAPPINGS.derived.join('; ')}.</div><div><b>Designed:</b> {RIBBON_MAPPINGS.designed.join('; ')}.</div></div></div>}
               {selectedCurrent && <div><div className="text-[10px] uppercase tracking-[.16em] text-[#8b7e94] font-bold">Music → current motion</div><div className="mt-2 space-y-2 text-xs">
                 <div className="flex justify-between gap-2 border-b border-[#eee8ef] pb-2"><span>Pitch vs phrase start</span><b>{selectedCurrent.semitonesFromPhraseStart > 0 ? '+' : ''}{selectedCurrent.semitonesFromPhraseStart} semitones</b></div>
                 <div className="flex justify-between gap-2 border-b border-[#eee8ef] pb-2"><span>Steers toward</span><b>{format(Math.abs(selectedCurrent.targetHeadingDeg),1)}° {selectedCurrent.targetHeadingDeg > 0.05 ? 'up' : selectedCurrent.targetHeadingDeg < -0.05 ? 'down' : '(level)'}</b></div>
+                {alsoSounding.length > 0 && <div className="flex justify-between gap-2 border-b border-[#eee8ef] pb-2"><span>Also sounding on this voice</span><b>{alsoSounding.join(', ')} (newest note steers)</b></div>}
                 <div className="flex justify-between gap-2"><span>Coupling while sounding</span><b>{selectedCurrent.couplings.length ? '' : 'none'}</b></div>
                 {selectedCurrent.couplings.map((c) => <div key={c.noteIds.join('-')} className="flex justify-between gap-2 text-[11px] text-[#5f5468]"><span>{c.noteIds[0] === selected!.id ? c.noteIds[1] : c.noteIds[0]} · {Math.abs(c.intervalSemitones)} semitones (class {c.intervalClass})</span><b>consonance {format(c.consonance)} · pull ≤ {format(c.maxPull * 100, 0)}%</b></div>)}
               </div>
-              <div className="mt-2 bg-[#f7f3fa] border border-[#e9e1ee] rounded-xl p-3 text-[11px] text-[#554a60] space-y-1"><div className="font-bold text-[#6e4aa6]">How the current is computed</div><div className="font-mono leading-5">heading = −H·tanh(κ·(pitch − phrase start)/H)<br/>counterline += λ·(melody − counterline), λ ≤ {DEFAULT_CURRENT_CONFIG.couplingMax}</div><div><b>Derived:</b> {CURRENT_MAPPINGS.derived.join('; ')}.</div><div><b>Designed:</b> {CURRENT_MAPPINGS.designed.join('; ')}.</div></div></div>}
-              <div className="rounded-xl border-l-[3px] border-[#8f63d4] bg-[#faf7fd] px-3 py-3 text-[11px] text-[#74687d] leading-relaxed"><b className="text-[#4b3a60]">Derived:</b> pitch, timing, frequency ratios, angular span and modeled partials. <b className="text-[#4b3a60]">Designed:</b> radius scale, palette, glow, note thickness and Orbit/Bloom/Weave/Ribbon/Current grammar. None is claimed to be the unique picture of a song.</div>
+              <div className="mt-2 bg-[#f7f3fa] border border-[#e9e1ee] rounded-xl p-3 text-[11px] text-[#554a60] space-y-1"><div className="font-bold text-[#6e4aa6]">How the current is computed</div><div className="font-mono leading-5">heading = −H·tanh(κ·(pitch − phrase start)/H)<br/>counterline += λ·(melody − counterline), λ ≤ {DEFAULT_CURRENT_CONFIG.couplingMax}</div><div><b>Derived:</b> {CURRENT_MAPPINGS.derived.join('; ')}.</div><div><b>Designed:</b> {CURRENT_MAPPINGS.designed.join('; ')}.</div>{grammar === 'luminous' && <div className="pt-1 border-t border-[#e9e1ee]"><b>Luminous material (appearance only, same motion):</b> derived — {LUMINOUS_MAPPINGS.derived.join('; ')}; designed — {LUMINOUS_MAPPINGS.designed.join('; ')}.</div>}</div></div>}
+              <div className="rounded-xl border-l-[3px] border-[#8f63d4] bg-[#faf7fd] px-3 py-3 text-[11px] text-[#74687d] leading-relaxed"><b className="text-[#4b3a60]">Derived:</b> pitch, timing, frequency ratios, angular span and modeled partials. <b className="text-[#4b3a60]">Designed:</b> radius scale, palette, glow, note thickness and Orbit/Bloom/Weave/Ribbon/Current grammar and the Luminous material. None is claimed to be the unique picture of a song.</div>
             </div> : <p className="text-sm text-[#807187]">Select a note in the score or artwork and reveal the mapping that produced its mark.</p>}
             <div className="mt-5 pt-4 border-t border-[#eee7ef] space-y-2">
               <div className="text-[10px] uppercase font-bold tracking-[.14em] text-[#85778f]">04 / Bridge to the original app</div>

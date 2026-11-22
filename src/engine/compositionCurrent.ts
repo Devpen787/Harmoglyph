@@ -5,7 +5,8 @@
  * reuses that file's spring step response, thickness and attribution helpers.
  *
  * Per voice, on a fixed global grid b_k = k·h:
- *   m(b)       = m₀ + Σ (mᵢ − mᵢ₋₁)·s(b − onsetᵢ)      spring-smoothed pitch (semitones)
+ *   m(b)       = m₀ + Σ (mᵢ − mᵢ₋₁)·s(b − tᵢ)          spring-smoothed pitch of the motion owner
+ *                (newest sounding note; owner changes at onsets and when an inner overlap ends)
  *   ref(b)     = same, over the first note of each phrase (bar) on this voice
  *   heading(b) = −H·tanh(κ·(m(b) − ref(b)) / H)      κ = degrees per semitone, |heading| < H < 90°
  *   speed(b)   = 1 + ½·Σ velocityᵢ·swell(b − onsetᵢ)   each onset pushes the stream forward
@@ -31,7 +32,7 @@
  * uniform translation.
  */
 import { totalBeats, type CompositionNote, type MusicalComposition } from './composition.ts';
-import { attributionAt, prepare, stepResponse, smoothstep, swell, widthAt, type PreparedTrack, type RibbonSample, type RibbonTrackFrame } from './compositionMotion.ts';
+import { attributionAt, ownerEvents, prepare, springFollow, smoothstep, swell, widthAt, type PreparedTrack, type RibbonSample, type RibbonTrackFrame } from './compositionMotion.ts';
 
 export interface CurrentConfig {
   omegaPerBeat: number;
@@ -119,21 +120,13 @@ function phraseStarts(notes: CompositionNote[], beatsPerBar: number): Compositio
   return notes.filter((n) => { const p = Math.floor(n.startBeat / beatsPerBar + 1e-9); if (seen.has(p)) return false; seen.add(p); return true; });
 }
 
-function smoothedPitch(seq: CompositionNote[], beat: number, c: CurrentConfig): number {
-  let m = seq[0].midi;
-  for (let i = 1; i < seq.length; i++) {
-    const tau = beat - seq[i].startBeat;
-    if (tau < 0) break;
-    m += (seq[i].midi - seq[i - 1].midi) * stepResponse(tau, c.omegaPerBeat, c.damping);
-  }
-  return m;
-}
-
-interface Voice { notes: CompositionNote[]; phrases: CompositionNote[] }
+interface Voice { notes: CompositionNote[]; pitch: Array<{ t: number; value: number }>; phrase: Array<{ t: number; value: number }> }
 
 function headingAt(v: Voice, beat: number, c: CurrentConfig): number {
   const H = c.maxHeadingDeg * RAD;
-  return -H * Math.tanh((c.degreesPerSemitone * RAD * (smoothedPitch(v.notes, beat, c) - smoothedPitch(v.phrases, beat, c))) / H);
+  const m = springFollow(v.pitch, beat, c.omegaPerBeat, c.damping);
+  const ref = springFollow(v.phrase, beat, c.omegaPerBeat, c.damping);
+  return -H * Math.tanh((c.degreesPerSemitone * RAD * (m - ref)) / H);
 }
 
 function speedAt(notes: CompositionNote[], beat: number): number {
@@ -205,7 +198,11 @@ function buildFull(composition: MusicalComposition, c: CurrentConfig): FullCompo
   const h = c.sampleStep;
   const lastK = Math.floor(span / h + 1e-9);
   const full: FullTrack[] = tracks.map((t) => {
-    const voice: Voice = { notes: t.notes, phrases: phraseStarts(t.notes, composition.beatsPerBar) };
+    const voice: Voice = {
+      notes: t.notes,
+      pitch: ownerEvents(t.notes).map((e) => ({ t: e.t, value: e.note.midi })),
+      phrase: phraseStarts(t.notes, composition.beatsPerBar).map((n) => ({ t: n.startBeat, value: n.midi })),
+    };
     if (!t.notes.length) return { prepared: t, voice, k0: lastK + 1, raw: [] };
     const k0 = Math.ceil(t.notes[0].startBeat / h - 1e-9);
     const raw: Array<[number, number]> = [[0, 0]];

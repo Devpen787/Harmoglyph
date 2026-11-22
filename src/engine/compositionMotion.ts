@@ -21,6 +21,13 @@
  * hold is a smoothstep plateau for the written duration. Every onset is
  * visible as thickness even when the pitch is unchanged.
  *
+ * Overlap (W2-C): several notes may sound at once on one voice. Every sample
+ * lists all of them (activeNoteIds, onset order). The NEWEST sounding note owns
+ * the position (noteId) and sets the pitch target; when it ends while an older
+ * note still sounds, the target returns to that older note. Thickness sums every
+ * sounding note, so both contributions stay visible. Without overlap this is
+ * identical to targeting each note at its onset.
+ *
  * Attribution (W2-B): a sample names a note only while that note sounds
  * (onset ≤ b < onset + duration). Samples in silence are kind 'rest', name no
  * note, and record only which note preceded them. They are a designed visual
@@ -82,8 +89,10 @@ export interface RibbonSample {
   width: number;
   /** 'note' while a note sounds; 'rest' during silence (decorative bridge). */
   kind: 'note' | 'rest';
-  /** The sounding note, or null during silence. */
+  /** The newest sounding note (owner of the position), or null during silence. */
   noteId: string | null;
+  /** Every note sounding on this voice at this beat, onset order. Empty during silence. */
+  activeNoteIds: string[];
   /** During silence: the note that preceded it. Null while a note sounds. */
   restAfterNoteId: string | null;
   trackId: string;
@@ -179,15 +188,58 @@ export function widthAt(notes: CompositionNote[], beat: number): number {
   return width;
 }
 
-/** Which note sounds at beat b, or which note the silence follows. Notes sorted by onset. */
-export function attributionAt(notes: CompositionNote[], beat: number): Pick<RibbonSample, 'kind' | 'noteId' | 'restAfterNoteId'> {
+const sounds = (n: CompositionNote, beat: number) => beat >= n.startBeat - 1e-9 && beat < n.startBeat + n.durationBeats - 1e-9;
+
+/** All notes sounding at beat b (onset order); the newest owns the sample. Notes sorted by onset. */
+export function attributionAt(notes: CompositionNote[], beat: number): Pick<RibbonSample, 'kind' | 'noteId' | 'restAfterNoteId' | 'activeNoteIds'> {
   let last: CompositionNote | null = null;
+  const active: string[] = [];
   for (const note of notes) {
     if (note.startBeat > beat + 1e-9) break;
     last = note;
-    if (beat < note.startBeat + note.durationBeats - 1e-9) return { kind: 'note', noteId: note.id, restAfterNoteId: null };
+    if (sounds(note, beat)) active.push(note.id);
   }
-  return { kind: 'rest', noteId: null, restAfterNoteId: last?.id ?? null };
+  if (active.length) return { kind: 'note', noteId: active[active.length - 1], restAfterNoteId: null, activeNoteIds: active };
+  return { kind: 'rest', noteId: null, restAfterNoteId: last?.id ?? null, activeNoteIds: [] };
+}
+
+/** A change of motion owner: from beat t, the pitch target is `note`. */
+export interface OwnerEvent { t: number; note: CompositionNote }
+
+/**
+ * When the motion owner changes on one voice: at every onset, and at any note end
+ * that reveals an older still-sounding note. Silence keeps the last owner.
+ */
+export function ownerEvents(notes: CompositionNote[]): OwnerEvent[] {
+  if (!notes.length) return [];
+  const times = [...new Set(notes.flatMap((n) => [n.startBeat, n.startBeat + n.durationBeats]))].sort((a, b) => a - b);
+  const events: OwnerEvent[] = [];
+  for (const t of times) {
+    let owner: CompositionNote | null = null;
+    for (const n of notes) if (sounds(n, t)) owner = n; // notes in onset order → last sounding is newest
+    if (owner && events.at(-1)?.note.id !== owner.id) events.push({ t, note: owner });
+  }
+  return events;
+}
+
+/** Σ-of-step-responses target follower: value₀ + Σ (valueₖ − valueₖ₋₁)·s(b − tₖ). */
+export function springFollow(events: Array<{ t: number; value: number }>, beat: number, omega: number, zeta: number): number {
+  let v = events[0].value;
+  for (let k = 1; k < events.length; k++) {
+    const tau = beat - events[k].t;
+    if (tau < 0) break;
+    v += (events[k].value - events[k - 1].value) * stepResponse(tau, omega, zeta);
+  }
+  return v;
+}
+
+/** Other notes on the same voice that sound at the same time as noteId. */
+export function overlappingNoteIds(composition: MusicalComposition, noteId: string): string[] {
+  const note = composition.notes.find((n) => n.id === noteId);
+  if (!note) return [];
+  return sortedNotes(composition)
+    .filter((n) => n.id !== noteId && n.trackId === note.trackId && n.startBeat < note.startBeat + note.durationBeats - 1e-9 && note.startBeat < n.startBeat + n.durationBeats - 1e-9)
+    .map((n) => n.id);
 }
 
 export interface PreparedTrack {
@@ -195,6 +247,8 @@ export interface PreparedTrack {
   trackIndex: number;
   notes: CompositionNote[];
   radii: number[];
+  /** Radius target per owner change (see ownerEvents). */
+  radiusEvents: Array<{ t: number; value: number }>;
 }
 
 export function prepare(composition: MusicalComposition): { span: number; tracks: PreparedTrack[] } {
@@ -206,19 +260,17 @@ export function prepare(composition: MusicalComposition): { span: number; tracks
     span: totalBeats(composition),
     tracks: composition.tracks.map((track, trackIndex) => {
       const trackNotes = notes.filter((n) => n.trackId === track.id);
-      return { trackId: track.id, trackIndex, notes: trackNotes, radii: trackNotes.map((n) => radiusById.get(n.id)!) };
+      return {
+        trackId: track.id, trackIndex, notes: trackNotes, radii: trackNotes.map((n) => radiusById.get(n.id)!),
+        radiusEvents: ownerEvents(trackNotes).map((e) => ({ t: e.t, value: radiusById.get(e.note.id)! })),
+      };
     }),
   };
 }
 
 function sampleTrack(track: PreparedTrack, beat: number, span: number, config: RibbonConfig): RibbonSample {
-  const { notes, radii } = track;
-  let r = radii[0];
-  for (let i = 1; i < notes.length; i++) {
-    const tau = beat - notes[i].startBeat;
-    if (tau < 0) break;
-    r += (radii[i] - radii[i - 1]) * stepResponse(tau, config.omegaPerBeat, config.damping);
-  }
+  const { notes } = track;
+  let r = springFollow(track.radiusEvents, beat, config.omegaPerBeat, config.damping);
   r = Math.min(R_MAX, Math.max(R_MIN, r));
   const theta = -Math.PI / 2 + (2 * Math.PI * beat) / span;
   return {

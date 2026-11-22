@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { COMPOSITION_PRESETS, cloneComposition, deriveGeometry, sortedNotes, totalBeats, type MusicalComposition } from './composition.ts';
+import { COMPOSITION_PRESETS, cloneComposition, deriveGeometry, sortedNotes, totalBeats, validateComposition as validateCompositionErrors, type MusicalComposition } from './composition.ts';
 import { computeRibbonFrame, describeNoteMotion, ribbonSegments, DEFAULT_RIBBON_CONFIG, type RibbonFrame } from './compositionMotion.ts';
-import { RESTED, assertStrictAttribution } from './motionTestFixtures.ts';
+import { OVERLAP, RESTED, assertStrictAttribution } from './motionTestFixtures.ts';
+import { computeCurrentFrame } from './compositionCurrent.ts';
+import { deriveGeometry as geometryOf } from './composition.ts';
 
 const preset = (id: string): MusicalComposition => cloneComposition(COMPOSITION_PRESETS.find((p) => p.id === id)!);
 const track = (frame: RibbonFrame, id: string) => frame.tracks.find((t) => t.trackId === id)!;
@@ -202,4 +204,39 @@ test('W2-B: explicit rests become separate bridges while the line stays continuo
   const t = frame.tracks[0].samples;
   for (let i = 1; i < t.length; i++) assert.ok(Math.hypot(t[i].x - t[i - 1].x, t[i].y - t[i - 1].y) < 12, `jump at ${t[i].beat}`);
   assert.deepEqual(computeRibbonFrame(RESTED, 99), frame, 'completed artwork (with bridges) is stable');
+});
+
+// ── W2-C: same-track overlap ─────────────────────────────────────────────────
+
+test('W2-C: overlapping notes on one voice are a valid score (precondition)', () => {
+  assert.deepEqual(validateCompositionErrors(OVERLAP), []);
+});
+
+test('W2-C: Ribbon lists every sounding note and the newest owns the motion', () => {
+  const f = computeRibbonFrame(OVERLAP, 4);
+  assertStrictAttribution(OVERLAP, f, 'ribbon/overlap');
+  const at = (b: number) => sampleAt(f, 'lead', b);
+  assert.deepEqual([at(0.5).activeNoteIds, at(0.5).noteId], [['A'], 'A']);
+  assert.deepEqual([at(1.5).activeNoteIds, at(1.5).noteId], [['A', 'B'], 'B'], 'both notes sound at beat 1.5');
+  assert.deepEqual([at(3).activeNoteIds, at(3).noteId], [['A'], 'A'], 'A still sounds after B ends');
+  assert.deepEqual(ribbonSegments(f.tracks[0]).map((g) => `${g.kind}:${g.noteId}`), ['note:A', 'note:B', 'note:A']);
+});
+
+test('W2-C: after the inner note ends, Ribbon motion returns to the still-sounding note', () => {
+  const f = computeRibbonFrame(OVERLAP, 4);
+  const [rA, rB] = geometryOf(OVERLAP).sort((a, b) => a.midi - b.midi).map((m) => m.radius);
+  const r = (b: number) => sampleAt(f, 'lead', b).r;
+  assert.ok(r(1.9) > rA + 0.8 * (rB - rA), 'moves to B while B is the newest sounding note');
+  assert.ok(Math.abs(r(3.95) - rA) < 0.05 * (rB - rA), `returns to A's pitch once only A sounds (r=${r(3.95).toFixed(2)}, A=${rA.toFixed(2)})`);
+  const width = (b: number) => sampleAt(f, 'lead', b).width;
+  assert.ok(width(1.5) > width(3.5), 'two sounding notes are thicker than one (both contribute)');
+});
+
+test('W2-C: Current lists every sounding note and steering follows the newest sounding pitch', () => {
+  const f = computeCurrentFrame(OVERLAP, 4);
+  assertStrictAttribution(OVERLAP, f, 'current/overlap');
+  const s = f.tracks[0].samples;
+  const heading = (b: number) => s.reduce((best, x) => (Math.abs(x.beat - b) < Math.abs(best.beat - b) ? x : best)).theta;
+  assert.ok(heading(1.9) < -0.5, 'climbs while B (7 semitones above A) is newest');
+  assert.ok(Math.abs(heading(3.95)) < 0.05, 'levels off again once only A sounds');
 });

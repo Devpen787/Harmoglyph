@@ -1485,6 +1485,180 @@ These are candidate directions, not approvals.
 
 No merge, deployment, synth change or W3.
 
+## W2-C — overlap attribution, audio-clock diagnosis, Luminous material (21–22 Nov 2026)
+
+Response to "ChatGPT independent W2-B review" on PR #5 (`6391704`). The commit SHA and CI result
+are in the PR #5 comment for this commit. Not changed: `audioSynth.ts`, `compositionTimeline.ts`
+(W1 scheduling), Orbit/Bloom/Weave, Ribbon and Current motion for scores without overlap. No new
+dependency.
+
+Labels: **[measured]**, **[aesthetic]** (Kiro's subjective judgement), **[proposal]** (not
+implemented).
+
+### 1. Same-track overlap attribution
+
+**Defect [measured]:** `attributionAt` returned only the first sounding note.
+- With A = C4 from beat 0 for 4 beats and B = G4 from beat 1 for 1 beat, the sample at beat 1.5
+  named only A.
+- After B ended, motion stayed on B's pitch while only A sounded.
+- `validateComposition` accepts this score; a test now asserts it.
+
+**Policy (shared by Ribbon and Current):**
+- Every sample lists all sounding notes on its voice: `activeNoteIds`, in onset order.
+- The newest sounding note owns the position (`noteId`) and sets the pitch target.
+- `ownerEvents()` changes the owner at each onset, and again when a note ends while an older one
+  still sounds. Motion then returns to the older note's pitch via the same spring
+  (`springFollow`).
+- Thickness already sums every sounding note, so both contribute.
+- The inspector lists "Also sounding on this voice".
+- Rendering: segments for A, B, A; React keys made unique.
+
+**Tests:**
+- 3 behaviour regressions plus 1 precondition.
+- The shared strict-attribution check now requires the exact list of sounding notes.
+- Failing run: `docs/evidence/w2/w2c-overlap-failing-run-2026-11-21.txt`.
+- Now 36/36 across both motion suites plus the material suite.
+
+**No regression [measured]:** a SHA-256 over 30 Ribbon and Current preset frames (excluding the
+new field) is identical at `6391704` and after the fix (`43fc75eecd71bebd`).
+
+### 2. Frozen AudioContext clock — diagnosis
+
+Script: `scripts/w2-audio-clock-diagnosis.ts`. Raw data:
+`w2c-audio-clock-diagnosis-2026-11-22.json` and `w2c-audio-clock-repetitions-2026-11-22.json`.
+Host: macOS (Darwin 27.2.0, arm64). Browsers: Chrome for Testing 156.0.8078.4 (Playwright cache)
+and the installed Google Chrome 157.0.8103.79 with a throwaway profile. Default output: MacBook Pro
+Speakers. Each run checked a default `AudioContext`, a context with no output device
+(`sinkId: {type: 'none'}`), an `OfflineAudioContext` 1 s render, suspend → resume, and the real
+app's first Play.
+
+| When (UTC) | Configuration | Default clock over 1 s | Output latency | No output device | Offline | App first Play |
+|---|---|---|---|---|---|---|
+| 21 Nov (W2-B) | CfT headed, Playwright defaults | **frozen at 0.0058 s**, every launch | — | not tested | not tested | frozen |
+| 22 Nov 10:36 | CfT headed, defaults (first launch of the day) | **0.000 s (frozen)** | **0** | 0.99 s | OK | advanced 0.3 → 2.6 beats |
+| 22 Nov 10:36 | CfT headless / headed without `--mute-audio` / Chrome 157 | 0.97 s | 0.032 | 0.99 s | OK | advanced |
+| 22 Nov 10:37–10:38 | All four configurations × 5 repeats | 0.97–0.98 s, **0/20 frozen** | 0.032 | 0.98–1.0 s | OK | (skipped) |
+
+Earlier: on 18 Nov (W1 probe) the same CfT headed defaults advanced normally.
+
+Findings [measured]:
+1. **Frozen pattern:** `state: 'running'` while `currentTime` stays at one render quantum plus base
+   latency (0.0058 s) and `outputLatency` is 0.
+2. **Web Audio itself works:** in the same frozen session, the no-output context advanced 0.99 s
+   and offline rendering produced a correct sine (RMS 0.707).
+3. **Recoverable:** a `suspend()` → `resume()` cycle restored the clock (+0.49 s in 0.5 s).
+4. **Not specific to Harmoglyph:** it reproduces on `about:blank`, and Harmoglyph's own first Play
+   advanced in every 22 Nov run.
+5. **Intermittent:** constant through the 21 Nov session, seen only at the first launch on 22 Nov,
+   then 0/20.
+
+Conclusion: an intermittent stall in the browser's real-time output-device stream, observed only
+in Chrome for Testing headed with Playwright's default `--mute-audio`. No evidence proves a
+macOS, hardware or Harmoglyph cause; none is claimed. System audio services, permissions and
+production scheduling were not touched.
+
+**Product risk [proposal, not implemented]:** Harmoglyph doesn't detect a stalled clock, so the
+composition silently freezes with the Pause button showing. Possible minimal remedy, which needs
+approval because it touches the W1 playback path: if `currentTime` has not advanced 400 ms after
+Play, call `suspend()`/`resume()` once, then show "Audio output is not responding".
+
+**Manual verification for Dev (one check, about 1 minute, your normal Chrome):**
+1. Open `http://localhost:3000` (`npm run dev`), then DevTools → Console.
+2. Paste:
+   `const c = new AudioContext(); await c.resume(); const t = c.currentTime; setTimeout(() => console.log(c.state, (c.currentTime - t).toFixed(2), c.outputLatency), 1000)`
+3. Expected: `running 1.00 0.03…`. Report the three values.
+4. Then press Play on Pulse Study, and report whether the "Song position" number climbs and
+   whether you hear the notes.
+
+### 3. Live motion in the real app — now verified [measured]
+
+With the audio clock advancing on 22 Nov, the corrected W2-B rule was rerun (`w2c-ui-check-2026-11-22.json`).
+The rule requires two observations 0.3 s apart, both during playback with heads present, and
+displacement > 1 px.
+
+**15/15 runs moved** (Ribbon, Current and Luminous × 5 presets). Head displacement ranged from
+14.3 px (Glass Garden, Current/Luminous) to 145 px (First Mark, Ribbon).
+
+These are scheduling-clock and DOM observations. No sound was judged.
+
+### 4. Luminous — visual material for Current
+
+`src/engine/currentMaterial.ts` (pure, read-only) is exposed as the "Luminous" style. It reuses
+Current's frame exactly; motion, score and audio are unchanged. Current's original appearance
+stays selectable.
+
+Elements, each from existing motion data:
+- **Canvas fit:** uniform scale 1–2, from the completed drawing, fixed during playback.
+- **Phrase columns** at bar lines.
+- **Translucent sheet** per voice, depth = note thickness (velocity × duration), plus one echo line.
+- **Glow underlay and bright core line.**
+- **Onset node** per note, radius ∝ velocity.
+- **Dotted thread** for silence only; zero-length end-of-note silences aren't drawn.
+- **Coupling membrane** wherever the real pull λ > 0, opacity ∝ mean λ.
+
+**Tests:** 6, written first; 5 failed against a stub (`w2c-luminous-failing-run-2026-11-22.txt`).
+The no-mutation test passed vacuously on the stub. They cover:
+- no mutation of frozen frames, and determinism
+- fixed view inside the canvas, using at least 380 px of width
+- finite paths, and one onset node per note ordered by velocity
+- rest threads only for real silences (0 / 1 / 2 for Glass Garden / First Mark / rest fixture)
+- membranes only with coupling: zero when λmax = 0 (control), bounded by λmax
+- one sheet, echo and core per voice; ordered phrase columns
+
+### 5. Real-app checks [measured, headed CfT 156]
+
+- **Keyboard focus**, all three styles: `outline: none`, white 2.4 px dashed stroke,
+  `:focus-visible` true; Enter opens the inspector.
+- **Save SVG:** `leap-dialogue-{ribbon,current,luminous}-harmoglyph.svg`, each with 12 note paths
+  (24 / 32 / 84 KB). Orbit still renders.
+- **Coupling example:** Leap Dialogue counter-1 (C3), selected by keyboard. Inspector: coupled to
+  lead-1 (12 semitones, class 0, consonance 1.00, pull ≤ 30%) and lead-2 (19 semitones, class 7,
+  consonance 0.85, pull ≤ 26%).
+- **Pitch edit:** through the real score editor, Glass Garden lead-5 B4 → E5 (+5). The peak of
+  phrase 2 changes visibly.
+  - All 16 Luminous segment paths changed on screen, because the canvas fit re-frames the whole
+    drawing after an edit.
+  - The engine guarantees only that earlier shapes are unchanged up to that framing (Current test).
+    The material does not isolate the edit on screen.
+- **Frame intervals during real playback** (Glass Garden, 239 frames): every style p50 8.3 ms,
+  max ≤ 17.4 ms, none over 20 ms. Luminous p95 9.2 ms.
+  - An earlier run showed one 317 ms frame in Current that did not recur; recorded, not explained.
+- **Node cost:** see W2-B; Luminous adds a material pass that wasn't separately benchmarked.
+
+### 6. Comparison and critical assessment [aesthetic, Kiro]
+
+Contact sheet: `docs/evidence/w2/w2c-screenshots/w2c-contact-sheet.png`.
+- Rows: Current (before) in-progress, Luminous (after) in-progress, Current complete, Luminous
+  complete.
+- Last row: edit before/after, coupling example and its inspector.
+
+**Why the pieces differ:** the motion, not the palette.
+- First Mark is one level stroke.
+- Glass Garden has two arches.
+- Ascending Light is a steady climb.
+- Pulse Study rises in steps with flat repeated-pitch runs.
+- Leap Dialogue has two streams joined by a membrane that thickens on consonant overlaps.
+
+**Honest verdict: the refinement does not yet succeed as artwork.**
+- Better: it fills the canvas, has depth, and the coupling membrane is much clearer than hatching.
+- Worse: it still reads as a line graph, arguably more so. The white onset nodes look like
+  plotted data points, and the alternating phrase columns look like chart gridlines.
+- The sheets and glow are too faint to change that impression. First Mark remains a bare line.
+
+Suggested directions for Dev's decision (not implemented):
+1. Remove the onset dots and phrase columns.
+2. Make the sheets the primary form.
+3. Or combine Current's motion with a non-Cartesian layout.
+
+### Remaining
+
+- Dev visual review; no style is approved.
+- ChatGPT engineering review of this commit.
+- [proposal] Stalled-clock detection.
+- W1 human listening test and W0 AI Studio provenance remain separate gates.
+
+No merge, deployment, synth change or W3.
+
 ## Next owner update
 
 When Kiro and browser checks are completed, append evidence links next to the

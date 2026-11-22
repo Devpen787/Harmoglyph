@@ -26,5 +26,13 @@ Parallel W0 eligibility origin check and remaining W1 human audio observation re
 - [x] Real voice coupling in Current (consonance-weighted, one-directional, λ ≤ 0.3); Ribbon links relabelled as annotations.
 - [x] A/B screenshots, 5 presets × 2 grammars × (in-progress, complete): `docs/evidence/w2/w2b-screenshots/ab-contact-sheet.png`.
 - [x] Focus treatment: dashed white stroke on the path at `:focus-visible`, no rectangular outline.
-- [ ] Live-motion browser evidence: BLOCKED. The AudioContext clock on this Mac stays at ~6 ms while reporting `running`, so playback never advances; the corrected check reports false for all 10 runs.
+- [x] Live-motion browser evidence: was blocked in W2-B (frozen AudioContext clock); W2-C reran the corrected check, 15/15 pass (see W2-C notes).
 - [ ] Dev visual selection between Ribbon and Current.
+
+### W2-C (Kiro CLI, 21–22 Nov 2026) — response to "ChatGPT independent W2-B review"
+- [x] Same-track overlap: samples list all sounding notes (`activeNoteIds`); newest owns the position; motion returns to the older note when the inner one ends. 3 regressions failed first; preset frames byte-identical to `6391704`.
+- [x] Audio-clock diagnosis: the stall is intermittent and environmental (output-device stream), not Harmoglyph-specific; 0/20 frozen on repeat; Web Audio without an output device always ran.
+- [x] Luminous material for Current (`src/engine/currentMaterial.ts`, 6 tests), appearance only; Current kept unchanged for comparison.
+- [x] Real-app A/B, pitch edit and coupling captures: `docs/evidence/w2/w2c-screenshots/w2c-contact-sheet.png`.
+- [ ] Dev visual review. Kiro's own assessment: Luminous still reads as a line chart (see handoff).
+- [ ] Proposed, not implemented (needs approval): detect a stalled audio clock after Play and tell the user instead of silently freezing.

@@ -1,0 +1,581 @@
+{
+  "generatedAt": "2026-11-22T10:43:13.083Z",
+  "browser": "156.0.8078.4",
+  "minDisplacementPx": 1,
+  "runs": {
+    "ribbon/first-mark": {
+      "totalBeats": 4,
+      "progressBeat": 2,
+      "pathsAtProgress": 2,
+      "notePathsComplete": 1,
+      "restBridgesComplete": 1,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            400.9495311869099,
+            188.24333508401787
+          ]
+        ],
+        "atMs": 1795344196882
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            448.4776230624544,
+            325.19435352859244
+          ]
+        ],
+        "atMs": 1795344197223
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 144.963791928662,
+      "headMovedDuringPlayback": true
+    },
+    "ribbon/glass-garden": {
+      "totalBeats": 16,
+      "progressBeat": 9,
+      "pathsAtProgress": 9,
+      "notePathsComplete": 16,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            326.8734266725107,
+            151.81707608878415
+          ]
+        ],
+        "atMs": 1795344198467
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            361.69838347895575,
+            160.98184901485826
+          ]
+        ],
+        "atMs": 1795344198782
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 36.01070228914268,
+      "headMovedDuringPlayback": true
+    },
+    "ribbon/ascending-light": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 5,
+      "notePathsComplete": 8,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            345.59007887626643,
+            156.46636384437338
+          ]
+        ],
+        "atMs": 1795344199872
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            398.0245166559238,
+            185.66910245094496
+          ]
+        ],
+        "atMs": 1795344200182
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 60.01808233684665,
+      "headMovedDuringPlayback": true
+    },
+    "ribbon/pulse-study": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 9,
+      "notePathsComplete": 16,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            361.80436805902133,
+            162.66617281665444
+          ]
+        ],
+        "atMs": 1795344201285
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            444.59859852093325,
+            203.97271627432258
+          ]
+        ],
+        "atMs": 1795344201621
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 92.52629426384918,
+      "headMovedDuringPlayback": true
+    },
+    "ribbon/leap-dialogue": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 8,
+      "notePathsComplete": 12,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            350.3764750721204,
+            158.0754751309414
+          ],
+          [
+            338.46809185454083,
+            191.62469880516772
+          ]
+        ],
+        "atMs": 1795344202879
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            404.6024302641024,
+            191.65475745172938
+          ],
+          [
+            379.8756937607688,
+            217.26624905012537
+          ]
+        ],
+        "atMs": 1795344203187
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 63.781050615853154,
+      "headMovedDuringPlayback": true
+    },
+    "current/first-mark": {
+      "totalBeats": 4,
+      "progressBeat": 2,
+      "pathsAtProgress": 2,
+      "notePathsComplete": 1,
+      "restBridgesComplete": 1,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            138.67198477950416,
+            300
+          ]
+        ],
+        "atMs": 1795344204242
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            205.0211338702974,
+            300
+          ]
+        ],
+        "atMs": 1795344204548
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 66.34914909079325,
+      "headMovedDuringPlayback": true
+    },
+    "current/glass-garden": {
+      "totalBeats": 16,
+      "progressBeat": 9,
+      "pathsAtProgress": 9,
+      "notePathsComplete": 16,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            162.58062343254474,
+            335.66449088877664
+          ]
+        ],
+        "atMs": 1795344205604
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            177.8132804130176,
+            335.6562436236053
+          ]
+        ],
+        "atMs": 1795344205941
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 15.232659213089853,
+      "headMovedDuringPlayback": true
+    },
+    "current/ascending-light": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 5,
+      "notePathsComplete": 8,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            120.95419166798214,
+            369.76537111523334
+          ]
+        ],
+        "atMs": 1795344207284
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            147.49307339185276,
+            369.76537111523334
+          ]
+        ],
+        "atMs": 1795344207597
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 26.538881723870617,
+      "headMovedDuringPlayback": true
+    },
+    "current/pulse-study": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 9,
+      "notePathsComplete": 16,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            135.40282136267462,
+            364.96803097565197
+          ]
+        ],
+        "atMs": 1795344208677
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            172.20252650081943,
+            362.3168674897032
+          ]
+        ],
+        "atMs": 1795344208984
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 36.895080513310035,
+      "headMovedDuringPlayback": true
+    },
+    "current/leap-dialogue": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 8,
+      "notePathsComplete": 12,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            137.26443966884054,
+            325.010444607019
+          ],
+          [
+            137.26443966884054,
+            374.010444607019
+          ]
+        ],
+        "atMs": 1795344210064
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            165.28850059007686,
+            325.010444607019
+          ],
+          [
+            165.28850059007686,
+            393.39606373073343
+          ]
+        ],
+        "atMs": 1795344210395
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 34.07565434921079,
+      "headMovedDuringPlayback": true
+    },
+    "luminous/first-mark": {
+      "totalBeats": 4,
+      "progressBeat": 2,
+      "pathsAtProgress": 6,
+      "notePathsComplete": 1,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            141.35677629536548,
+            300
+          ]
+        ],
+        "atMs": 1795344211580
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            207.35214863795727,
+            300
+          ]
+        ],
+        "atMs": 1795344211887
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 65.99537234259179,
+      "headMovedDuringPlayback": true
+    },
+    "luminous/glass-garden": {
+      "totalBeats": 16,
+      "progressBeat": 9,
+      "pathsAtProgress": 21,
+      "notePathsComplete": 16,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            163.17332767231852,
+            335.66449088877664
+          ]
+        ],
+        "atMs": 1795344213003
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            177.51097292363062,
+            335.6617236005339
+          ]
+        ],
+        "atMs": 1795344213311
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 14.337645518367253,
+      "headMovedDuringPlayback": true
+    },
+    "luminous/ascending-light": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 13,
+      "notePathsComplete": 8,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            119.90236580242421,
+            369.76537111523334
+          ]
+        ],
+        "atMs": 1795344214374
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            146.60234199790457,
+            369.76537111523334
+          ]
+        ],
+        "atMs": 1795344214708
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 26.69997619548036,
+      "headMovedDuringPlayback": true
+    },
+    "luminous/pulse-study": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 21,
+      "notePathsComplete": 16,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            136.09546227130872,
+            364.96803097565197
+          ]
+        ],
+        "atMs": 1795344215929
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            173.98625433311136,
+            361.0204732337474
+          ]
+        ],
+        "atMs": 1795344216236
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 38.09587031682616,
+      "headMovedDuringPlayback": true
+    },
+    "luminous/leap-dialogue": {
+      "totalBeats": 8,
+      "progressBeat": 4.5,
+      "pathsAtProgress": 27,
+      "notePathsComplete": 12,
+      "restBridgesComplete": 0,
+      "observationA": {
+        "playing": true,
+        "heads": [
+          [
+            138.94151363322857,
+            325.010444607019
+          ],
+          [
+            138.94151363322857,
+            374.010444607019
+          ]
+        ],
+        "atMs": 1795344217340
+      },
+      "observationB": {
+        "playing": true,
+        "heads": [
+          [
+            166.24678867359702,
+            325.010444607019
+          ],
+          [
+            166.24678867359702,
+            394.53585117814254
+          ]
+        ],
+        "atMs": 1795344217648
+      },
+      "validObservationPair": true,
+      "headDisplacementPx": 34.15948418726621,
+      "headMovedDuringPlayback": true
+    }
+  },
+  "checks": {
+    "ribbonKeyboardFocus": {
+      "label": "Inspect E5, beat 3.0, lead ribbon",
+      "outlineStyle": "none",
+      "stroke": "rgb(255, 255, 255)",
+      "strokeDasharray": "3px, 2px",
+      "strokeWidth": "2.4px",
+      "focusVisible": true
+    },
+    "ribbonInspectorShown": true,
+    "ribbonInspectorText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · LEAD | E5 | Beat 3.0 · 1 beat(s) · 659.26 Hz | MUSIC → MATHEMATICS | Frequency | 659.26 Hz | Ratio to C4 | 2.5198 : 1 | Angle / note onset | 90.0° | Arc / note duration | 45.0° | Radius / pitch + voice | 211.4 units | Energy / line width | 7.27 units | Traceable formulas | f = 440 × 2^((m − 69)/12) | θ = 2π × onset / total | Δθ = 2π × duration / total | Harmonic partials: 659Hz · 1319Hz · 1978Hz · 2637Hz · 3296Hz | MUSIC → RIBBON MOTION | Interval from previous note | +9 semitones | Ribbon moves by | 34.2 units | Spring overshoot | 8.0 units",
+    "ribbonSavedSvg": {
+      "file": "leap-dialogue-ribbon-harmoglyph.svg",
+      "hasLayer": true,
+      "notePaths": 12,
+      "bytes": 24012
+    },
+    "currentKeyboardFocus": {
+      "label": "Inspect E5, beat 3.0, lead current",
+      "outlineStyle": "none",
+      "stroke": "rgb(255, 255, 255)",
+      "strokeDasharray": "3px, 2px",
+      "strokeWidth": "2.4px",
+      "focusVisible": true
+    },
+    "currentInspectorShown": true,
+    "currentInspectorText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · LEAD | E5 | Beat 3.0 · 1 beat(s) · 659.26 Hz | MUSIC → MATHEMATICS | Frequency | 659.26 Hz | Ratio to C4 | 2.5198 : 1 | Angle / note onset | 90.0° | Arc / note duration | 45.0° | Radius / pitch + voice | 211.4 units | Energy / line width | 7.27 units | Traceable formulas | f = 440 × 2^((m − 69)/12) | θ = 2π × onset / total | Δθ = 2π × duration / total | Harmonic partials: 659Hz · 1319Hz · 1978Hz · 2637Hz · 3296Hz | MUSIC → CURRENT MOTION | Pitch vs phrase start | +16 semitones | Steers toward | 72.4° up | Coupling while sounding | counter-2 · 21 semitones (class 9)",
+    "currentSavedSvg": {
+      "file": "leap-dialogue-current-harmoglyph.svg",
+      "hasLayer": true,
+      "notePaths": 12,
+      "bytes": 32484
+    },
+    "luminousKeyboardFocus": {
+      "label": "Inspect E5, beat 3.0, lead luminous",
+      "outlineStyle": "none",
+      "stroke": "rgb(255, 255, 255)",
+      "strokeDasharray": "3px, 2px",
+      "strokeWidth": "2.4px",
+      "focusVisible": true
+    },
+    "luminousInspectorShown": true,
+    "luminousInspectorText": "03 / WHY THIS SHAPE? | Hide | SELECTED SOURCE · LEAD | E5 | Beat 3.0 · 1 beat(s) · 659.26 Hz | MUSIC → MATHEMATICS | Frequency | 659.26 Hz | Ratio to C4 | 2.5198 : 1 | Angle / note onset | 90.0° | Arc / note duration | 45.0° | Radius / pitch + voice | 211.4 units | Energy / line width | 7.27 units | Traceable formulas | f = 440 × 2^((m − 69)/12) | θ = 2π × onset / total | Δθ = 2π × duration / total | Harmonic partials: 659Hz · 1319Hz · 1978Hz · 2637Hz · 3296Hz | MUSIC → CURRENT MOTION | Pitch vs phrase start | +16 semitones | Steers toward | 72.4° up | Coupling while sounding | counter-2 · 21 semitones (class 9)",
+    "luminousSavedSvg": {
+      "file": "leap-dialogue-luminous-harmoglyph.svg",
+      "hasLayer": true,
+      "notePaths": 12,
+      "bytes": 84332
+    },
+    "couplingInspectorText": "Pitch vs phrase start | 0 semitones | Steers toward | Coupling while sounding | lead-1 · 12 semitones (class 0) | consonance 1.00 · pull ≤ 30% | lead-2 · 19 semitones (class 7) | consonance 0.85 · pull ≤ 26% | Derived: Direction = pitch above or below the first note of the current phrase (bar); higher climbs; Turn speed = interval size, smoothed by the same damped spring as Ribbon; Forward surge and thickness swell = note velocity at each onset; Plateau length = written duration; Separate stream per voice; Counterline pulled toward the melody while both sound; strength = consonance of the interval. | Designed: Steering scale κ, steering limit H, pull limit λmax, spring ω and ζ; Total stream length, 70-unit voice spacing and centring; Silence: thin bridge labelled as rest (owned by no note); Palette, glow and pull-thread drawing.",
+    "pitchEdit": {
+      "note": "lead-5 B4→E5 (+5)",
+      "segmentsBefore": 16,
+      "segmentsAfter": 16,
+      "segmentsChanged": 16
+    },
+    "orbitStillRenders": true
+  },
+  "frameProfile": {
+    "orbit": {
+      "frames": 239,
+      "p50ms": 8.3,
+      "p95ms": 16.5,
+      "p99ms": 16.7,
+      "maxMs": 17.4,
+      "over20ms": 0,
+      "playingThroughout": true
+    },
+    "ribbon": {
+      "frames": 239,
+      "p50ms": 8.3,
+      "p95ms": 16.3,
+      "p99ms": 16.7,
+      "maxMs": 17.3,
+      "over20ms": 0,
+      "playingThroughout": true
+    },
+    "current": {
+      "frames": 239,
+      "p50ms": 8.3,
+      "p95ms": 9.4,
+      "p99ms": 16.7,
+      "maxMs": 17.1,
+      "over20ms": 0,
+      "playingThroughout": true
+    },
+    "luminous": {
+      "frames": 239,
+      "p50ms": 8.3,
+      "p95ms": 9.2,
+      "p99ms": 9.3,
+      "maxMs": 9.3,
+      "over20ms": 0,
+      "playingThroughout": true
+    }
+  },
+  "pageErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+}
