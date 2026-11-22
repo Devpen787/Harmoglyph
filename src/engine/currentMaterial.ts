@@ -61,10 +61,11 @@ function normals(s: RibbonSample[]): Array<[number, number]> {
   });
 }
 
-function fitView(complete: CurrentFrame): MaterialView {
+/** Uniform scale (1–2) + translation fitting a COMPLETED drawing into the canvas. Shared by materials. */
+export function fitView(complete: Pick<CurrentFrame, 'tracks'>, padFactor = SHEET_FACTOR): MaterialView {
   let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
   for (const t of complete.tracks) for (const s of t.samples) {
-    const pad = s.width * SHEET_FACTOR + 4;
+    const pad = s.width * padFactor + 4;
     minX = Math.min(minX, s.x - pad); maxX = Math.max(maxX, s.x + pad);
     minY = Math.min(minY, s.y - pad); maxY = Math.max(maxY, s.y + pad);
   }

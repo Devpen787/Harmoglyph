@@ -36,3 +36,8 @@ Parallel W0 eligibility origin check and remaining W1 human audio observation re
 - [x] Real-app A/B, pitch edit and coupling captures: `docs/evidence/w2/w2c-screenshots/w2c-contact-sheet.png`.
 - [ ] Dev visual review. Kiro's own assessment: Luminous still reads as a line chart (see handoff).
 - [ ] Proposed, not implemented (needs approval): detect a stalled audio clock after Play and tell the user instead of silently freezing.
+
+### W2-D (Kiro CLI, 22 Nov 2026) — Dev-approved options 1 + 2 after the be-of-dao.com reference
+- [x] Filament material (`src/engine/filamentMaterial.ts`, 7 tests written first): each voice is a bundle of 36 hashed (non-random) strands on the existing motion coordinates; works on Current and Ribbon frames.
+- [x] DAO-inspired palette while Filament is selected: black ground, bone white, one warm hue per voice; other styles unchanged. No new fonts.
+- [ ] Dev visual review (open questions in handoff W2-D section).

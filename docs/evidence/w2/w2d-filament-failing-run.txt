@@ -1,0 +1,123 @@
+✖ Filament: read-only, deterministic, no randomness (frozen inputs, identical output) (24.599833ms)
+✖ Filament: each voice is a bundle of strands; every point finite and inside the canvas (0.669416ms)
+✔ Filament: earlier strand geometry never changes as playback advances (3.129959ms)
+✖ Filament: the bundle opens with note thickness (velocity/duration) and narrows in silence (0.637834ms)
+✖ Filament: louder notes spread the bundle wider (velocity → width) (1.22475ms)
+✖ Filament: strands cross between voices only where the real coupling pulls (4.972417ms)
+✖ Filament: material is independent of the motion engine (works on Ribbon frames too) (0.973458ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 1
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 274.405375
+
+✖ failing tests:
+
+test at src/engine/filamentMaterial.test.ts:1:1030
+✖ Filament: read-only, deterministic, no randomness (frozen inputs, identical output) (24.599833ms)
+  AssertionError [ERR_ASSERTION]: produces strands
+      at TestContext.<anonymous> (<repo>/src/engine/filamentMaterial.test.ts:23:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.start (node:internal/test_runner/test:959:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:332:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at src/engine/filamentMaterial.test.ts:1:1512
+✖ Filament: each voice is a bundle of strands; every point finite and inside the canvas (0.669416ms)
+  AssertionError [ERR_ASSERTION]: first-mark/lead: 36 strands
+
+  0 !== 36
+
+      at TestContext.<anonymous> (<repo>/src/engine/filamentMaterial.test.ts:31:14)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:332:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 36,
+    operator: 'strictEqual'
+  }
+
+test at src/engine/filamentMaterial.test.ts:1:2677
+✖ Filament: the bundle opens with note thickness (velocity/duration) and narrows in silence (0.637834ms)
+  AssertionError [ERR_ASSERTION]: explicit rests produce rest strands
+      at TestContext.<anonymous> (<repo>/src/engine/filamentMaterial.test.ts:60:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at src/engine/filamentMaterial.test.ts:1:3622
+✖ Filament: louder notes spread the bundle wider (velocity → width) (1.22475ms)
+  AssertionError [ERR_ASSERTION]: loud -Infinity vs quiet -Infinity
+      at TestContext.<anonymous> (<repo>/src/engine/filamentMaterial.test.ts:75:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at src/engine/filamentMaterial.test.ts:1:4132
+✖ Filament: strands cross between voices only where the real coupling pulls (4.972417ms)
+  AssertionError [ERR_ASSERTION]: some counterline strands reach toward the melody (0)
+      at TestContext.<anonymous> (<repo>/src/engine/filamentMaterial.test.ts:85:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at src/engine/filamentMaterial.test.ts:1:4965
+✖ Filament: material is independent of the motion engine (works on Ribbon frames too) (0.973458ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 36
+
+      at TestContext.<anonymous> (<repo>/src/engine/filamentMaterial.test.ts:94:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 36,
+    operator: 'strictEqual'
+  }

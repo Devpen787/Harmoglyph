@@ -1659,6 +1659,101 @@ Suggested directions for Dev's decision (not implemented):
 
 No merge, deployment, synth change or W3.
 
+## W2-D — Filament material and black/bone/warm palette (22 Nov 2026)
+
+Dev pointed to https://be-of-dao.com/ as the desired look and approved options 1 and 2:
+- **Option 1:** a strand ("Filament") material on the existing motion.
+- **Option 2:** a DAO-inspired palette.
+
+Kiro viewed all eight slides of the reference in a browser. It took the principles (black field,
+bone-white type, one luminous subject, forms built from many fine strands, warm light), not the
+site's identity or its planet/galaxy imagery.
+
+The commit SHA and CI result are in the PR #5 comment. Not changed: `audioSynth.ts`,
+`compositionTimeline.ts`, `compositionMotion.ts`, `compositionCurrent.ts` (the diff is empty);
+Orbit/Bloom/Weave/Ribbon/Current/Luminous appearance. No new dependency and no new fonts
+(Dev did not choose; system fonts kept).
+
+### What was built
+
+`src/engine/filamentMaterial.ts` is pure and read-only. It accepts any motion frame built from
+`RibbonTrackFrame` tracks, so it works on both Current and Ribbon frames. That shows the
+mix-and-match foundation.
+
+Each voice is a bundle of 36 strands along the motion engine's own coordinates:
+- **Bundle width** = note thickness × 1.9 (velocity swell plus written-duration plateau).
+- **Sway:** each strand sways ±0.35 × thickness, continuous in beat.
+- **No randomness:** lane, jitter, weight and sway come from a FNV-1a hash of (track, strand
+  index), not `Math.random`.
+- **Silence:** only the inner strands remain, dimmer and dotted. A single end-of-note sample
+  isn't drawn.
+- **Coupling (Current only):** about 45% of the counterline's strands bend toward the melody by
+  λ/λmax, at most 85% of the way. Melody strands never bend.
+- **Curves:** Catmull-Rom → cubic Bézier curves over every 3rd sample.
+- **Canvas fit:** the same as Luminous (`fitView`, now shared).
+- **UI:** "Filament" is in the style switcher. Note shapes remain keyboard/click hit targets over
+  the strands; selection shows as a bone outline, and focus-visible stays dashed white.
+- **Palette** while Filament is selected: black ground with a faint warm centre glow (purple aura
+  removed), bone `#EEEBE4`, voice hues gold `#F2C47E`, ember `#E2774C`, rose `#E9A5A0`.
+  Strands blend with `mix-blend-mode: screen`.
+
+### Tests [measured]
+
+- 7 Filament tests, written first; 6 failed against a stub (`w2d-filament-failing-run.txt`). The
+  prefix test passed vacuously on the stub's empty output.
+- They cover:
+  - frozen-input purity and determinism
+  - 36 strands per voice, all points inside the canvas, smooth cubic paths
+  - fixed strand prefix during playback
+  - silence keeps under half the lanes, dimmer, and none for Glass Garden
+  - louder note → wider bundle (> 1.3×)
+  - crossing only where coupling λ > 0: none for one-voice scores, none with λmax = 0, melody
+    never bends
+  - works on Ribbon frames
+- An end-of-note rest stub was found and fixed during the work.
+- **Totals:** motion + material suites 43/43, typecheck, composition 8/8, timeline 12/12,
+  PBT 500/500, build PASS.
+
+### Real app [measured, headed Chrome for Testing 156, `w2d-ui-check.json`]
+
+- **Live motion:** 20/20 runs moved (4 styles × 5 presets), with Filament head displacement
+  14.5–63.6 px.
+  - An earlier run in this session had 1 of 20 frozen at beat 0 (Ribbon/First Mark, first
+    measured run). Two reruns of that case moved 133 px and 131 px.
+  - This matches the intermittent audio start-up stall from W2-C.
+- **Frame intervals during playback** (Glass Garden, 239 frames): Filament p50 8.3 ms,
+  p95 9.1 ms, max 9.3 ms, none over 20 ms.
+  - Plain SVG is sufficient on this Mac, so canvas wasn't needed.
+  - Node material cost is p50 0.3–1.8 ms, p95 ≤ 3.6 ms. The largest frames are about 256 KB of
+    path data.
+  - Low-power devices are untested.
+- **Interactions:** keyboard focus and inspector work.
+- **Save SVG:** `leap-dialogue-filament-harmoglyph.svg` with 12 note paths (309 KB).
+- **Coupling inspector** for counter-1: lead-1 (octave, pull ≤ 30%), lead-2 (class 7, ≤ 26%).
+- **Pitch edit** (Glass Garden lead-5 B4 → E5) changes the second arch. All segments re-frame
+  because of the canvas fit.
+
+### Visual assessment [aesthetic, Kiro]
+
+Contact sheet: `docs/evidence/w2/w2d-screenshots/w2d-contact-sheet.png`. Rows: Luminous (W2-C)
+complete, Filament in progress, Filament complete, Filament edit and coupling.
+
+- **Clear step up:** gold filament on black reads as a woven material, not a plotted line, and
+  the data-point dots are gone.
+- **Strongest piece:** Leap Dialogue. The copper counterline's strands visibly reach up into the
+  gold melody where they are coupled.
+- Still open for Dev's decision:
+  1. Single-voice pieces are one narrow braid in the middle of the frame. DAO's subjects fill
+     the frame with dense volume; this would need a wider bundle or a layout that uses the area.
+  2. The coupling curtain shows stepped, comb-like teeth where overlap windows switch.
+     Smoothing would mean softer bend windows in the material.
+  3. First Mark is still a short braid plus a thread.
+  4. Typography and the page chrome (wide-caps titles, "01 / 05" index) are untouched; that was
+     option 3, not approved.
+
+No merge, deployment, synth/scheduling change or W3. The W1 listening test and the W0 AI Studio
+provenance check remain separate gates.
+
 ## Next owner update
 
 When Kiro and browser checks are completed, append evidence links next to the

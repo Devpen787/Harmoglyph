@@ -20,9 +20,9 @@ const CHROMIUM = process.env.HG_CHROMIUM ??
 const URL = process.env.HG_URL ?? 'http://localhost:3000';
 const OUT = process.env.HG_OUT ?? 'docs/evidence/w2/w2c-screenshots';
 const PRESETS = (process.env.HG_PRESETS ?? 'first-mark,glass-garden,ascending-light,pulse-study,leap-dialogue').split(',');
-const GRAMMARS = (process.env.HG_GRAMMARS ?? 'ribbon,current,luminous').split(',');
-const LAYER: Record<string, string> = { ribbon: 'Melodic ribbon', current: 'Melodic current', luminous: 'Melodic current luminous' };
-const INSPECTOR: Record<string, string> = { ribbon: 'Music → ribbon motion', current: 'Music → current motion', luminous: 'Music → current motion' };
+const GRAMMARS = (process.env.HG_GRAMMARS ?? 'ribbon,current,luminous,filament').split(',');
+const LAYER: Record<string, string> = { ribbon: 'Melodic ribbon', current: 'Melodic current', luminous: 'Melodic current luminous', filament: 'Melodic current filament' };
+const INSPECTOR: Record<string, string> = { ribbon: 'Music → ribbon motion', current: 'Music → current motion', luminous: 'Music → current motion', filament: 'Music → current motion' };
 const MIN_DISPLACEMENT_PX = 1;
 
 type Head = [number, number];
@@ -114,30 +114,31 @@ async function main() {
   }
 
   // Multi-voice coupling example: Luminous, counterline note selected, inspector shows its coupling.
-  if (GRAMMARS.includes('luminous')) {
+  for (const fg of ['luminous', 'filament'].filter((g) => GRAMMARS.includes(g))) {
     await page.selectOption('#composition-preset', 'leap-dialogue');
-    await page.getByRole('button', { name: /^luminous$/i }).click();
+    await page.getByRole('button', { name: new RegExp(`^${fg}$`, 'i') }).click();
     await page.getByRole('button', { name: 'Complete art' }).click();
     // Select by keyboard (focus + Enter): a pointer click at a long segment's box centre can land on the other voice.
-    await layer('luminous').locator('path[role="button"][aria-label*="counter"]').first().focus();
+    await layer(fg).locator('path[role="button"][aria-label*="counter"]').first().focus();
     await page.keyboard.press('Enter');
     await page.waitForTimeout(150);
-    await svg.screenshot({ path: `${OUT}/coupling-leap-dialogue-luminous-counter-selected.png` });
-    await page.getByLabel('Mathematics and source inspector').screenshot({ path: `${OUT}/coupling-leap-dialogue-inspector.png` });
-    report.checks.couplingInspectorText = (await page.getByLabel('Mathematics and source inspector').innerText()).split('\n').filter((l: string) => /semitones|consonance|pull|Coupling|Pitch vs|Steers/.test(l)).join(' | ');
+    await svg.screenshot({ path: `${OUT}/coupling-leap-dialogue-${fg}-counter-selected.png` });
+    await page.getByLabel('Mathematics and source inspector').screenshot({ path: `${OUT}/coupling-leap-dialogue-${fg}-inspector.png` });
+    report.checks[`${fg}CouplingInspectorText`] = (await page.getByLabel('Mathematics and source inspector').innerText()).split('\n').filter((l: string) => /semitones|consonance|pull|Coupling|Pitch vs|Steers/.test(l)).join(' | ');
 
     // Controlled pitch edit through the real score editor: Glass Garden lead-5 (B4, beat 5) → E5 (+5 semitones).
     await page.selectOption('#composition-preset', 'glass-garden');
+    await page.getByRole('button', { name: new RegExp(`^${fg}$`, 'i') }).click();
     await page.getByRole('button', { name: 'Complete art' }).click();
-    await svg.screenshot({ path: `${OUT}/edit-glass-garden-luminous-before.png` });
-    const before = await layer('luminous').locator('path[role="button"]').evaluateAll((els: Element[]) => els.map((e) => e.getAttribute('d')));
+    await svg.screenshot({ path: `${OUT}/edit-glass-garden-${fg}-before.png` });
+    const before = await layer(fg).locator('path[role="button"]').evaluateAll((els: Element[]) => els.map((e) => e.getAttribute('d')));
     await page.getByRole('button', { name: 'Select and hear B4 at beat 5' }).click();
     await page.getByLabel('Selected note pitch').selectOption({ label: 'E5' });
     await page.getByRole('button', { name: 'Complete art' }).click();
     await page.waitForTimeout(150);
-    await svg.screenshot({ path: `${OUT}/edit-glass-garden-luminous-after-B4-to-E5.png` });
-    const after = await layer('luminous').locator('path[role="button"]').evaluateAll((els: Element[]) => els.map((e) => e.getAttribute('d')));
-    report.checks.pitchEdit = { note: 'lead-5 B4→E5 (+5)', segmentsBefore: before.length, segmentsAfter: after.length, segmentsChanged: before.filter((d: string, i: number) => d !== after[i]).length };
+    await svg.screenshot({ path: `${OUT}/edit-glass-garden-${fg}-after-B4-to-E5.png` });
+    const after = await layer(fg).locator('path[role="button"]').evaluateAll((els: Element[]) => els.map((e) => e.getAttribute('d')));
+    report.checks[`${fg}PitchEdit`] = { note: 'lead-5 B4→E5 (+5)', segmentsBefore: before.length, segmentsAfter: after.length, segmentsChanged: before.filter((d: string, i: number) => d !== after[i]).length };
     await page.selectOption('#composition-preset', 'glass-garden'); // restore preset
   }
 
