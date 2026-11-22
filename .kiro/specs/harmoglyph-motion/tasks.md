@@ -47,3 +47,44 @@ Parallel W0 eligibility origin check and remaining W1 human audio observation re
 - [x] Volume from note thickness; First Mark sparse control; rests identical to W2-D; coupling bends eased across each real coupling window, zero outside and with zero coupling. 5 focused tests (4 failed first).
 - [x] Real-app A/B at matching beats/viewport/framing, fixed-view Glass Garden edit, mouse + keyboard selection, export determinism, playback motion.
 - [ ] Dev visual review (tradeoffs in handoff W2-E section).
+
+## Finish the musical artwork — Dev's product direction, 22 November 2026
+
+Done means a creator can hear an arrangement, watch its artwork grow, hang a cohesive print, rotate the complete static 3D sculpture, and reopen one editable digital original. Selecting a meaningful region reveals its musical sources, mapping and time range and plays the corresponding passage. The score, style, mapping version and framing reproduce the declared result. The static digital sculpture is required. Physical fabrication is a separate optional outcome.
+
+Tick each item after recording its revision and evidence here or in the existing handoff. Dev chooses the artwork. A screenshot, a CI result, a listening observation and a physical print establish different things.
+
+### Reference passage and visual baseline
+- [x] Use Leap Dialogue as the first controlled two-voice study. At revision `2b722858`, the score has 8 lead notes, 4 counterline notes, 8 beats and 104 BPM. Recomputed three region anchors from the preset and its onset generator below. Beat offsets are zero-based.
+- [x] Confirm W2-E implementation and independent CI [45033423063](https://github.com/Devpen787/Harmoglyph/actions/runs/45033423063). The [browser evidence](../../../docs/evidence/w2/w2e-ab-check.json) records repeat-identical SVG export with 12 note paths, keyboard/mouse selection, and a controlled pitch edit. The [contact sheet](../../../docs/evidence/w2/w2e-screenshots/w2e-ab-contact-sheet.png) is ready for visual review.
+
+| Beat offset | Melody | Counterline | Check in both views |
+|---|---|---|---|
+| 0 | lead-1, C4 | counter-1, C3 | Identify the opening octave and audition it |
+| 2 | lead-3, E5 | counter-2, G3 | Match the third lead onset to its two sounding voices |
+| 6 | lead-7, D5 | counter-4, G3 | Trace the late phrase and its movement into the ending |
+
+### Make and hear the music
+- [ ] Compose and save a new original passage using the editor. Audition melody and bass separately and together. Add rhythmic accents intentionally.
+- [ ] For the known-song path, select a recognizable 4–8-bar passage of Wake Me Up and a source permitted for the intended use. Record arrangement and source credits.
+- [ ] Enter or import the melody, check pitch and rhythm by ear, then add bass and pulse. Compare to the chosen reference and label playback as the arrangement. Evaluate MIDI/MusicXML import against manual entry if it helps scale to a full song.
+- [ ] Expand both studies section by section to completed pieces. If playback of a specific recording is desired, separately test authorized audio aligned to verified phrase timestamps.
+
+### Shape and print
+- [ ] Compare both Filament versions at matching framing. Use First Mark for silence, Glass Garden for a single voice and Leap Dialogue for counterpoint. Dev chooses a print candidate.
+- [ ] Compare continuous and phrase-grouped layouts on a longer score. Run controlled tests for pitch, rhythm, and coupling with one input changed at a time. Record which visual rules are authored and which values come from the score.
+- [ ] Export the approved full composition as SVG. Set intended paper size and margins, open independently, print at size and assess line weight, silhouette and balance at wall distance.
+
+### Link the sculpture and the score
+- [ ] **Next Kiro implementation:** Generate one static 3D study from Leap Dialogue's existing score-derived paths, retaining both voices and the three region anchors above. Reuse the 3D stage where suitable. Evaluate a shallow relief and depth-separated voices. Capture front, side and oblique views; rotate after playback ends.
+- [ ] Make a selection in either artwork resolve to the same note/phrase IDs and beat range. Audition the region and show why its geometry changed. Exercise all three anchors and a rest or zero-coupling control.
+- [ ] Export the static model (GLB candidate), reopen it in an independent viewer, and check geometry, materials and multiple viewpoints. Optional physical edition: validate thickness/supports and fabricate a small proof.
+- [ ] Save score, tracks, tempo, rules, versions, any seed, material, framing, camera and source-region links together. Add Open Piece with validation, legacy-score handling and preservation of the current piece on failure.
+- [ ] In a clean browser reopen, play, seek, edit and re-export. Compare source IDs, timing, geometry checkpoints and final views. Verify an appearance-only edit preserves sound and motion. Check a supported formula/3D transfer and the safe refusal of a lossy polyphonic sheet transfer.
+- [ ] Have a new user make, explain, save and reopen their version unaided. Record 3–5 creator observations and Dev's final print and sculpture selection.
+
+### Release and Kiroween
+- [ ] Reconcile AI Studio source history and pending changes with the draft PR stack. Establish eligibility and rights for public assets and demo music.
+- [ ] Complete human listening including first play, polyphony, pause/seek, background/return and legacy playback. Check two browsers, keyboard, reduced motion, small screens and performance on the release build.
+- [ ] Prepare the reviewed release SHA. Restrict development-only server operations in the public build. Verify clean install, tests, public judge URL, exports and replay.
+- [ ] Assemble Kiro spec/commit/test and hook evidence with observed limits. Finish README, honest prior-art comparison, licensed public demo video under three minutes, category and Devpost preview. Obtain Dev's release/submission approval and verify the submitted links.
