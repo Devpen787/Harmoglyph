@@ -76,7 +76,12 @@ Tick each item after recording its revision and evidence here or in the existing
 - [ ] Export the approved full composition as SVG. Set intended paper size and margins, open independently, print at size and assess line weight, silhouette and balance at wall distance.
 
 ### Link the sculpture and the score
-- [ ] **Next Kiro implementation:** Generate one static 3D study from Leap Dialogue's existing score-derived paths, retaining both voices and the three region anchors above. Reuse the 3D stage where suitable. Evaluate a shallow relief and depth-separated voices. Capture front, side and oblique views; rotate after playback ends.
+- [x] **Next Kiro implementation:** Generate one static 3D study from Leap Dialogue's existing score-derived paths, retaining both voices and the three region anchors above. Reuse the 3D stage where suitable. Evaluate a shallow relief and depth-separated voices. Capture front, side and oblique views; rotate after playback ends.
+  **Done (Kiro CLI, 22 Nov 2026; commit and CI in the PR #5 comment "W2-F").**
+  - `src/engine/scoreSculpture.ts`: the completed Current paths in 3D, as a shallow relief and as voices separated in depth.
+  - `src/components/ScoreSculptureView.tsx`: three.js viewer following the 3D stage's conventions; the monophonic sheet stage itself is not reused because polyphonic transfer is refused.
+  - 6 tests, written first, pass. The real-app check confirmed the three anchors (`lead-1/counter-1` C4+C3, `lead-3/counter-2` E5+G3, `lead-7/counter-4` D5+G3) and captured front, side and oblique views for both depths. After playback ended, auto-rotate turned 16.3° in 1.5 s and a drag rotated 90°.
+  - Evidence: `docs/evidence/w2/w2f-sculpture-check.json`, `docs/evidence/w2/w2f-screenshots/w2f-sculpture-contact-sheet.png`. Visual direction awaits Dev's review.
 - [ ] Make a selection in either artwork resolve to the same note/phrase IDs and beat range. Audition the region and show why its geometry changed. Exercise all three anchors and a rest or zero-coupling control.
 - [ ] Export the static model (GLB candidate), reopen it in an independent viewer, and check geometry, materials and multiple viewpoints. Optional physical edition: validate thickness/supports and fabricate a small proof.
 - [ ] Save score, tracks, tempo, rules, versions, any seed, material, framing, camera and source-region links together. Add Open Piece with validation, legacy-score handling and preservation of the current piece on failure.

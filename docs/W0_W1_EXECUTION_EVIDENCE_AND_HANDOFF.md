@@ -1889,6 +1889,86 @@ Images: `docs/evidence/w2/w2e-screenshots/`.
 
 Stopped for ChatGPT engineering review and Dev visual review. No merge or deployment.
 
+## W2-F — static Leap Dialogue sculpture, relief vs depth-separated (22 Nov 2026)
+
+Task: the "Next Kiro implementation" item under "Link the sculpture and the score" in
+`.kiro/specs/harmoglyph-motion/tasks.md` (added by Dev in `bc9d329`, fast-forwarded before work;
+no local edits were overwritten). The commit SHA and CI result are in the PR #5 comment "W2-F".
+
+**Not changed:** the synth, scheduling, both motion engines, the Filament material (W2-D
+fingerprint still `43f014de77daa5d4`), and the existing `HarmonicThreeStage`. No new dependency;
+three.js and `OrbitControls` were already used by the 3D stage.
+
+### What was built
+
+- **`src/engine/scoreSculpture.ts`:** pure and deterministic, independent of playback. It takes
+  Current's completed frame, the same paths as the 2D art.
+  - X/Y = the 2D path.
+  - Tube radius = 0.6 × note thickness while a note sounds, 0.3 × in silence, so rests stay
+    visibly thinner.
+  - Surface lift = 2.2 × (thickness − base).
+  - **Relief:** both voices on one plane, a shallow relief at most 16 units deep.
+  - **Separated:** melody at z = +45 and the counterline 90 deeper.
+  - **Struts** join the counterline to the melody only where the real coupling λ > 0; strength
+    λ/λmax.
+  - **Anchors** place every note that starts at a requested beat on its voice's path.
+- **`src/components/ScoreSculptureView.tsx`:** a three.js viewer reusing the 3D stage's conventions
+  (`OrbitControls` with damping and auto-rotate, `RoomEnvironment`, ACES tone mapping).
+  - One tube per note or rest run, carrying `noteId`, track and kind for the later
+    selection-linking task.
+  - Anchor spheres and labels; Front / Side / Oblique buttons; an auto-rotate toggle; the camera
+    angle exposed as `data-azimuth` / `data-polar`.
+  - The `HarmonicThreeStage` component itself is not reused: it renders the monophonic A1:F48
+    sheet, and polyphonic transfer into it is deliberately refused.
+- **Compose & Art:** a "3D sculpture" toggle beside Full show, with Relief / Separated pills while
+  it's shown. The SVG stays mounted but hidden, so the 2D styles and Save SVG are unaffected.
+
+### Tests [measured]
+
+6 tests, written first; all 6 failed against a stub (`w2f-sculpture-failing-run.txt`). They cover:
+- static and deterministic output
+- built from the Current completed frame: every point's X/Y, note ID and kind match a motion
+  sample; both voices and all 12 notes kept
+- the three anchors resolve to `lead-1 C4 + counter-1 C3` (beat 0), `lead-3 E5 + counter-2 G3`
+  (beat 2) and `lead-7 D5 + counter-4 G3` (beat 6), each sitting on its voice's path at its onset
+- relief and separated share X/Y exactly; relief depth range ≤ 16; separated planes ≥ 60 apart
+- rest radius below every note radius
+- struts only where λ > 0, none with zero coupling, none for one voice
+
+Totals: motion + material + sculpture suites 54/54, typecheck, composition 8/8, timeline 12/12,
+PBT 500/500, build PASS.
+
+### Real app [measured, headed Chrome for Testing 156, 1500×1000]
+
+Script: `scripts/w2f-sculpture-check.ts`. Raw: `w2f-sculpture-check.json`.
+- **Views:** captured with auto-rotate off. Front, side and oblique land at azimuth/polar
+  ≈ 0°/90°, 90°/90° and 42°/66° for both depths.
+  - Images: `w2f-screenshots/leap-dialogue-{relief,separated}-{front,side,oblique}.png`.
+  - Overview: `w2f-screenshots/w2f-sculpture-contact-sheet.png`.
+- **Anchors in the page:** `beat 1 · C4 + C3` (`lead-1,counter-1`), `beat 3 · E5 + G3`
+  (`lead-3,counter-2`) and `beat 7 · D5 + G3` (`lead-7,counter-4`), in both depths.
+- **Rotation after playback ends:** playback was observed running and then ended (button back to
+  "Play from start").
+  - Auto-rotate then turned the sculpture 16.3° in 1.5 s.
+  - With auto-rotate off, a mouse drag rotated it 90.0°.
+  - Image: `leap-dialogue-separated-after-playback-dragged.png`.
+- **Return to 2D:** the SVG artwork is visible again. No page errors.
+
+### Visual assessment [aesthetic, Kiro]
+
+- **Separated is the more informative study.** The side and oblique views show the melody and
+  counterline as two layers joined by coupling struts. Relief from the side collapses to an
+  edge-on line, so it adds little beyond the 2D art.
+- **Front views** of both depths are the same picture by design.
+- **For Dev's review:**
+  1. The sculpture fills only about a third of the frame; the camera fits the full bounding sphere
+     including depth.
+  2. Anchor spheres are small, and each label sits midway between its two notes.
+  3. The grey struts read somewhat like hatching.
+  4. The tubes use one mean radius per note, so thickness varies note to note, not within a note.
+
+Stopped for visual review. No merge or deployment.
+
 ## Next owner update
 
 When Kiro and browser checks are completed, append evidence links next to the

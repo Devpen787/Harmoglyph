@@ -1,0 +1,140 @@
+✖ Sculpture: static and deterministic — one model per score, independent of playback (3.544334ms)
+✖ Sculpture: built from the existing musical paths (Current completed frame), both voices, all 12 notes (21.474125ms)
+✖ Sculpture: the three documented Leap Dialogue anchors resolve to the right note pairs (0.614791ms)
+✖ Sculpture: shallow relief vs depth-separated voices share the same X/Y, differ only in depth (0.328958ms)
+✖ Sculpture: silence stays distinct — rests are thinner than sounding notes (0.220834ms)
+✖ Sculpture: bridges only where the real coupling pulls (0.2755ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 0
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 357.866916
+
+✖ failing tests:
+
+test at src/engine/scoreSculpture.test.ts:1:555
+✖ Sculpture: static and deterministic — one model per score, independent of playback (3.544334ms)
+  AssertionError [ERR_ASSERTION]: has geometry
+      at TestContext.<anonymous> (<repo>/src/engine/scoreSculpture.test.ts:15:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.start (node:internal/test_runner/test:959:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:332:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at src/engine/scoreSculpture.test.ts:1:1044
+✖ Sculpture: built from the existing musical paths (Current completed frame), both voices, all 12 notes (21.474125ms)
+  AssertionError [ERR_ASSERTION]: relief: both voices kept
+  + actual - expected
+
+  + []
+  - [
+  -   'lead',
+  -   'counter'
+  - ]
+
+      at TestContext.<anonymous> (<repo>/src/engine/scoreSculpture.test.ts:24:12)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:332:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'lead', 'counter' ],
+    operator: 'deepStrictEqual'
+  }
+
+test at src/engine/scoreSculpture.test.ts:1:2013
+✖ Sculpture: the three documented Leap Dialogue anchors resolve to the right note pairs (0.614791ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+  + []
+  - [
+  -   [
+  -     0,
+  -     [
+  -       'lead-1 C4',
+  -       'counter-1 C3'
+  -     ]
+  -   ],
+  -   [
+  -     2,
+  -     [
+  -       'lead-3 E5',
+  -       'counter-2 G3'
+  -     ]
+  -   ],
+  -   [
+  -     6,
+  -     [
+  -       'lead-7 D5',
+  -       'counter-4 G3'
+  -     ]
+  -   ]
+  - ]
+
+      at TestContext.<anonymous> (<repo>/src/engine/scoreSculpture.test.ts:42:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ [ 0, [Array] ], [ 2, [Array] ], [ 6, [Array] ] ],
+    operator: 'deepStrictEqual'
+  }
+
+test at src/engine/scoreSculpture.test.ts:1:2778
+✖ Sculpture: shallow relief vs depth-separated voices share the same X/Y, differ only in depth (0.328958ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'points')
+      at zs (<repo>/src/engine/scoreSculpture.test.ts:62:85)
+      at TestContext.<anonymous> (<repo>/src/engine/scoreSculpture.test.ts:63:25)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7)
+
+test at src/engine/scoreSculpture.test.ts:1:3756
+✖ Sculpture: silence stays distinct — rests are thinner than sounding notes (0.220834ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'radii')
+      at TestContext.<anonymous> (<repo>/src/engine/scoreSculpture.test.ts:73:19)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7)
+
+test at src/engine/scoreSculpture.test.ts:1:4153
+✖ Sculpture: bridges only where the real coupling pulls (0.2755ms)
+  AssertionError [ERR_ASSERTION]: coupled bridges, bounded strength
+      at TestContext.<anonymous> (<repo>/src/engine/scoreSculpture.test.ts:81:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1062:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:752:18)
+      at Test.postRun (node:internal/test_runner/test:1191:19)
+      at Test.run (node:internal/test_runner/test:1119:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:752:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }

@@ -11,6 +11,10 @@ import { beatAtAudioTime, CompositionLookaheadCursor, planCompositionTimeline } 
 import { computeRibbonFrame, describeNoteMotion, overlappingNoteIds, ribbonSegments, RIBBON_MAPPINGS, type RibbonTrackFrame } from '../engine/compositionMotion';
 import { buildLuminousLayer, LUMINOUS_MAPPINGS, type LuminousLayer } from '../engine/currentMaterial';
 import { buildFilamentLayer, FILAMENT_MAPPINGS, FILAMENT_PALETTE, type FilamentLayer } from '../engine/filamentMaterial';
+import { LEAP_DIALOGUE_ANCHOR_BEATS, type SculptureDepth } from '../engine/scoreSculpture';
+import { ScoreSculptureView } from './ScoreSculptureView';
+
+const NO_ANCHORS: number[] = [];
 import { computeCurrentFrame, describeCurrentNote, CURRENT_MAPPINGS, DEFAULT_CURRENT_CONFIG, type CurrentCoupling } from '../engine/compositionCurrent';
 
 type ArtGrammar = 'orbit' | 'bloom' | 'weave' | 'ribbon' | 'current' | 'luminous' | 'filament' | 'filament2';
@@ -63,6 +67,8 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
   const [addPitch, setAddPitch] = useState(67);
   const [addDuration, setAddDuration] = useState(1);
   const [grammar, setGrammar] = useState<ArtGrammar>('orbit');
+  const [sculpture, setSculpture] = useState(false);
+  const [sculptureDepth, setSculptureDepth] = useState<SculptureDepth>('separated');
   const [performing, setPerforming] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [showComplete, setShowComplete] = useState(true);
@@ -356,8 +362,8 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
             </section>
           )}
 
-          <section aria-label="Song-generated artwork and performance" className={`relative rounded-[25px] overflow-hidden min-h-[680px] ${isFilament(grammar) ? 'bg-black border-[#1c1a18]' : 'bg-[#120e21]'} text-[#f7f2ff] border border-[#2d2440] shadow-[0_25px_90px_rgba(42,19,73,.17)] flex flex-col ${performing ? 'lg:col-span-2 2xl:col-span-3' : ''}`}>
-            <div className="pointer-events-none absolute inset-0 opacity-90" style={{ background: isFilament(grammar) ? 'radial-gradient(circle at 50% 52%, rgba(242,196,126,.07) 0%, rgba(0,0,0,0) 55%)' : 'radial-gradient(circle at 50% 49%, #3b245e 0%, #20152f 33%, #130e20 68%, #100d1a 100%)' }}/>
+          <section aria-label="Song-generated artwork and performance" className={`relative rounded-[25px] overflow-hidden min-h-[680px] ${isFilament(grammar) || sculpture ? 'bg-black border-[#1c1a18]' : 'bg-[#120e21]'} text-[#f7f2ff] border border-[#2d2440] shadow-[0_25px_90px_rgba(42,19,73,.17)] flex flex-col ${performing ? 'lg:col-span-2 2xl:col-span-3' : ''}`}>
+            <div className="pointer-events-none absolute inset-0 opacity-90" style={{ background: isFilament(grammar) || sculpture ? 'radial-gradient(circle at 50% 52%, rgba(242,196,126,.07) 0%, rgba(0,0,0,0) 55%)' : 'radial-gradient(circle at 50% 49%, #3b245e 0%, #20152f 33%, #130e20 68%, #100d1a 100%)' }}/>
             <div className="relative z-10 px-5 md:px-7 pt-6 flex flex-wrap items-start justify-between gap-3">
               <div><div className="text-[10px] font-semibold tracking-[.24em] uppercase text-[#bda5db]">02 / The visual score</div><h2 className="font-serif text-2xl md:text-3xl mt-1">{composition.title}</h2><p className="text-[11px] text-[#a999bc] mt-1">Every stroke represents an actual note · {grammar.toUpperCase()} interpretation</p></div>
               <div className="flex gap-1 rounded-full p-1 bg-[#281d3b]/80 border border-[#473456]" aria-label="Visual interpretation">
@@ -365,7 +371,7 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
               </div>
             </div>
             <div className="relative z-10 flex-1 min-h-[480px] flex items-center justify-center px-2">
-              <svg ref={svgRef} viewBox="0 0 600 600" role="img" aria-label={`Mathematical ${grammar} artwork for ${composition.title}; click a score note to inspect its contribution`} className="w-full max-w-[640px] max-h-[620px] drop-shadow-[0_0_32px_rgba(185,133,255,.16)]">
+              <svg ref={svgRef} viewBox="0 0 600 600" role="img" aria-label={`Mathematical ${grammar} artwork for ${composition.title}; click a score note to inspect its contribution`} className={`w-full max-w-[640px] max-h-[620px] drop-shadow-[0_0_32px_rgba(185,133,255,.16)] ${sculpture ? 'hidden' : ''}`}>
                 <defs>
                   <radialGradient id="art-aura"><stop offset="0" stopColor="#533a75" stopOpacity=".24"/><stop offset="1" stopColor="#1c102f" stopOpacity="0"/></radialGradient>
                   <filter id="lum-glow" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="4.5"/></filter>
@@ -454,7 +460,8 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
                   <text x="300" y="315" textAnchor="middle" fill="#9788ab" fontSize="8" letterSpacing="2">{countLabel(notes.length)} NOTES</text>
                 </> : <text x="300" y="582" textAnchor="middle" fill="#9788ab" fontSize="8" letterSpacing="2">HG · {countLabel(notes.length)} NOTES · TIME FLOWS LEFT TO RIGHT</text>}
               </svg>
-              {!showComplete && painted === 0 && !playing && <p className="absolute bottom-6 text-xs text-[#afa0c5]">Press Play to see every note leave its mark.</p>}
+              {sculpture && !invalid.length && <ScoreSculptureView composition={composition} depth={sculptureDepth} anchorBeats={composition.id === 'leap-dialogue' ? LEAP_DIALOGUE_ANCHOR_BEATS : NO_ANCHORS}/>}
+              {!sculpture && !showComplete && painted === 0 && !playing && <p className="absolute bottom-6 text-xs text-[#afa0c5]">Press Play to see every note leave its mark.</p>}
             </div>
             <div className="relative z-10 px-5 md:px-7 pb-6 space-y-3">
               <div className="flex flex-wrap items-end justify-between gap-3">
@@ -468,7 +475,7 @@ export function CompositionJourneyView({ composition, onChange, onOpenInstrument
               <label className="block text-[10px] text-[#ab9bbe]">Song position · {format(progress,1)} / {span} beats<input aria-label="Scrub song position" className="w-full block mt-1 accent-[#d5b1f5]" type="range" min="0" max={span} step=".5" value={progress} onChange={(e) => {stopTransport();setShowComplete(false);setPlayhead(Number(e.target.value));}}/></label>
               <div className="flex flex-wrap justify-between gap-2 items-center">
                 <div className="flex flex-wrap gap-1.5">{Array.from({length:barCount},(_,i)=><span key={i} className={`rounded-full text-[10px] px-2 py-1 border ${i + 1 === currentPhrase ? 'bg-[#665085] text-white border-[#9175b0]' : 'border-[#433453] text-[#a696ba]'}`}>Phrase {i+1}</span>)}</div>
-                <div className="flex gap-3"><button type="button" className="text-xs text-[#c7b4e0] flex items-center gap-1" onClick={() => setPerforming((prev) => !prev)}><Eye size={13}/> {performing ? 'Exit show' : 'Full show'}</button><button type="button" className="text-xs text-[#c7b4e0] flex items-center gap-1" onClick={saveSvg} disabled={invalid.length > 0}><Download size={13}/> Save SVG</button></div>
+                <div className="flex gap-3 items-center">{sculpture && <div className="flex gap-1" aria-label="Sculpture depth">{(['relief', 'separated'] as SculptureDepth[]).map((d) => <button key={d} type="button" aria-pressed={sculptureDepth === d} onClick={() => setSculptureDepth(d)} className={`rounded-full px-2.5 py-1 text-[11px] border ${sculptureDepth === d ? 'bg-[#EEEBE4] text-black border-[#EEEBE4]' : 'border-[#645171] text-[#e4d7f3]'}`}>{d === 'relief' ? 'Relief' : 'Separated'}</button>)}</div>}<button type="button" aria-pressed={sculpture} className="text-xs text-[#c7b4e0] flex items-center gap-1" onClick={() => setSculpture((prev) => !prev)}><Sparkles size={13}/> {sculpture ? '2D artwork' : '3D sculpture'}</button><button type="button" className="text-xs text-[#c7b4e0] flex items-center gap-1" onClick={() => setPerforming((prev) => !prev)}><Eye size={13}/> {performing ? 'Exit show' : 'Full show'}</button><button type="button" className="text-xs text-[#c7b4e0] flex items-center gap-1" onClick={saveSvg} disabled={invalid.length > 0}><Download size={13}/> Save SVG</button></div>
               </div>
             </div>
           </section>

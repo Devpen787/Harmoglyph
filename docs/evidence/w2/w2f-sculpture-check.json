@@ -1,0 +1,86 @@
+{
+  "generatedAt": "2026-11-22T14:46:19.072Z",
+  "browser": "156.0.8078.4",
+  "viewport": "1500x1000",
+  "depths": {
+    "relief": {
+      "views": {
+        "front": {
+          "azimuth": -0.79,
+          "polar": 90
+        },
+        "side": {
+          "azimuth": 90,
+          "polar": 90
+        },
+        "oblique": {
+          "azimuth": 42,
+          "polar": 66
+        }
+      },
+      "anchors": [
+        {
+          "beat": 0,
+          "noteIds": "lead-1,counter-1",
+          "label": "beat 1 · C4 + C3"
+        },
+        {
+          "beat": 2,
+          "noteIds": "lead-3,counter-2",
+          "label": "beat 3 · E5 + G3"
+        },
+        {
+          "beat": 6,
+          "noteIds": "lead-7,counter-4",
+          "label": "beat 7 · D5 + G3"
+        }
+      ],
+      "ariaLabel": "3D sculpture of Leap Dialogue, shallow relief. Drag to rotate."
+    },
+    "separated": {
+      "views": {
+        "front": {
+          "azimuth": 0,
+          "polar": 90
+        },
+        "side": {
+          "azimuth": 90,
+          "polar": 90
+        },
+        "oblique": {
+          "azimuth": 42,
+          "polar": 66
+        }
+      },
+      "anchors": [
+        {
+          "beat": 0,
+          "noteIds": "lead-1,counter-1",
+          "label": "beat 1 · C4 + C3"
+        },
+        {
+          "beat": 2,
+          "noteIds": "lead-3,counter-2",
+          "label": "beat 3 · E5 + G3"
+        },
+        {
+          "beat": 6,
+          "noteIds": "lead-7,counter-4",
+          "label": "beat 7 · D5 + G3"
+        }
+      ],
+      "ariaLabel": "3D sculpture of Leap Dialogue, voices separated in depth. Drag to rotate."
+    }
+  },
+  "checks": {
+    "rotationAfterPlayback": {
+      "playbackObservedThenEnded": true,
+      "autoRotateAzimuthChangeDeg": 16.29,
+      "autoRotateWorks": true,
+      "dragAzimuthChangeDeg": 90.01,
+      "dragRotateWorks": true
+    },
+    "backTo2dSvgVisible": true
+  },
+  "pageErrors": []
+}
